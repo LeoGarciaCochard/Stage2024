@@ -33,6 +33,7 @@ import threading
 from datetime import datetime
 import time
 from PIL import Image, ImageTk
+from tkinter import Toplevel, Label
 
 ########################################################################### Variables Globales
 
@@ -442,7 +443,7 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
 
 
 frame_button = ctk.CTkFrame(master=root)
-button_err = ctk.CTkButton(master = frame_button, text="Renseigner une erreur",command=lambda : stimulation(0))
+button_err = ctk.CTkButton(master = frame_button, text="Renseigner un incident négatif",command=lambda : stimulation(0))
 button_err.configure(height=200, width=200, corner_radius=20, font=("Helvetica", 30, "bold") )
 
 #TODO Trouver bonne forme
@@ -450,10 +451,10 @@ button_err.configure(height=200, width=200, corner_radius=20, font=("Helvetica",
 frame_button_cadre = ctk.CTkFrame(master=frame_button)
 
 
-button_errForget = ctk.CTkButton(master = frame_button, text="J'ai oublié de renseigner une erreur", command=forgottenErr1)
+button_errForget = ctk.CTkButton(master = frame_button, text="J'ai oublié de renseigner un incident négatif", command=forgottenErr1)
 button_errForget.configure(height=50, width=300)
 
-label_forget = ctk.CTkLabel(master = frame_button_cadre, text="Combien de temps s'est-il passé depuis l'erreur ? \n (En minutes)")
+label_forget = ctk.CTkLabel(master = frame_button_cadre, text="Combien de temps s'est-il passé depuis l'incident négatif ? \n (En minutes)")
 label_forget.configure(font=("Helvetica", 15))
 
 entry_forgotten = ctk.CTkEntry(master = frame_button_cadre, placeholder_text=("Temps en minutes"))
@@ -493,7 +494,7 @@ def vers_frame_tab_err() :
 
     frame_recap.pack(pady=15, padx=30, fill="both", expand=True)
 
-button_voir_err = ctk.CTkButton(master = frame_button, text="Voir ses erreurs", command=vers_frame_tab_err)
+button_voir_err = ctk.CTkButton(master = frame_button, text="Voir ses incidents négatifs", command=vers_frame_tab_err)
 button_voir_err.configure(height=50, width=300)
 
 
@@ -518,7 +519,7 @@ frame_recap = ctk.CTkFrame(master=root)
 frame_recapTitre = ctk.CTkFrame(master=frame_recap)
 frame_recapTitre.pack(pady=25, padx=50)
 
-label_TitreRecap = ctk.CTkLabel(master= frame_recapTitre, text="Récapitulatif des erreurs commises")
+label_TitreRecap = ctk.CTkLabel(master= frame_recapTitre, text="Récapitulatif des incidents négatifs commises")
 label_TitreRecap.pack(pady=10, padx=50)
 label_TitreRecap.configure(font=("Helvetica", 35))
 
@@ -575,7 +576,7 @@ def sauvegarder_modif() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
-    if ( type != '') and ( description != "Description de l'erreur...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
+    if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
@@ -797,7 +798,7 @@ frame_quest = ctk.CTkFrame(master=root)
 frame_questTitre = ctk.CTkFrame(master=frame_quest)
 frame_questTitre.pack(pady=10, padx=50, expand=True)
 
-label_quest = ctk.CTkLabel(master= frame_questTitre, text="Questionnaire sur l'Erreur")
+label_quest = ctk.CTkLabel(master= frame_questTitre, text="Questionnaire sur l'incident négatif")
 label_quest.pack(pady=20, padx=50)
 label_quest.configure(font=("Helvetica", 35))
 
@@ -852,7 +853,7 @@ button_quit_Modif = ctk.CTkButton(master = frame_quest, text="Annuler la modific
 frame_questType = ctk.CTkFrame(master=frame_quest)
 frame_questType.pack(pady=5, padx=50, fill="both", expand=True)
 
-label_typeErreur = ctk.CTkLabel(master=frame_questType, text="Veuillez renseigner la nature de l'erreur commise")
+label_typeErreur = ctk.CTkLabel(master=frame_questType, text="Veuillez renseigner la nature de l'incident négatif")
 label_typeErreur.pack(pady=10)
 label_typeErreur.configure(font=("Helvetica", 15))
 
@@ -860,6 +861,8 @@ label_typeErreur.configure(font=("Helvetica", 15))
 df_types = pd.read_excel("../Sources/types_err.xlsx")
 
 options = list(df_types['Types'])
+descriptions = list(df_types['Description'])
+exemples = list(df_types['Exemple'])
 
 def get_selected_button_value():
     for option, is_selected in button_states.items():
@@ -877,80 +880,80 @@ def auto_toogle(val):
 
 def actualisation_options(event=None):
     entered_text = entry_actualise_options.get().lower()
-    filtered_options = [option for option in options if entered_text in option.lower()]
-
-    # Supprimer tous les boutons existants
-    for widget in affichage_boutons.winfo_children():
-        widget.destroy()
-
-    for btn in button_states :
-        button_states[btn] = False
-
-    # Recréer les boutons filtrés
-    i, j = 0, 0
-    for e in filtered_options:
-        button_states[e] = False
-        def create_button(e):
-            button = ctk.CTkButton(affichage_boutons, text=e, fg_color="#2FA572", width=button_width, height=button_height)
-            button.configure(command=lambda btn=button, opt=e: toggle_button(btn, opt))
-            return button
-        button = create_button(e)
-        button.grid(row=j, column=i, pady=5, padx=5)
-        if i + 1 == 6:
-            i = 0
-            j += 1
-        else:
-            i += 1
+    # filtered_options = [option for option in options if entered_text in option.lower()]
+#
+#     # Supprimer tous les boutons existants
+#     for widget in affichage_boutons.winfo_children():
+#         widget.destroy()
+#
+#     for btn in button_states :
+#         button_states[btn] = False
+#
+#     # Recréer les boutons filtrés
+#     i, j = 0, 0
+#     for e in filtered_options:
+#         button_states[e] = False
+#         def create_button(e):
+#             button = ctk.CTkButton(affichage_boutons, text=e, fg_color="#2FA572", width=button_width, height=button_height)
+#             button.configure(command=lambda btn=button, opt=e: toggle_button(btn, opt))
+#             return button
+#         button = create_button(e)
+#         button.grid(row=j, column=i, pady=5, padx=5)
+#         if i + 1 == 6:
+#             i = 0
+#             j += 1
+#         else:
+#             i += 1
     auto_toogle(entered_text)
 
 
 entry_actualise_options = ctk.CTkEntry(master=frame_questType,width=200 ,placeholder_text=("Rechercher                                   🔎"))
-entry_actualise_options.pack(pady=5)
-entry_actualise_options.bind("<KeyRelease>", actualisation_options)
+# entry_actualise_options.pack(pady=5)
+# entry_actualise_options.bind("<KeyRelease>", actualisation_options)
 
-def rajouterType():
-    """Rajoute un type d'erreur"""
-    df_types = pd.read_excel("../Sources/types_err.xlsx")
+# def rajouterType():
+#     """Rajoute un type d'erreur"""
+#     df_types = pd.read_excel("../Sources/types_err.xlsx")
+#
+#     type = entry_rajouter_typeErreur.get()
+#     description = entry_rajouter_typeErreurD.get()
+#
+#     global options
+#
+#     if (not type in options) and (type != '') and (description != ''):
+#
+#         nouvelle_erreur = pd.DataFrame({"Types": [type], "Description": [description]})
+#         df_types = pd.concat([df_types, nouvelle_erreur])
+#         df_types.to_excel("../Sources/types_err.xlsx", index=False)
+#         print("Fait")
+#
+#         afficherPlus()
+#
+#         options = list(df_types["Types"])
+#         entry_actualise_options.delete(0, tk.END)
+#         entry_actualise_options.insert(tk.END, type)
+#         actualisation_options()
 
-    type = entry_rajouter_typeErreur.get()
-    description = entry_rajouter_typeErreurD.get()
 
-    global options
+# cadreNouveauType = ctk.CTkFrame(master=frame_questType)
+#
+# entry_rajouter_typeErreur = ctk.CTkEntry(master=cadreNouveauType,width=175, placeholder_text="Rajouter un type d'erreur")
+# entry_rajouter_typeErreur.grid(row=0, column=0, pady=10, padx=10)
+# entry_rajouter_typeErreurD = ctk.CTkEntry(master=cadreNouveauType, width=250,placeholder_text="Rajouter la description du type d'erreur")
+# entry_rajouter_typeErreurD.grid(row=0, column=1, pady=10, padx=10)
+#
+# entry_rajouter_typeErreurD.bind("<Return>", lambda x: rajouterType())
+#
+# button_rajouter_typeErreur = ctk.CTkButton(master=cadreNouveauType, text="Rajouter", command=rajouterType)
+# button_rajouter_typeErreur.grid(row=0, column=2, pady=10, padx=10)
 
-    if (not type in options) and (type != '') and (description != ''):
-
-        nouvelle_erreur = pd.DataFrame({"Types": [type], "Description": [description]})
-        df_types = pd.concat([df_types, nouvelle_erreur])
-        df_types.to_excel("../Sources/types_err.xlsx", index=False)
-        print("Fait")
-
-        afficherPlus()
-
-        options = list(df_types["Types"])
-        entry_actualise_options.delete(0, tk.END)
-        entry_actualise_options.insert(tk.END, type)
-        actualisation_options()
-
-
-cadreNouveauType = ctk.CTkFrame(master=frame_questType)
-
-entry_rajouter_typeErreur = ctk.CTkEntry(master=cadreNouveauType,width=175, placeholder_text="Rajouter un type d'erreur")
-entry_rajouter_typeErreur.grid(row=0, column=0, pady=10, padx=10)
-entry_rajouter_typeErreurD = ctk.CTkEntry(master=cadreNouveauType, width=250,placeholder_text="Rajouter la description du type d'erreur")
-entry_rajouter_typeErreurD.grid(row=0, column=1, pady=10, padx=10)
-
-entry_rajouter_typeErreurD.bind("<Return>", lambda x: rajouterType())
-
-button_rajouter_typeErreur = ctk.CTkButton(master=cadreNouveauType, text="Rajouter", command=rajouterType)
-button_rajouter_typeErreur.grid(row=0, column=2, pady=10, padx=10)
-
-def afficherPlus():
-    if cadreNouveauType.winfo_ismapped():
-        cadreNouveauType.pack_forget()
-    else:
-        cadreNouveauType.pack(anchor=tk.CENTER, padx=10, pady=10)
-
-button_plus = ctk.CTkButton(master=frame_questType, text="Votre type d'erreur n'apparait pas ?", command=afficherPlus)
+# def afficherPlus():
+#     if cadreNouveauType.winfo_ismapped():
+#         cadreNouveauType.pack_forget()
+#     else:
+#         cadreNouveauType.pack(anchor=tk.CENTER, padx=10, pady=10)
+#
+# button_plus = ctk.CTkButton(master=frame_questType, text="Votre type d'erreur n'apparait pas ?", command=afficherPlus)
 
 
 affichage_boutons = ctk.CTkFrame(master=frame_questType)
@@ -969,6 +972,9 @@ button_states = {}
 #         button.configure(fg_color="#106A43")
 #     button_states[option] = not button_states[option]
 #
+# Dictionnaire pour maintenir l'état des boutons
+button_states = {}
+
 def toggle_button(button, option):
     # Vérifier si un autre bouton est sélectionné
     selected_button = None
@@ -987,33 +993,95 @@ def toggle_button(button, option):
         button_states[option] = True
     # Sinon, ne rien faire
 
-
 # Dimensions des boutons
 button_width = 180
 button_height = 30
 
-# Créer et placer les boutons avec gestion de l'état
-def creation_boutons_type() :
-    i, j = 0, 0
-    for e in options:
-        button_states[e] = False
-        def create_button(e):
-            button = ctk.CTkButton(affichage_boutons, text=e, fg_color="#2FA572", width=button_width, height=button_height)
-            button.configure(command=lambda btn=button, opt=e: toggle_button(btn, opt))
+# Initialisation de la variable globale
+tooltip_window = None
 
-            return button
-        button = create_button(e)
+# Fonction pour afficher la bulle d'info lors du survol
+def show_tooltip(event, text):
+    global tooltip_window
+    if tooltip_window:
+        return
+    x, y = event.widget.winfo_pointerxy()
+    tooltip_window = Toplevel(event.widget)
+    tooltip_window.wm_overrideredirect(True)
+    tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+    tooltip_window.attributes("-alpha", 0.9)  # Réglez la transparence ici
+    frame = ctk.CTkFrame(tooltip_window,fg_color=None)
+    frame.pack()
+    label = ctk.CTkLabel(frame, text=text, text_color="white", fg_color="black")
+    label.pack(ipady=5, ipadx=5)
+
+
+# Fonction pour cacher la bulle d'info lorsque la souris quitte le bouton
+def hide_tooltip(event):
+    global tooltip_window
+    if tooltip_window:
+        tooltip_window.destroy()
+        tooltip_window = None
+
+# Fonction pour déplacer la bulle d'info lorsque la souris se déplace
+def move_tooltip(event):
+    global tooltip_window
+    if tooltip_window:
+        x, y = event.widget.winfo_pointerxy()
+        tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+
+# Créer et placer les boutons avec gestion de l'état et tooltips
+def creation_boutons_type():
+    i, j = 0, 0
+    for k in range(len(options)):
+        type_button = options[k]
+        description = descriptions[k]
+        exemple = exemples[k]
+
+        button_states[type_button] = False
+
+        button = ctk.CTkButton(affichage_boutons, text=type_button, fg_color="#2FA572", width=button_width, height=button_height)
+        button.configure(command=lambda btn=button, opt=type_button: toggle_button(btn, opt))
         button.grid(row=j, column=i, pady=5, padx=5)
-        if i + 1 == 6:
+
+        if i + 1 == 3:
             i = 0
             j += 1
         else:
             i += 1
 
+        text_survol = f"Description : {description} \n Exemple : {exemple}"
+
+        # Lien des événements de survol au bouton
+        button.bind("<Enter>", lambda event, text=text_survol: show_tooltip(event, text))
+        button.bind("<Leave>", hide_tooltip)
+        button.bind("<Motion>", move_tooltip)
+
 creation_boutons_type()
 
+#
+# button_plus.pack(pady=5, padx=10)
 
-button_plus.pack(pady=5, padx=10)
+#TODO Faute Système/User :
+
+
+selected_option_Bad = tk.StringVar() #Variable qui stock la séléection oui/non
+
+cadre_boutons_Bad = ctk.CTkFrame(master = frame_questType)
+cadre_boutons_Bad.pack(ipadx=10,pady=10)
+
+label_bad = ctk.CTkLabel(master=cadre_boutons_Bad, text="Selon vous,\n de qui provient l'incident ?" )
+label_bad.grid(row=0, column=1, pady=5, padx=10)
+
+# Radiobutton 1
+bad_button_1 = ctk.CTkRadioButton(cadre_boutons_Bad, text="Utilisateur (Moi)", variable=selected_option_Bad, value="Utilisateur (Moi)")
+bad_button_1.grid(row=1, column=0, pady=5, padx=10)
+
+# Radiobutton 2
+bad_button_2 = ctk.CTkRadioButton(cadre_boutons_Bad, text="Système (Machine)", variable=selected_option_Bad, value="Système (Machine)")
+bad_button_2.grid(row=1, column=2, pady=5, padx=0)
+
+
 
 
 
@@ -1031,7 +1099,7 @@ def magnet_likert_importance(valeur_actuelle) :
 frame_questImportance = ctk.CTkFrame(master=frame_quest)
 frame_questImportance.pack(pady=5, padx=50, fill="both", expand=True)
 
-label_typeImportance = ctk.CTkLabel(master = frame_questImportance,text="Veuillez renseigner l'importance (la gravité) de l'erreur commise")
+label_typeImportance = ctk.CTkLabel(master = frame_questImportance,text="Veuillez renseigner l'importance (la gravité) de l'incident négatif")
 label_typeImportance.pack(pady=10)
 label_typeImportance.configure(font=("Helvetica", 15))
 
@@ -1081,7 +1149,7 @@ sliderImportance.pack()
 frame_questCommentaire = ctk.CTkFrame(master=frame_quest)
 frame_questCommentaire.pack(pady=5, padx=50, fill="both", expand=True)
 
-label_Commentaire = ctk.CTkLabel(master = frame_questCommentaire,text="Décrivez l'erreur commise : ")
+label_Commentaire = ctk.CTkLabel(master = frame_questCommentaire,text="Décrivez l'incident négatif : ")
 label_Commentaire.pack(pady=(10,5))
 label_Commentaire.configure(font=("Helvetica", 15))
 # Créer une zone de texte pour les commentaires
@@ -1091,15 +1159,15 @@ entry_Commentaire.pack(pady=5)
 # Fonction pour ajouter le placeholder
 def add_placeholder(event):
     if entry_Commentaire.get("1.0", "end-1c") == "":
-        entry_Commentaire.insert("1.0", "Description de l'erreur...")
+        entry_Commentaire.insert("1.0", "Description de l'incident négatif...")
 
 # Fonction pour retirer le placeholder
 def remove_placeholder(event):
-    if entry_Commentaire.get("1.0", "end-1c") == "Description de l'erreur...":
+    if entry_Commentaire.get("1.0", "end-1c") == "Description de l'incident négatif...":
         entry_Commentaire.delete("1.0", "end")
 
 # Ajouter le placeholder initialement
-entry_Commentaire.insert("1.0", "Description de l'erreur...")
+entry_Commentaire.insert("1.0", "Description de l'incident négatif...")
 
 # Lier les événements focus in et focus out pour gérer le placeholder
 entry_Commentaire.bind("<FocusIn>", remove_placeholder)
@@ -1130,7 +1198,7 @@ def magnet_likert_concentration(valeur_actuelle) :
 
 frame_questConcentration = ctk.CTkFrame(master = frame_quest)
 
-label_Concentration = ctk.CTkLabel(master = frame_questConcentration,text="Sur une échelle de 1 à 7, comment évalueriez-vous votre niveau de concentration \n au moment où vous avez commis l'erreur ?")
+label_Concentration = ctk.CTkLabel(master = frame_questConcentration,text="Sur une échelle de 1 à 7, comment évalueriez-vous votre niveau de concentration \n au moment où incident négatif a été commis ?")
 label_Concentration.pack(pady=10)
 label_Concentration.configure(font=("Helvetica", 15))
 
@@ -1188,7 +1256,7 @@ def check_selection(*args):
 
 frame_questDistraction = ctk.CTkFrame(master = frame_quest)
 
-label_Distraction_1 = ctk.CTkLabel(master = frame_questDistraction,text="Étiez-vous distrait(e) par quelque chose au moment où l'erreur s'est produite ?")
+label_Distraction_1 = ctk.CTkLabel(master = frame_questDistraction,text="Étiez-vous distrait(e) par quelque chose au moment où l'incident négatif s'est produit ?")
 label_Distraction_1.pack()
 label_Distraction_1.configure(font=("Helvetica",15))
 
@@ -1228,7 +1296,7 @@ def magnet_likert_Fatigue(valeur_actuelle) :
 
 frame_questFatigue = ctk.CTkFrame(master = frame_quest)
 
-label_Fatigue = ctk.CTkLabel(master = frame_questFatigue,text="Sur une échelle de 1 à 7, à quel point vous sentiez-vous mentalement \n fatigué au moment de l'erreur ?")
+label_Fatigue = ctk.CTkLabel(master = frame_questFatigue,text="Sur une échelle de 1 à 7, à quel point vous sentiez-vous mentalement \n fatigué au moment de l'incident négatif ?")
 label_Fatigue.pack(pady=10)
 label_Fatigue.configure(font=("Helvetica", 15))
 
@@ -1277,7 +1345,7 @@ sliderFatigue.pack()
 frame_questDifficulte = ctk.CTkFrame(master = frame_quest)
 
 
-label_Difficulte_1 = ctk.CTkLabel(master = frame_questDifficulte,text="Comment qualifieriez-vous la difficulté de la tâche au moment de l'erreur ?")
+label_Difficulte_1 = ctk.CTkLabel(master = frame_questDifficulte,text="Comment qualifieriez-vous la difficulté de la tâche au moment de l'incident négatif ?")
 label_Difficulte_1.pack()
 label_Difficulte_1.configure(font=("Helvetica",15))
 
@@ -1316,17 +1384,17 @@ def reset_entry(list_val = ['',50,"",50,'','',50,'']) :
     entry_actualise_options.delete(0,tk.END)
     entry_actualise_options.insert(tk.END, list_val[0])
 
-    entry_rajouter_typeErreur.delete(0,tk.END)
-    entry_rajouter_typeErreur.insert(tk.END, list_val[0])
-
-    entry_rajouter_typeErreurD.delete(0,tk.END)
-    entry_rajouter_typeErreurD.insert(tk.END, list_val[0])
-
-    if cadreNouveauType.winfo_ismapped():
-        cadreNouveauType.pack_forget()
-
-    for widget in affichage_boutons.winfo_children():
-        widget.destroy()
+    # entry_rajouter_typeErreur.delete(0,tk.END)
+    # entry_rajouter_typeErreur.insert(tk.END, list_val[0])
+    #
+    # entry_rajouter_typeErreurD.delete(0,tk.END)
+    # entry_rajouter_typeErreurD.insert(tk.END, list_val[0])
+    #
+    # if cadreNouveauType.winfo_ismapped():
+    #     cadreNouveauType.pack_forget()
+    #
+    # for widget in affichage_boutons.winfo_children():
+    #     widget.destroy()
 
 #   Likert Importance/Gravité
 
@@ -1395,7 +1463,7 @@ def sauvegarderQuest() :
     path = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
 
 
-    if ( type != '') and ( description != "Description de l'erreur...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
+    if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
