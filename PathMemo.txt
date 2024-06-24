@@ -1,0 +1,46 @@
+
+Python  # Path #
+
+
+				#Path de l'execuatble d'openvibe 
+openvibe_executable = r"C:\Program Files\openvibe-3.6.0-64bit\bin\openvibe-designer.exe"
+	
+				#Path des scénarios
+scenario_file = r"C:\Users\milio\PycharmProjects\Stage\OpenVibe\Scenario\EcritureEEG.xml"
+scenario_file_Stim = r"C:\Users\milio\PycharmProjects\Stage\OpenVibe\Scenario\placementStimulation.xml"
+
+
+				#Path du fichier d'enregistrement actuel (même que EcritureEEG : Generic Stream Writer)
+record_ov = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/record.ov"
+	
+				#Path des fichiers finaux pour les rename et déplacer (même que PlacementStimulation : 	Generic Stream Writer)
+path_recordStim_edf = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.edf"
+path_recordStim_ov = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.ov"
+
+
+
+OpenVibe :
+
+			#Path de l'enregistrement en cours
+EcritureEEG : 	Generic Stream Writer : C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/record.ov
+			
+			#Path de l'enregistrement en cours pour backup
+		Generic Stream Writer BackUp : 	C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/recordBackup-[$core{date}-$core{time}].ov
+
+
+				#Path de l'enregistrement (même que EcritureEEG : Generic Stream Writer)
+PlacementStimulation : 	Generic Stream Reader : C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/record.ov
+
+				#Path des enregistrements finaux avec l'ajout des stimulations, ils seront déplacés et rename par le script python
+			Generic Stream Writer : C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.ov
+			EDF File Writer : C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.edf
+
+				#Path de l'enregistrement final avec l'ajout des stimulations qui restera dans ce fichier pour backup
+			EDF File Writer BackUp : C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStimBackUp-[$core{date}-$core{time}].edf
+
+				#Path du script LUA permettant l'ajout des stimulations 
+			Lua Stimulator : C:/Users/milio/PycharmProjects/Stage/OpenVibe/ScriptLua/algoLuaListe.lua
+
+
+				#Path du fichier .ov qu'on veut lire
+VerificationReader :	Generic Stream Reader : C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.ov
