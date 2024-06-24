@@ -1073,6 +1073,7 @@ label_importance_6.configure(font=("Helvetica",13),text_color='red')
 sliderImportance = ctk.CTkSlider(master = frame_questImportance, from_=0, to=100, width=600, command=magnet_likert_importance)
 sliderImportance.pack()
 
+#Ligne rajoutée
 
 
 # ✔ TODO            # Commentaires
