@@ -1,4 +1,4 @@
-
+import tkinter
 ## Interface Graphique pour récupérations de données EEG sur l'ErrP
 
 
@@ -313,7 +313,7 @@ def creer_repertoire(n) :
                     #Création du fichier Excel s'il n'existe pas déjà
 
     if not os.path.exists(excel_path):                  #On veérifie que le fichier n'existe pas
-        colonnes = ["ID", "Path", "Timecode", "Parameter","ID Cible" , "Type", "Importance","Description", "Concentration",
+        colonnes = ["ID", "Path", "Timecode", "Parameter","ID Cible" , "Type","Faute", "Importance","Description", "Concentration",
                     "Distrait","NatureDistraction", "Fatigue", "Difficulte"]
         df = pd.DataFrame(columns=colonnes)
         df.to_excel(excel_path, index=False)                                                                    #S'il n'éxiste pas on enregistre le fichier Excel
@@ -329,6 +329,8 @@ def versPage2() :
 
         frame_acc.pack_forget()
         frame_info.pack(pady=20, padx=50, fill="both", expand=True)
+
+        versB() #TODO RETIRER
 
     except Exception as e :
         print("Ca bug")
@@ -354,6 +356,7 @@ label_image.pack(pady=(100,20), padx=10)
 button_versB = ctk.CTkButton(master = frame_info, text="Compris !", command=versB, width= 250, height=60)
 button_versB.configure(font=("Helvetica", 30, "bold"))
 button_versB.pack(pady=10, padx=10)
+
 
 
 
@@ -568,6 +571,7 @@ def sauvegarder_modif() :
     global excel_path, row_modif
 
     type = get_selected_button_value()
+    faute = selected_option_Bad.get()
     niveau_importance = dic_likert_Importance[sliderImportance.get()]
     description = entry_Commentaire.get("1.0", tk.END).strip()
     niveau_concentration = dic_likert_Concentration[sliderConcentration.get()]
@@ -584,6 +588,7 @@ def sauvegarder_modif() :
 
                 updates = {
                     "Type" : type,
+                    "Faute" : faute,
                     "Importance" : niveau_importance,
                     "Description" : description ,
                     "Concentration" : niveau_concentration ,
@@ -617,7 +622,8 @@ def sauvegarder_modif() :
                 df = pd.read_excel(excel_path)
 
                 updates = {
-                    "Type": type,
+                    "Type" : type,
+                    "Faute" : faute,
                     "Importance": niveau_importance,
                     "Description": description,
                     "Concentration": niveau_concentration,
@@ -676,9 +682,9 @@ def modifier_ligne(row) :
     ligne = df.loc[df['ID'] == row_modif]
     ligne_liste = ligne.values.flatten().tolist()[5:]
 
-    ligne_liste[1]  = {value: key for key, value in dic_likert_Importance.items()}[ligne_liste[1]]
-    ligne_liste[3]  = {value: key for key, value in dic_likert_Concentration.items()}[ligne_liste[3]]
-    ligne_liste[6]  = {value: key for key, value in dic_likert_Fatigue.items()}[ligne_liste[6]]
+    ligne_liste[2]  = {value: key for key, value in dic_likert_Importance.items()}[ligne_liste[2]]
+    ligne_liste[4]  = {value: key for key, value in dic_likert_Concentration.items()}[ligne_liste[4]]
+    ligne_liste[7]  = {value: key for key, value in dic_likert_Fatigue.items()}[ligne_liste[7]]
 
 
 
@@ -959,6 +965,7 @@ entry_actualise_options = ctk.CTkEntry(master=frame_questType,width=200 ,placeho
 affichage_boutons = ctk.CTkFrame(master=frame_questType)
 affichage_boutons.pack(anchor=tk.CENTER, padx=10, pady=10)
 
+
 # Dictionnaire pour maintenir l'état des boutons
 button_states = {}
 
@@ -1137,23 +1144,28 @@ creation_boutons_type()
 
 selected_option_Bad = tk.StringVar() #Variable qui stock la séléection oui/non
 
-cadre_boutons_Bad = ctk.CTkFrame(master = frame_questType)
+cadre_boutons_Bad = ctk.CTkFrame(master = frame_questType, width=100)
 cadre_boutons_Bad.pack(ipadx=10,pady=10)
 
-label_bad = ctk.CTkLabel(master=cadre_boutons_Bad, text="Selon vous, qui est responsable de l'incident ?" )
-label_bad.pack(pady=10,padx=10)
+label_bad = ctk.CTkLabel(master=cadre_boutons_Bad, text="Selon vous, qui est responsable de l'incident ?", fg_color="#333333", corner_radius=50 )
+label_bad.pack(pady=(10,0),padx=0)
 
 
-# Radiobutton 1
-bad_button_1 = ctk.CTkRadioButton(cadre_boutons_Bad, text="Utilisateur (Moi)", variable=selected_option_Bad, value="Utilisateur (Moi)")
-bad_button_1.pack(pady=10,padx=10)
 
 # Radiobutton 2
 bad_button_2 = ctk.CTkRadioButton(cadre_boutons_Bad, text="Système (Machine)", variable=selected_option_Bad, value="Système (Machine)")
-bad_button_2.pack(pady=10,padx=10)
+bad_button_2.pack(pady=10,padx=10,side="right")
+bad_button_2.configure(font=("Helvetica",13))
 
 
+# Radiobutton 1
+bad_button_1 = ctk.CTkRadioButton(cadre_boutons_Bad, text="", variable=selected_option_Bad, value="Utilisateur (Moi)")
+bad_button_1.pack(pady=10,padx=(0,10),side="right")
 
+bad_label_1 = ctk.CTkLabel(master=cadre_boutons_Bad, text="Utilisateur (Moi)")
+bad_label_1.configure(font=("Helvetica",13),cursor="hand2")
+bad_label_1.pack(pady=10,padx=10,side="right")
+bad_label_1.bind("<Button-1>", lambda event:selected_option_Bad.set("Utilisateur (Moi)"))
 
 
 #  TODO            # Echelle d'importance de l'erreur
@@ -1446,7 +1458,7 @@ button_difficult_5.grid(row=1, column=4, pady=5, padx=0)
 
 
 # # ✔ TODO "Annuler" et fin "done" retour page bouton + fontion reset_entry()
-def reset_entry(list_val = ['',50,"",50,'','',50,'']) :
+def reset_entry(list_val = ['','',50,"",50,'','',50,'']) :
     """
     Fait en sorte que les entry soient mises sur les val correspondantes lors de la prochaine ouverture de la page questionnaire
     """
@@ -1467,36 +1479,41 @@ def reset_entry(list_val = ['',50,"",50,'','',50,'']) :
     # for widget in affichage_boutons.winfo_children():
     #     widget.destroy()
 
+#Faute
+
+    selected_option_Bad.set(list_val[1])
+
+
 #   Likert Importance/Gravité
 
-    sliderImportance.set(list_val[1])
+    sliderImportance.set(list_val[2])
 
 #   TextBox description + Placeholder
 
     entry_Commentaire.delete("1.0", tk.END)
-    entry_Commentaire.insert("1.0", list_val[2])
+    entry_Commentaire.insert("1.0", list_val[3])
     add_placeholder("<FocusOut>")
 
 #   Likert Concentration
 
-    sliderConcentration.set(list_val[3])
+    sliderConcentration.set(list_val[4])
 
 #   Choix Distraction
 
-    selected_optionDistraction.set(list_val[4])
+    selected_optionDistraction.set(list_val[5])
 
     #   Nature distraction
 
     entry_Distraction.delete(0,tk.END)
-    entry_Distraction.insert(tk.END, list_val[5])
+    entry_Distraction.insert(tk.END, list_val[6])
 
 #   Likert Fatigue
 
-    sliderFatigue.set(list_val[6])
+    sliderFatigue.set(list_val[7])
 
 #   Choix Difficulté
 
-    selected_optionDifficulte.set(list_val[7])
+    selected_optionDifficulte.set(list_val[8])
 
 
 
@@ -1518,6 +1535,7 @@ def sauvegarderQuest() :
     # Récupération des données :
 
     type = get_selected_button_value()
+    faute = selected_option_Bad.get()
     niveau_importance = dic_likert_Importance[sliderImportance.get()]
     description = entry_Commentaire.get("1.0", tk.END).strip()
     niveau_concentration = dic_likert_Concentration[sliderConcentration.get()]
@@ -1545,6 +1563,7 @@ def sauvegarderQuest() :
                     "Parameter" : [dernier_parametre],
                     "ID Cible" : [''],
                     "Type" : [type],
+                    "Faute" : [faute],
                     "Importance" : [niveau_importance],
                     "Description" : [description] ,
                     "Concentration" : [niveau_concentration] ,
@@ -1568,7 +1587,8 @@ def sauvegarderQuest() :
                     "Timecode": [dernier_time_code],
                     "Parameter": [dernier_parametre],
                     "ID Cible": [''],
-                    "Type": [type],
+                    "Type" : [type],
+                    "Faute" : [faute],
                     "Importance": [niveau_importance],
                     "Description": [description],
                     "Concentration": [niveau_concentration],
