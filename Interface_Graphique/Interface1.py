@@ -37,7 +37,7 @@ from tkinter import Toplevel, Label
 
 ########################################################################### Variables Globales
 
-
+screen_width = 3072
 width = 1000                        #Taille de la fenêtre
 height = 800                          #Taille de la fenêtre
 time_start = None
@@ -971,9 +971,6 @@ button_states = {}
 #     else:
 #         button.configure(fg_color="#106A43")
 #     button_states[option] = not button_states[option]
-#
-# Dictionnaire pour maintenir l'état des boutons
-button_states = {}
 
 def toggle_button(button, option):
     # Vérifier si un autre bouton est sélectionné
@@ -1000,20 +997,63 @@ button_height = 30
 # Initialisation de la variable globale
 tooltip_window = None
 
-# Fonction pour afficher la bulle d'info lors du survol
+# # Fonction pour afficher la bulle d'info lors du survol
+# def show_tooltip(event, text):
+#     global tooltip_window
+#     if tooltip_window:
+#         return
+#     x, y = event.widget.winfo_pointerxy()
+#     tooltip_window = Toplevel(event.widget)
+#     tooltip_window.wm_overrideredirect(True)
+#     tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+#     frame = ctk.CTkFrame(tooltip_window,fg_color=None)
+#     frame.pack()
+#     label = ctk.CTkLabel(frame, text=text, text_color="white", fg_color="black")
+#     label.pack(ipady=5, ipadx=5)
+#
+#
+# # Fonction pour cacher la bulle d'info lorsque la souris quitte le bouton
+# def hide_tooltip(event):
+#     global tooltip_window
+#     if tooltip_window:
+#         tooltip_window.destroy()
+#         tooltip_window = None
+#
+# # Fonction pour déplacer la bulle d'info lorsque la souris se déplace
+# def move_tooltip(event):
+#     global tooltip_window
+#     if tooltip_window:
+#         x, y = event.widget.winfo_pointerxy()
+#         tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+#
+#
+
+
 def show_tooltip(event, text):
     global tooltip_window
     if tooltip_window:
         return
     x, y = event.widget.winfo_pointerxy()
+    screen_width = event.widget.winfo_screenwidth()
     tooltip_window = Toplevel(event.widget)
     tooltip_window.wm_overrideredirect(True)
-    tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
-    tooltip_window.attributes("-alpha", 0.9)  # Réglez la transparence ici
-    frame = ctk.CTkFrame(tooltip_window,fg_color=None)
+
+    frame = ctk.CTkFrame(tooltip_window, fg_color=None)
     frame.pack()
     label = ctk.CTkLabel(frame, text=text, text_color="white", fg_color="black")
     label.pack(ipady=5, ipadx=5)
+
+    # Obtenir la largeur de la bulle d'information
+    tooltip_window.update_idletasks()
+    tooltip_width = tooltip_window.winfo_width()
+
+    # Positionner la bulle à droite ou à gauche du curseur selon la position du curseur par rapport à l'écran
+    if x < screen_width / 2:
+        # Positionner à droite du curseur
+        tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+    else:
+        # Positionner à gauche du curseur
+        tooltip_window.wm_geometry(f"+{x - tooltip_width - 20}+{y + 20}")
 
 
 # Fonction pour cacher la bulle d'info lorsque la souris quitte le bouton
@@ -1023,12 +1063,39 @@ def hide_tooltip(event):
         tooltip_window.destroy()
         tooltip_window = None
 
+
 # Fonction pour déplacer la bulle d'info lorsque la souris se déplace
+# def move_tooltip(event):
+#     global tooltip_window
+#     if tooltip_window:
+#         x, y = event.widget.winfo_pointerxy()
+#         screen_width = event.widget.winfo_screenwidth()
+#         tooltip_width = tooltip_window.winfo_width()
+#         print(f"x :{x} / {screen_width} \n {int(x) <= int(screen_width) // 2} ")
+#         if int(x) <= int(screen_width) // 2:
+#             print("droite")
+#             # Positionner à droite du curseur
+#             tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+#         else:
+#             print("gauche")
+#             # Positionner à gauche du curseur
+#             tooltip_window.wm_geometry(f"+{x - tooltip_width - 20}+{y + 20}")
+
+
 def move_tooltip(event):
     global tooltip_window
     if tooltip_window:
         x, y = event.widget.winfo_pointerxy()
-        tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+        global screen_width
+        tooltip_width = tooltip_window.winfo_width()
+
+        if x <= screen_width // 2:
+            # Positionner à droite du curseur
+            tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
+        else:
+            # Positionner à gauche du curseur
+            tooltip_window.wm_geometry(f"+{x - tooltip_width - 20}+{y + 20}")
+
 
 # Créer et placer les boutons avec gestion de l'état et tooltips
 def creation_boutons_type():
@@ -1037,6 +1104,9 @@ def creation_boutons_type():
         type_button = options[k]
         description = descriptions[k]
         exemple = exemples[k]
+
+        description = description.replace('\\n', '\n')
+        exemple = exemple.replace('\\n', '\n')
 
         button_states[type_button] = False
 
@@ -1050,7 +1120,7 @@ def creation_boutons_type():
         else:
             i += 1
 
-        text_survol = f"Description : {description} \n Exemple : {exemple}"
+        text_survol = f"{description} \n Ex :  {exemple}"
 
         # Lien des événements de survol au bouton
         button.bind("<Enter>", lambda event, text=text_survol: show_tooltip(event, text))
@@ -1070,16 +1140,17 @@ selected_option_Bad = tk.StringVar() #Variable qui stock la séléection oui/non
 cadre_boutons_Bad = ctk.CTkFrame(master = frame_questType)
 cadre_boutons_Bad.pack(ipadx=10,pady=10)
 
-label_bad = ctk.CTkLabel(master=cadre_boutons_Bad, text="Selon vous,\n de qui provient l'incident ?" )
-label_bad.grid(row=0, column=1, pady=5, padx=10)
+label_bad = ctk.CTkLabel(master=cadre_boutons_Bad, text="Selon vous, qui est responsable de l'incident ?" )
+label_bad.pack(pady=10,padx=10)
+
 
 # Radiobutton 1
 bad_button_1 = ctk.CTkRadioButton(cadre_boutons_Bad, text="Utilisateur (Moi)", variable=selected_option_Bad, value="Utilisateur (Moi)")
-bad_button_1.grid(row=1, column=0, pady=5, padx=10)
+bad_button_1.pack(pady=10,padx=10)
 
 # Radiobutton 2
 bad_button_2 = ctk.CTkRadioButton(cadre_boutons_Bad, text="Système (Machine)", variable=selected_option_Bad, value="Système (Machine)")
-bad_button_2.grid(row=1, column=2, pady=5, padx=0)
+bad_button_2.pack(pady=10,padx=10)
 
 
 
