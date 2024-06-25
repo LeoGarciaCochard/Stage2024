@@ -369,7 +369,8 @@ def affichePageB() :
     """
     frame_info.pack_forget()
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-    button_err.pack(pady=((height / 2) - 125, 30), padx=10)
+    button_err.pack(pady=((height / 2)  -120  -125, 30), padx=10)
+    button_aj_Rapide.pack(pady=10, padx=10)
     button_errForget.pack(pady=10, padx=10)
     button_voir_err.pack(pady=0, padx=10)
     entry_cachee.focus_set()                                                                                            #TODO retirer ca #Subterfuge pour appuyer sur le bouton Erreur avec "entrée"
@@ -449,6 +450,14 @@ frame_button = ctk.CTkFrame(master=root)
 button_err = ctk.CTkButton(master = frame_button, text="Renseigner un incident négatif",command=lambda : stimulation(0))
 button_err.configure(height=200, width=200, corner_radius=20, font=("Helvetica", 30, "bold") )
 
+
+#TODO AjoutRapide
+
+button_aj_Rapide = ctk.CTkButton(master = frame_button, text="Ajouter et Renseigner plus tard",command=lambda : stimulation(0))
+button_aj_Rapide.configure(height=100, width=100, corner_radius=20, font=("Helvetica", 20, "bold") )
+
+
+
 #TODO Trouver bonne forme
 
 frame_button_cadre = ctk.CTkFrame(master=frame_button)
@@ -509,7 +518,8 @@ def sortir_recap() :
     """
     frame_recap.pack_forget()
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-    button_err.pack(pady=((height / 2) - 125, 30), padx=10)
+    button_err.pack(pady=((height / 2) - 125- 120, 30), padx=10)
+    button_aj_Rapide.pack(pady=10, padx=10)
     button_errForget.pack(pady=10, padx=10)
     frame_button_cadre.pack_forget()
     button_voir_err.pack_forget()
