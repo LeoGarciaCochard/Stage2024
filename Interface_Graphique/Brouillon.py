@@ -1,52 +1,33 @@
 import customtkinter as ctk
+from PIL import Image, ImageTk
+
+path_img_btn = "../Sources/btn.png"
 
 # Initialisation de l'application principale
 root = ctk.CTk()
-root.title("Exemple de RadioButton Personnalisé")
+root.title("Exemple de Bouton Rond")
 root.geometry("400x300")
 
 # Initialisation de customtkinter
 ctk.set_appearance_mode("System")  # Options: "System" (par défaut), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Options: "blue" (par défaut), "green", "dark-blue"
 
-# Cadre principal
-frame_questType = ctk.CTkFrame(master=root)
-frame_questType.pack(padx=20, pady=20, fill="both", expand=True)
+# Charger et redimensionner l'image
+image_btn = Image.open(path_img_btn)
+image_btn_resized = image_btn.resize((50, 50), Image.LANCZOS)
+photo_btn = ctk.CTkImage(light_image=image_btn_resized, dark_image=image_btn_resized, size=(50, 50))
 
-# Variable qui stocke la sélection oui/non
-selected_option_Bad = ctk.StringVar()
+# Fonction pour gérer le clic sur le bouton rond
+def on_round_button_click():
+    print("Bouton rond cliqué !")
 
-# Cadre pour les boutons radio
-cadre_boutons_Bad = ctk.CTkFrame(master=frame_questType)
-cadre_boutons_Bad.pack(ipadx=10, pady=10)
+# Cadre pour le bouton
+frame_button = ctk.CTkFrame(master=root)
+frame_button.pack(pady=20)
 
-# Label
-label_bad = ctk.CTkLabel(master=cadre_boutons_Bad, text="Selon vous, qui est responsable de l'incident ?")
-label_bad.pack(pady=10, padx=10)
-
-
-# Fonction pour créer un radio button personnalisé avec la case à droite
-def create_custom_radiobutton(master, text, variable, value):
-    frame = ctk.CTkFrame(master=master, fg_color="transparent")
-    label = ctk.CTkLabel(master=frame, text=text)
-    label.pack(side="left")
-    radio_button = ctk.CTkRadioButton(master=frame, variable=variable, value=value)
-    radio_button.pack(side="right")
-
-    # Associer le clic sur le label au changement de valeur du radio button
-    label.bind("<Button-1>", lambda event: variable.set(value))
-
-    frame.pack(pady=10, padx=10)
-
-
-# Radiobutton 1
-create_custom_radiobutton(cadre_boutons_Bad, text="Utilisateur (Moi)", variable=selected_option_Bad,
-                          value="Utilisateur (Moi)")
-
-# Radiobutton 2
-create_custom_radiobutton(cadre_boutons_Bad, text="Système (Machine)", variable=selected_option_Bad,
-                          value="Système (Machine)")
+# Création d'un bouton avec l'image redimensionnée
+label_image_btn = ctk.CTkButton(master=frame_button, image=photo_btn, text="Ajout rapide", command=on_round_button_click, width=100, height=100, compound='top')
+label_image_btn.pack(pady=20)
 
 # Lancer la boucle principale de l'application
 root.mainloop()
-

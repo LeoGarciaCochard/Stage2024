@@ -76,8 +76,8 @@ dic_likert_Fatigue =    { 0: "Pas fatigué",
                          83: "Fatigué",
                          100: "Vraiment fatigué"}
 
-
-
+path_img_btn = "../Sources/btn.png"
+path_img_btnf = "../Sources/btn_f.png"
 
 ########################################################################### Lancement de l'interface
 
@@ -369,10 +369,11 @@ def affichePageB() :
     """
     frame_info.pack_forget()
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-    button_err.pack(pady=((height / 2)  -120  -125, 30), padx=10)
-    button_aj_Rapide.pack(pady=10, padx=10)
+    button_err.pack(pady=((height / 2) -100  , 30), padx=10)
+
     button_errForget.pack(pady=10, padx=10)
     button_voir_err.pack(pady=0, padx=10)
+    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
     entry_cachee.focus_set()                                                                                            #TODO retirer ca #Subterfuge pour appuyer sur le bouton Erreur avec "entrée"
 
 frame_acc = ctk.CTkFrame(master=root)
@@ -453,9 +454,32 @@ button_err.configure(height=200, width=200, corner_radius=20, font=("Helvetica",
 
 #TODO AjoutRapide
 
-button_aj_Rapide = ctk.CTkButton(master = frame_button, text="Ajouter et Renseigner plus tard",command=lambda : stimulation(0))
-button_aj_Rapide.configure(height=100, width=100, corner_radius=20, font=("Helvetica", 20, "bold") )
+def ajout_rapide() :
+    pass
 
+
+def on_enter3(event):
+    label_image_btn.configure(image=photo_btnf)
+def on_leave3(event):
+    label_image_btn.configure(image=photo_btn)
+
+
+image_btn = Image.open(path_img_btn)
+image_btn_resized = image_btn.resize((100, 100), Image.LANCZOS)
+photo_btn = ctk.CTkImage(light_image=image_btn_resized, dark_image=image_btn_resized, size=(100, 60))
+
+image_btnf = Image.open(path_img_btnf)
+image_btnf_resized = image_btnf.resize((100, 100), Image.LANCZOS)
+photo_btnf = ctk.CTkImage(light_image=image_btnf_resized, dark_image=image_btnf_resized, size=(100, 60))
+
+# Afficher l'image dans un label
+label_image_btn = ctk.CTkLabel(master=frame_button, image=photo_btn ,text='                                        Ajout Rapide', cursor="hand2")
+label_image_btn.configure(font=('Helvetica',15))
+
+
+label_image_btn.bind("<Button-1>", command=lambda x: ajout_rapide())
+label_image_btn.bind("<Enter>", on_enter3)
+label_image_btn.bind("<Leave>", on_leave3)
 
 
 #TODO Trouver bonne forme
@@ -464,7 +488,7 @@ frame_button_cadre = ctk.CTkFrame(master=frame_button)
 
 
 button_errForget = ctk.CTkButton(master = frame_button, text="J'ai oublié de renseigner un incident négatif", command=forgottenErr1)
-button_errForget.configure(height=50, width=300)
+button_errForget.configure(font=("Helvetica",15),height=50, width=300)
 
 label_forget = ctk.CTkLabel(master = frame_button_cadre, text="Combien de temps s'est-il passé depuis l'incident négatif ? \n (En minutes)")
 label_forget.configure(font=("Helvetica", 15))
@@ -507,6 +531,7 @@ def vers_frame_tab_err() :
     frame_recap.pack(pady=15, padx=30, fill="both", expand=True)
 
 button_voir_err = ctk.CTkButton(master = frame_button, text="Voir ses incidents négatifs", command=vers_frame_tab_err)
+button_voir_err.configure(font=("Helvetica",15))
 button_voir_err.configure(height=50, width=300)
 
 
