@@ -247,8 +247,6 @@ def stimulation(parametre ,t = 0) :
     nouvelle_ligne = pd.DataFrame({"id" : [id_time_code] , "timecode" : [temps_stim] , "parameter" : [parametre] })
     df = pd.concat([df, nouvelle_ligne], ignore_index=True)
 
-
-
     df.to_csv(path_time_code, index=False)
     df.to_csv(path_time_code_BackUp, index=False)
 
@@ -256,7 +254,7 @@ def stimulation(parametre ,t = 0) :
     global dernier_time_code
     global dernier_parametre
     dernier_id = id_time_code
-    dernier_time_code =temps_stim
+    dernier_time_code = temps_stim
     dernier_parametre = parametre
 
     if parametre == 2:
@@ -270,15 +268,28 @@ def stimulation(parametre ,t = 0) :
         df = pd.concat([df, nouvelle_ligne2])
         df.to_excel(excel_path, index=False)
 
+    if parametre == 3 :
 
+        global description_ajout_rapide
 
+        nouvelle_ligne2 = pd.DataFrame({
+            "ID": [dernier_id],
+            "Path": [f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"],
+            "Timecode": [dernier_time_code],
+            "Parameter": [dernier_parametre],
+            "Description": [description_ajout_rapide]})
+        df = pd.read_excel(excel_path)
+        df = pd.concat([df, nouvelle_ligne2])
+        df.to_excel(excel_path, index=False)
 
+    else :
+        versQuestionnaire()
 
     id_time_code += 1
 
     print("stimulé !")
 
-    versQuestionnaire()
+
 
 
 def arretExpe(acc=False) :
@@ -409,11 +420,14 @@ def forgottenErr1() :
 
     button_errForget.pack_forget()
     button_voir_err.pack_forget()
+    label_image_btn.pack_forget()
     frame_button_cadre.pack(pady=10, padx=10)
+    unpack_textbox()
     label_forget.pack(pady=10, padx=10)
     entry_forgotten.pack(pady=5, padx=10)
     button_errForget2.pack(pady=5, padx=10)
     button_voir_err.pack(pady=0, padx = 10)
+    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
 
 
 def forgottenErr2() :
@@ -441,6 +455,7 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
     entry_forgotten.pack_forget()
     button_errForget2.pack_forget()
     button_voir_err.pack_forget()
+    label_image_btn.pack_forget()
     label_forget.pack_forget()
     frame_quest.pack(pady=20, padx=50, fill="both", expand=True)
     creation_boutons_type()
@@ -454,8 +469,31 @@ button_err.configure(height=200, width=200, corner_radius=20, font=("Helvetica",
 
 #TODO AjoutRapide
 
-def ajout_rapide() :
-    pass
+def unpack_textbox() :
+    textbox_description.delete("1.0", tk.END)
+    textbox_description.pack_forget()
+    textbov_validation.pack_forget()
+
+def pack_text_box() :
+    textbox_description.pack(pady=10, padx=10)
+    textbov_validation.pack(pady=10, padx=10)
+    textbox_description.focus_set()
+
+def recup_desc() :
+    # Récupère la description :
+    global description_ajout_rapide
+    description_ajout_rapide = textbox_description.get("1.0", tk.END).strip()
+
+    #Stimule :
+    stimulation(3)
+    unpack_textbox()
+
+
+
+
+textbox_description = ctk.CTkTextbox(master= frame_button, width= 100, height=50)
+textbov_validation = ctk.CTkButton(master = frame_button, text= "Valider ou Ignorer", command=recup_desc)
+
 
 
 def on_enter3(event):
@@ -477,7 +515,7 @@ label_image_btn = ctk.CTkLabel(master=frame_button, image=photo_btn ,text='     
 label_image_btn.configure(font=('Helvetica',15))
 
 
-label_image_btn.bind("<Button-1>", command=lambda x: ajout_rapide())
+label_image_btn.bind("<Button-1>", command=lambda x: pack_text_box())
 label_image_btn.bind("<Enter>", on_enter3)
 label_image_btn.bind("<Leave>", on_leave3)
 
@@ -543,12 +581,15 @@ def sortir_recap() :
     """
     frame_recap.pack_forget()
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-    button_err.pack(pady=((height / 2) - 125- 120, 30), padx=10)
-    button_aj_Rapide.pack(pady=10, padx=10)
+    button_err.pack(pady=((height / 2) - 100, 30), padx=10)
     button_errForget.pack(pady=10, padx=10)
     frame_button_cadre.pack_forget()
     button_voir_err.pack_forget()
+    unpack_textbox()
+    label_image_btn.pack_forget()
+
     button_voir_err.pack(pady=0, padx=10)
+    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
     entry_cachee.focus_set()
     clear_table()
 
@@ -648,8 +689,11 @@ def sauvegarder_modif() :
 
                 entry_forgotten.delete(0, tk.END)
                 frame_button_cadre.pack_forget()
+                unpack_textbox()
+                label_image_btn.pack_forget()
                 button_errForget.pack(pady=10, padx=10)
                 button_voir_err.pack(pady=0, padx=10)
+                label_image_btn.pack(pady=(15, 10), padx=(0, 105))
 
         elif (distraction == "Non"):
             if (natureDistration == ''):
@@ -683,8 +727,11 @@ def sauvegarder_modif() :
 
                 entry_forgotten.delete(0, tk.END)
                 frame_button_cadre.pack_forget()
+                unpack_textbox()
+                label_image_btn.pack_forget()
                 button_errForget.pack(pady=10, padx=10)
                 button_voir_err.pack(pady=0, padx=10)
+                label_image_btn.pack(pady=(15, 10), padx=(0, 105))
 
 
 
@@ -737,11 +784,15 @@ def display_table(columns_to_exclude=["Path","ID Cible" ,"Timecode", "Parameter"
 
     df = pd.read_excel(excel_path)
 
-    # Filtrer les colonnes indésirables
+    # Filtrer les colonnes indésirables :
+
     df_filtered = df[df['Parameter'] != 2]
     #Supprimer les lignes dont la colonne "Parameter" est == 2
-    df_filtered = df_filtered.drop(columns=columns_to_exclude)
 
+    df_filtered = df[df['Parameter'] != 3]
+    # Supprimer les lignes dont la colonne "Parameter" est == 3
+
+    df_filtered = df_filtered.drop(columns=columns_to_exclude)
 
 
     frame_tableau = ctk.CTkFrame(master=scrollable_frame)
@@ -875,8 +926,11 @@ def retourPage2(supp=0) :
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
     entry_forgotten.delete(0, tk.END)
     frame_button_cadre.pack_forget()
+    unpack_textbox()
+    label_image_btn.pack_forget()
     button_errForget.pack(pady=10, padx=10)
     button_voir_err.pack(pady=0, padx=10)
+    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
 
     if vers_tab :
         vers_frame_tab_err()
