@@ -1,24 +1,9 @@
 import tkinter
 ## Interface Graphique pour récupérations de données EEG sur l'ErrP
 
-
-# ✔ TODO    #Page1 d'acceuil simple
-# ✔ TODO        #Renseigner le numéro d'anonymat pour identifier la data qui sera enregistré.
-
-# ✔TODO    #Changer de page vers Page2 : Bouton "J'ai commis une erreur"
-
-# ✔TODO  #Changer de page vers page3 : Questionnaire
-#            # Revenir
-#            # Type de l'erreur
-#            # Echelle d'Concentration de l'erreur
-#            # Echelle du niveau de concentration
-#            # Commentaires
-#            # Screen ?
-
-# ✔ TODO    #Revenir sur la page2.
-
-# ✔ Todo bouton femer
-
+#TODO ID float dans ajout rapide
+#TODO Trouver ce qui unselect les types puis l'implémentaer dans la modif de ligne
+#TODO Regler la changement de tab
 
 ########################################################################### Imports
 
@@ -50,6 +35,8 @@ dernier_time_code = None
 dernier_parametre = None
 background_color = "#2b2b2b"
 row_modif = None
+description_rapide = None
+
 
 dic_likert_Importance = { 0: "Insignifiante",
                          16: "Peu Importante",
@@ -270,14 +257,14 @@ def stimulation(parametre ,t = 0) :
 
     if parametre == 3 :
 
-        global description_ajout_rapide
+        global description_rapide
 
         nouvelle_ligne2 = pd.DataFrame({
             "ID": [dernier_id],
             "Path": [f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"],
             "Timecode": [dernier_time_code],
             "Parameter": [dernier_parametre],
-            "Description": [description_ajout_rapide]})
+            "Description": [description_rapide]})
         df = pd.read_excel(excel_path)
         df = pd.concat([df, nouvelle_ligne2])
         df.to_excel(excel_path, index=False)
@@ -481,8 +468,8 @@ def pack_text_box() :
 
 def recup_desc() :
     # Récupère la description :
-    global description_ajout_rapide
-    description_ajout_rapide = textbox_description.get("1.0", tk.END).strip()
+    global description_rapide
+    description_rapide = textbox_description.get("1.0", tk.END).strip()
 
     #Stimule :
     stimulation(3)
@@ -563,6 +550,7 @@ def vers_frame_tab_err() :
 
     frame_button.pack_forget()
     display_table()
+    display_table2()
 
 
 
@@ -591,7 +579,9 @@ def sortir_recap() :
     button_voir_err.pack(pady=0, padx=10)
     label_image_btn.pack(pady=(15, 10), padx=(0, 105))
     entry_cachee.focus_set()
+    clear_table2()
     clear_table()
+
 
 frame_recap = ctk.CTkFrame(master=root)
 
@@ -635,6 +625,44 @@ def on_frame_configure(event=None):
     canvas.configure(scrollregion=canvas.bbox("all"))
 
 scrollable_frame.bind("<Configure>", on_frame_configure)
+
+
+###########  Tableau ajout rapide
+
+container_frame3 = ctk.CTkFrame(master=frame_recap)
+container_frame3.pack(pady=10, padx=25, fill="both", expand=True)
+container_frame3.configure(fg_color=background_color)
+
+# Créer un frame pour contenir le canvas et les scrollbars
+container_frame4 = ctk.CTkFrame(master=container_frame3)
+container_frame4.pack(pady=10, padx=25, fill="both", expand=True)
+container_frame4.configure(fg_color=background_color)
+
+# Créer un canvas pour le contenu défilant avec la même couleur de fond
+canvas2 = tk.Canvas(container_frame4, bg=background_color, bd=0, highlightthickness=0)
+canvas2.pack(side=tk.LEFT, fill="both", expand=True)
+
+# Ajouter une barre de défilement verticale
+scrollbar_v2 = ctk.CTkScrollbar(container_frame4, orientation="vertical", command=canvas2.yview)
+scrollbar_v2.pack(side=tk.RIGHT, fill=tk.Y)
+
+# Ajouter une barre de défilement horizontale
+scrollbar_h2 = ctk.CTkScrollbar(container_frame3, orientation="horizontal", command=canvas2.xview)
+scrollbar_h2.pack(side=tk.BOTTOM, fill=tk.X)
+
+# Lier les scrollbars au canvas
+canvas2.configure(yscrollcommand=scrollbar_v2.set, xscrollcommand=scrollbar_h2.set)
+
+# Créer un frame pour le contenu à l'intérieur du canvas
+scrollable_frame2 = ctk.CTkFrame(canvas2, fg_color=background_color)
+canvas2.create_window((0, 0), window=scrollable_frame2, anchor="nw")
+
+def on_frame_configure2(event=None):
+    """Met à jour la région scrollable du canvas pour s'adapter au contenu."""
+    canvas2.configure(scrollregion=canvas2.bbox("all"))
+
+scrollable_frame2.bind("<Configure>", on_frame_configure2)
+
 
 
 def sauvegarder_modif() :
@@ -746,6 +774,7 @@ def affiche_Quest_Modif() :
     frame_quest.pack(pady=20, padx=50, fill="both", expand=True)
     button_quit.place_forget()
     button_quit_Modif.place(x=5, y=5)
+    actualisation_options()
     Concentration_Type()
 
     # button_done.pack_forget()
@@ -768,10 +797,10 @@ def modifier_ligne(row) :
     ligne_liste[4]  = {value: key for key, value in dic_likert_Concentration.items()}[ligne_liste[4]]
     ligne_liste[7]  = {value: key for key, value in dic_likert_Fatigue.items()}[ligne_liste[7]]
 
-
-
+    reset_entry()
     reset_entry(ligne_liste)
     clear_table()
+    clear_table2()
     frame_recap.pack_forget()
     actualisation_options()
     if entry_Distraction.get() == 'NaN' :
@@ -823,6 +852,75 @@ def clear_table():
     if frame_tableau:
         frame_tableau.destroy()
         frame_tableau = None
+
+
+#RECAP AJOUT RAPIDE
+
+def modifier_ligne2(row) :
+    """
+    Récupère les informations de la n ième ligne du fichier excel_path
+    les stock dans une liste
+    reset_entry(liste)
+
+    """
+    global excel_path, row_modif, description_rapide
+    row_modif = row
+
+    reset_entry()
+    reset_entry(['','',50,description_rapide,50,'','',50,''])
+    clear_table()
+    clear_table2()
+    frame_recap.pack_forget()
+    actualisation_options()
+    if entry_Distraction.get() == 'NaN' :
+        entry_Distraction.delete(0, tk.END)
+
+    affiche_Quest_Modif()
+
+
+
+def display_table2(columns_to_keep=["ID","Description",]):
+    global excel_path, frame_tableau2
+
+    df = pd.read_excel(excel_path)
+
+    # Filtrer les colonnes indésirables :
+
+    df_filtered = df[df['Parameter'] == 3]
+    #Supprimer les lignes dont la colonne "Parameter" n'est pas == 3
+
+    df_filtered = df_filtered[columns_to_keep]
+
+
+    frame_tableau2 = ctk.CTkFrame(master=scrollable_frame2)
+    frame_tableau2.pack(fill="both", expand=True)
+
+    # Ajout des en-têtes de colonnes
+    headers = ["Modifier"] + list(df_filtered.columns)
+    for col_num, col_name in enumerate(headers):
+        header = ctk.CTkLabel(frame_tableau2, text=col_name)
+        header.grid(row=0, column=col_num, padx=10, pady=5)
+
+    # Insérer les données et les boutons
+    for row_num, row in df_filtered.iterrows():
+        # Ajouter un bouton dans la première colonne
+        button = ctk.CTkButton(frame_tableau2, text="Modifier", width=50,
+                               command=lambda row=row_num: modifier_ligne2(row))
+        button.grid(row=row_num + 1, column=0, padx=10, pady=5)
+
+        # Ajouter les autres cellules
+        for col_num, value in enumerate(row):
+            cell = ctk.CTkLabel(frame_tableau2, text=value)
+            cell.grid(row=row_num + 1, column=col_num + 1, padx=10, pady=5)
+    on_frame_configure2()
+
+
+def clear_table2():
+    global frame_tableau2
+    if frame_tableau2:
+        frame_tableau2.destroy()
+        frame_tableau2 = None
+
 
 button_sortir_recap = ctk.CTkButton(master = frame_recap, text="Revenir", width=15 , command=sortir_recap)
 button_sortir_recap.pack()
@@ -1611,7 +1709,7 @@ def reset_entry(list_val = ['','',50,"",50,'','',50,'']) :
 
 def sauvegarderQuest() :
     """
-    # TODO Logique "Done" :
+    # Logique "Done" :
           Verifier type :
               d'erreur.entry_get() non vide
           Stocker les entry dans des variables
@@ -1645,11 +1743,16 @@ def sauvegarderQuest() :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
+                if dernier_parametre == 3:
+                    nouveau_para = 0
+                else :
+                    nouveau_para = dernier_parametre
+
                 nouvelle_ligne = pd.DataFrame({
                     "ID" : [dernier_id],
                     "Path" : [path],
                     "Timecode" : [dernier_time_code],
-                    "Parameter" : [dernier_parametre],
+                    "Parameter" : [nouveau_para],
                     "ID Cible" : [''],
                     "Type" : [type],
                     "Faute" : [faute],
