@@ -2,7 +2,6 @@ import tkinter
 ## Interface Graphique pour récupérations de données EEG sur l'ErrP
 
 #TODO ID float dans ajout rapide
-#TODO Trouver ce qui unselect les types puis l'implémentaer dans la modif de ligne
 
 
 ########################################################################### Imports
@@ -260,7 +259,7 @@ def stimulation(parametre ,t = 0) :
         global description_rapide
 
         nouvelle_ligne2 = pd.DataFrame({
-            "ID": [dernier_id],
+            "ID": [id_time_code],
             "Path": [f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"],
             "Timecode": [dernier_time_code],
             "Parameter": [dernier_parametre],
@@ -347,7 +346,7 @@ image_path = "../Sources/Information_R.png"
 image = Image.open(image_path)
 photo = ImageTk.PhotoImage(image)
 
-# Afficher l'image dans un label
+#Afficher l'image dans le label
 label_image = tk.Label(master=frame_info, image=photo)
 label_image.pack(pady=(100,20), padx=10)
 
@@ -435,8 +434,9 @@ def forgottenErr2() :
 
 
 def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
-    """Retire la page 2 et affiche le questionnaire"""
-    # reset_entry(list_val) list_val = ['',50,"",50,'','',50,'']
+    """Retire la page bouton et affiche le questionnaire"""
+
+    # Retier la page bouton
     frame_button.pack_forget()
     button_errForget.pack_forget()
     entry_forgotten.pack_forget()
@@ -444,6 +444,8 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
     button_voir_err.pack_forget()
     label_image_btn.pack_forget()
     label_forget.pack_forget()
+
+
     frame_quest.pack(pady=20, padx=50, fill="both", expand=True)
     creation_boutons_type()
     Concentration_Type()
@@ -582,9 +584,10 @@ def sortir_recap() :
     clear_table2()
     clear_table()
 
-
+#Fenêtre racap
 frame_recap = ctk.CTkFrame(master=root)
 
+#Titre Principal
 frame_recapTitre = ctk.CTkFrame(master=frame_recap)
 frame_recapTitre.pack(pady=25, padx=50)
 
@@ -592,6 +595,16 @@ label_TitreRecap = ctk.CTkLabel(master= frame_recapTitre, text="Récapitulatif d
 label_TitreRecap.pack(pady=10, padx=50)
 label_TitreRecap.configure(font=("Helvetica", 35))
 
+#SousTitre Info complétées :
+
+frame_recapTitre2 = ctk.CTkFrame(master=frame_recap)
+frame_recapTitre2.pack(pady=15, padx=50)
+
+label_TitreRecap2 = ctk.CTkLabel(master= frame_recapTitre2, text="Informations complétées")
+label_TitreRecap2.pack(pady=5, padx=50)
+label_TitreRecap2.configure(font=("Helvetica", 20))
+
+#Cadre du premier tableau (complétées)
 container_frame2 = ctk.CTkFrame(master=frame_recap)
 container_frame2.pack(pady=10, padx=25, fill="both", expand=True)
 container_frame2.configure(fg_color=background_color)
@@ -629,6 +642,17 @@ scrollable_frame.bind("<Configure>", on_frame_configure)
 
 ###########  Tableau ajout rapide
 
+
+#SousTitre Info complétées :
+
+frame_recapTitre3 = ctk.CTkFrame(master=frame_recap)
+frame_recapTitre3.pack(pady=15, padx=50)
+
+label_TitreRecap3 = ctk.CTkLabel(master= frame_recapTitre3, text="Informations à compléter :")
+label_TitreRecap3.pack(pady=5, padx=50)
+label_TitreRecap3.configure(font=("Helvetica", 20))
+
+#Cadre du second tableau (à compléter)
 container_frame3 = ctk.CTkFrame(master=frame_recap)
 container_frame3.pack(pady=10, padx=25, fill="both", expand=True)
 container_frame3.configure(fg_color=background_color)
@@ -686,8 +710,8 @@ def sauvegarder_modif() :
 
     df = pd.read_excel(excel_path)
 
-    para = int(df['Parameter'])
-
+    para = int(df.at[row_modif,'Parameter'])
+    print(para)
 
     if  para == 3:
         nouveau_para = 0
@@ -698,18 +722,17 @@ def sauvegarder_modif() :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
-
                 updates = {
-                    "Parameter" : [nouveau_para] ,
-                    "Type" : [type],
-                    "Faute" : [faute],
-                    "Importance" : [niveau_importance],
-                    "Description" : [description] ,
-                    "Concentration" : [niveau_concentration] ,
-                    "Distrait" : [distraction],
-                    "NatureDistraction" : [natureDistration] ,
-                    "Fatigue" : [niveau_fatigue] ,
-                    "Difficulte" : [niveau_difficulte]}
+                    "Parameter": nouveau_para,
+                    "Type": type,
+                    "Faute": faute,
+                    "Importance": niveau_importance,
+                    "Description": description,
+                    "Concentration": niveau_concentration,
+                    "Distrait": distraction,
+                    "NatureDistraction": natureDistration,
+                    "Fatigue": niveau_fatigue,
+                    "Difficulte": niveau_difficulte}
 
                 for column, new_value in updates.items():
                     df.at[row_modif, column] = new_value
@@ -737,16 +760,16 @@ def sauvegarder_modif() :
             if (natureDistration == ''):
 
                 updates = {
-                    "Parameter": [nouveau_para],
-                    "Type" : [type],
-                    "Faute" : [faute],
-                    "Importance": [niveau_importance],
-                    "Description": [description],
-                    "Concentration": [niveau_concentration],
-                    "Distrait": [distraction],
-                    "NatureDistraction": [natureDistration],
-                    "Fatigue": [niveau_fatigue],
-                    "Difficulte": [niveau_difficulte]}
+                    "Parameter": nouveau_para,
+                    "Type" : type,
+                    "Faute" : faute,
+                    "Importance": niveau_importance,
+                    "Description": description,
+                    "Concentration": niveau_concentration,
+                    "Distrait": distraction,
+                    "NatureDistraction": natureDistration,
+                    "Fatigue": niveau_fatigue,
+                    "Difficulte": niveau_difficulte}
 
                 for column, new_value in updates.items():
                     df.at[row_modif, column] = new_value
@@ -806,16 +829,17 @@ def modifier_ligne(row) :
     ligne_liste[4]  = {value: key for key, value in dic_likert_Concentration.items()}[ligne_liste[4]]
     ligne_liste[7]  = {value: key for key, value in dic_likert_Fatigue.items()}[ligne_liste[7]]
 
-    reset_entry()
     reset_entry(ligne_liste)
     clear_table()
     clear_table2()
     frame_recap.pack_forget()
+    creation_boutons_type()
     actualisation_options()
     if entry_Distraction.get() == 'NaN' :
         entry_Distraction.delete(0, tk.END)
 
     affiche_Quest_Modif()
+
 
 def display_table(columns_to_exclude=["Path","ID Cible" ,"Timecode", "Parameter"]):
     global excel_path, frame_tableau
@@ -880,6 +904,7 @@ def modifier_ligne2(row) :
     clear_table()
     clear_table2()
     frame_recap.pack_forget()
+    creation_boutons_type()
     actualisation_options()
     if entry_Distraction.get() == 'NaN' :
         entry_Distraction.delete(0, tk.END)
@@ -1004,9 +1029,14 @@ label_quest.configure(font=("Helvetica", 35))
 # Revenir en frame_button et supprimer l'enregistrement
 
 def retourPage2(supp=0) :
-    """Retire le questionnaire et affiche la page 2"""
-    #TODO supprimer_rec(dernier_rec_path)
+    """Retire le questionnaire et affiche la page 2
 
+    Si param = -1 alors on enlève la dernière stimulation ( à changer pour en ajouter une d'aun autre label à la place en indiquant l'id Cible ?)
+
+    si param = 1 alors appelée depuis "annuler modification" pour remettre les bons boutons"
+
+    """
+    #De base on ne vient pas forcément de la modification
     vers_tab = False
 
     if supp == -1 :
@@ -1028,9 +1058,11 @@ def retourPage2(supp=0) :
 
 
 
-    reset_entry()
-    frame_quest.pack_forget()
-    frame_button.pack(pady=20, padx=50, fill="both", expand=True)
+    reset_entry()                                                       #On reset les données du tableau
+    frame_quest.pack_forget()                                           #On retire la page du questionnaire
+    frame_button.pack(pady=20, padx=50, fill="both", expand=True)       #Puis faire apparaitre la page des buttons
+
+                 # On réinitialise les cadres de la page bouton
     entry_forgotten.delete(0, tk.END)
     frame_button_cadre.pack_forget()
     unpack_textbox()
@@ -1039,6 +1071,7 @@ def retourPage2(supp=0) :
     button_voir_err.pack(pady=0, padx=10)
     label_image_btn.pack(pady=(15, 10), padx=(0, 105))
 
+    # Si on venait de la modification, en entre à nouveau dans la page du récap
     if vers_tab :
         vers_frame_tab_err()
 
@@ -1200,37 +1233,6 @@ button_height = 30
 # Initialisation de la variable globale
 tooltip_window = None
 
-# # Fonction pour afficher la bulle d'info lors du survol
-# def show_tooltip(event, text):
-#     global tooltip_window
-#     if tooltip_window:
-#         return
-#     x, y = event.widget.winfo_pointerxy()
-#     tooltip_window = Toplevel(event.widget)
-#     tooltip_window.wm_overrideredirect(True)
-#     tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
-#     frame = ctk.CTkFrame(tooltip_window,fg_color=None)
-#     frame.pack()
-#     label = ctk.CTkLabel(frame, text=text, text_color="white", fg_color="black")
-#     label.pack(ipady=5, ipadx=5)
-#
-#
-# # Fonction pour cacher la bulle d'info lorsque la souris quitte le bouton
-# def hide_tooltip(event):
-#     global tooltip_window
-#     if tooltip_window:
-#         tooltip_window.destroy()
-#         tooltip_window = None
-#
-# # Fonction pour déplacer la bulle d'info lorsque la souris se déplace
-# def move_tooltip(event):
-#     global tooltip_window
-#     if tooltip_window:
-#         x, y = event.widget.winfo_pointerxy()
-#         tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
-#
-#
-
 
 def show_tooltip(event, text):
     global tooltip_window
@@ -1267,23 +1269,6 @@ def hide_tooltip(event):
         tooltip_window = None
 
 
-# Fonction pour déplacer la bulle d'info lorsque la souris se déplace
-# def move_tooltip(event):
-#     global tooltip_window
-#     if tooltip_window:
-#         x, y = event.widget.winfo_pointerxy()
-#         screen_width = event.widget.winfo_screenwidth()
-#         tooltip_width = tooltip_window.winfo_width()
-#         print(f"x :{x} / {screen_width} \n {int(x) <= int(screen_width) // 2} ")
-#         if int(x) <= int(screen_width) // 2:
-#             print("droite")
-#             # Positionner à droite du curseur
-#             tooltip_window.wm_geometry(f"+{x + 20}+{y + 20}")
-#         else:
-#             print("gauche")
-#             # Positionner à gauche du curseur
-#             tooltip_window.wm_geometry(f"+{x - tooltip_width - 20}+{y + 20}")
-
 
 def move_tooltip(event):
     global tooltip_window
@@ -1300,7 +1285,7 @@ def move_tooltip(event):
             tooltip_window.wm_geometry(f"+{x - tooltip_width - 20}+{y + 20}")
 
 
-# Créer et placer les boutons avec gestion de l'état et tooltips
+#Créer et placer les boutons avec tooltips et état appuyé/non
 def creation_boutons_type():
     i, j = 0, 0
     for k in range(len(options)):
@@ -1325,15 +1310,13 @@ def creation_boutons_type():
 
         text_survol = f"{description} \n Ex :  {exemple}"
 
-        # Lien des événements de survol au bouton
         button.bind("<Enter>", lambda event, text=text_survol: show_tooltip(event, text))
         button.bind("<Leave>", hide_tooltip)
         button.bind("<Motion>", move_tooltip)
 
 creation_boutons_type()
 
-#
-# button_plus.pack(pady=5, padx=10)
+
 
 #TODO Faute Système/User :
 
