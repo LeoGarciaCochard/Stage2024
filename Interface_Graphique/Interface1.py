@@ -3,6 +3,7 @@ import tkinter
 
 #TODO ID float dans ajout rapide
 
+#TODO Type de travail : CODER/Ecrire/Lire..
 
 ########################################################################### Imports
 
@@ -35,6 +36,7 @@ dernier_parametre = None
 background_color = "#2b2b2b"
 row_modif = None
 description_rapide = None
+n_anonymat = None
 
 
 dic_likert_Importance = { 0: "Insignifiante",
@@ -287,10 +289,6 @@ def arretExpe(acc=False) :
         root.destroy()
 
 
-
-########################################################################### Frame 1 : Page d'accueil
-
-# ✔ TODO sur page numéro anonymat : creer un repertoire du numéro d'anonymat dans "../DATA/n°Ano" + creer un fichier Excel "../DATA/n°Ano/Data_n°Ano.xls"
 def creer_repertoire(n) :
     """
     ouvre le dossier ../Data verifie s'il existe un répertoire ../DATA/n, si oui : est-ce qu'il existe ../Data/n/n.xlsx, si oui : ne rien faire (=réouverture du dossier, en cas de crash par exemple)
@@ -316,32 +314,62 @@ def creer_repertoire(n) :
         df.to_excel(excel_path, index=False)                                                                    #S'il n'éxiste pas on enregistre le fichier Excel
 
 
-def versPage2() :
-    """
-    Stock le n° d'anonymat dans n_anonymat puis affiche la page suivante si l'entrée est un nombre, ne fait rien sinon
-    """
-    try :
-        global n_anonymat
-        n_anonymat = int(entry_n_anonymat.get())
+#Anonymat
 
-        frame_acc.pack_forget()
-        frame_info.pack(pady=20, padx=50, fill="both", expand=True)
+def generer_ano() :
+    df_anonymat = pd.read_excel("../Sources/anonymat.xlsx")
 
-        versB() #TODO RETIRER
+    #On récupère la dernière ligne de la colonne "N_ano" et ajoute 1 pour le nouveau numéro d'ano
+    global n_anonymat
+    n_anonymat = int(df_anonymat["N_ano"].iloc[-1]) +1
 
-    except Exception as e :
-        print("Ca bug")
-        print(f"Erreur : {e}")
+    #Ajoute le n_anonymat à la fin du tableau
+
+    nouvelle_ligne = pd.DataFrame({"N_ano": [n_anonymat]})
+    df_anonymat = pd.concat([df_anonymat, nouvelle_ligne], ignore_index=True)
+    df_anonymat.to_excel("../Sources/anonymat.xlsx", index=False)
 
 
-def versB() :
-    affichePageB()
-    creer_repertoire(n_anonymat)
-    start_recording_thread()
+
+
+########################################################################### Frame 1 : Informations
+
+# def affichePageB() :
+#     """
+#     Retire la page 1 (frame_acc) et affiche la 2 (frame_button)
+#     """
+#     frame_participant.pack_forget()
+#     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
+#     button_err.pack(pady=((height / 2) -100  , 30), padx=10)
+#
+#     button_errForget.pack(pady=10, padx=10)
+#     button_voir_err.pack(pady=0, padx=10)
+#     label_image_btn.pack(pady=(15, 10), padx=(0, 105))
+#     entry_cachee.focus_set()
+#
+# def versB() :
+#     affichePageB()
+#     creer_repertoire(n_anonymat)
+#     start_recording_thread()
+#
+# def versParticipant() :
+#     frame_info.pack_forget()
+#     frame_button.pack(pady=15, padx=30, fill="both", expand=True)
+#     versB()
+#     pass
+
+
+def versParticipant() :
+
+    frame_info.pack_forget()
+    frame_participant.pack(pady=15, padx=30, fill="both", expand=True)
+
+
+
 
 
 frame_info = ctk.CTkFrame(master=root)
-
+frame_info.pack(pady=15, padx=30, fill="both", expand=True)
 image_path = "../Sources/Information_R.png"
 image = Image.open(image_path)
 photo = ImageTk.PhotoImage(image)
@@ -350,55 +378,115 @@ photo = ImageTk.PhotoImage(image)
 label_image = tk.Label(master=frame_info, image=photo)
 label_image.pack(pady=(100,20), padx=10)
 
-button_versB = ctk.CTkButton(master = frame_info, text="Compris !", command=versB, width= 250, height=60)
+button_versB = ctk.CTkButton(master = frame_info, text="Compris !", width= 250, height=60, command=versParticipant)
 button_versB.configure(font=("Helvetica", 30, "bold"))
 button_versB.pack(pady=10, padx=10)
 
 
+########################################################################### Frame 2 : Questionnaire de participant
 
 
-#TODO -moments ou j'ai oublié
+#Affiche un questionnaire
+
+frame_participant = ctk.CTkFrame(master=root)
 
 
-def affichePageB() :
+
+cadre_participantTitre = ctk.CTkFrame(master=frame_participant)
+cadre_participantTitre.pack(pady=25, padx=50)
+
+label_participantTitre = ctk.CTkLabel(master= cadre_participantTitre, text="Merci de remplir ces informations anonymes")
+label_participantTitre.pack(pady=10, padx=50)
+label_participantTitre.configure(font=("Helvetica", 35))
+
+#Questionnaire :
+
+cadre_demande_info1 = ctk.CTkFrame(master=frame_participant)
+cadre_demande_info1.pack(pady=5, padx=50, fill="both", expand=True)
+
+cadre_demande_info2 = ctk.CTkFrame(master=frame_participant)
+cadre_demande_info2.pack(pady=5, padx=50, fill="both", expand=True)
+
+cadre_demande_info3 = ctk.CTkFrame(master=frame_participant)
+cadre_demande_info3.pack(pady=5, padx=50, fill="both", expand=True)
+
+# cadre_demande_info4 = ctk.CTkFrame(master=frame_participant)
+# cadre_demande_info4.pack(pady=5, padx=50, fill="both", expand=True)
+#
+# cadre_demande_info5 = ctk.CTkFrame(master=frame_participant)
+# cadre_demande_info5.pack(pady=5, padx=50, fill="both", expand=True)
+#
+# cadre_demande_info6 = ctk.CTkFrame(master=frame_participant)
+# cadre_demande_info6.pack(pady=5, padx=50, fill="both", expand=True)
+#
+# cadre_demande_info7 = ctk.CTkFrame(master=frame_participant)
+# cadre_demande_info7.pack(pady=5, padx=50, fill="both", expand=True)
+
+
+#Bouton suivant :
+
+#On récupère n_anonymat, et on lance les rec
+
+def versBouton() :
     """
-    Retire la page 1 (frame_acc) et affiche la 2 (frame_button)
+    Récupère les données de l'utilisateur
+    Donne un numéro de candidat
+    Crée le répertoire
+    stock les données utilisateur dans un csv
+    lance le rec
+    Affiche la page suivante
     """
-    frame_info.pack_forget()
+    # recuperation_donnees_participant
+
+    generer_ano()
+    creer_repertoire(n_anonymat)
+
+    # Stock les données
+
+    start_recording_thread()
+
+    # Afficher page bouton
+
+    frame_participant.pack_forget()
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
     button_err.pack(pady=((height / 2) -100  , 30), padx=10)
 
     button_errForget.pack(pady=10, padx=10)
     button_voir_err.pack(pady=0, padx=10)
     label_image_btn.pack(pady=(15, 10), padx=(0, 105))
-    entry_cachee.focus_set()                                                                                            #TODO retirer ca #Subterfuge pour appuyer sur le bouton Erreur avec "entrée"
-
-frame_acc = ctk.CTkFrame(master=root)
-frame_acc.pack(pady=20, padx=50, fill="both", expand=True)
-
-entry_n_anonymat = ctk.CTkEntry(master=frame_acc, placeholder_text=("N° d'anonymat"))
-entry_n_anonymat.pack(pady=(50+(height//2),0), padx=10)
+    entry_cachee.focus_set()
 
 
 
-button_vers2 = ctk.CTkButton(master=frame_acc, text="Suivant", command=lambda : versPage2())
-button_vers2.pack(pady=10, padx=10)
 
-entry_n_anonymat.bind("<Return>", lambda x : versPage2())
+button_versB = ctk.CTkButton(master = frame_participant, text="Suivant", width= 250, height=60, command=versBouton)
+button_versB.configure(font=("Helvetica", 20, "bold"))
+button_versB.pack(pady=10, padx=10)
+
+# global n_anonymat
+# n_anonymat = int(entry_n_anonymat.get())
 
 
+########################################################################### Frame 3 :  Page Bouton
+
+
+
+
+########## bouton f4
 def on_enter2(event):
     button_acc_f4.configure(text="❌ Fermer")
 def on_leave2(event):
     button_acc_f4.configure(text="❌")
 
-button_acc_f4 = ctk.CTkButton(master = frame_acc, text="❌", width=15, command=lambda : arretExpe(True))
+button_acc_f4 = ctk.CTkButton(master = frame_info, text="❌", width=15, command=lambda : arretExpe(True))
 button_acc_f4.configure(fg_color="red", hover_color="white", text_color="black")
 button_acc_f4.pack()
 button_acc_f4.place(x=5,y=5)
 
 button_acc_f4.bind("<Enter>", on_enter2)
 button_acc_f4.bind("<Leave>", on_leave2)
+
+
 
 ########################################################################### Frame 2 : Page d'utilisateur avec bouton
 
