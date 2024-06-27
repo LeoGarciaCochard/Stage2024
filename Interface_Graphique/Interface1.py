@@ -493,11 +493,11 @@ def on_leave3(event):
 
 image_btn = Image.open(path_img_btn)
 image_btn_resized = image_btn.resize((100, 100), Image.LANCZOS)
-photo_btn = ctk.CTkImage(light_image=image_btn_resized, dark_image=image_btn_resized, size=(100, 60))
+photo_btn = ctk.CTkImage(light_image=image_btn_resized, dark_image=image_btn_resized, size=(55, 55))
 
 image_btnf = Image.open(path_img_btnf)
 image_btnf_resized = image_btnf.resize((100, 100), Image.LANCZOS)
-photo_btnf = ctk.CTkImage(light_image=image_btnf_resized, dark_image=image_btnf_resized, size=(100, 60))
+photo_btnf = ctk.CTkImage(light_image=image_btnf_resized, dark_image=image_btnf_resized, size=(55, 55))
 
 # Afficher l'image dans un label
 label_image_btn = ctk.CTkLabel(master=frame_button, image=photo_btn ,text='                                        Ajout Rapide', cursor="hand2")
