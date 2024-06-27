@@ -3,7 +3,7 @@ import tkinter
 
 #TODO ID float dans ajout rapide
 #TODO Trouver ce qui unselect les types puis l'implémentaer dans la modif de ligne
-#TODO Regler la changement de tab
+
 
 ########################################################################### Imports
 
@@ -588,7 +588,7 @@ frame_recap = ctk.CTkFrame(master=root)
 frame_recapTitre = ctk.CTkFrame(master=frame_recap)
 frame_recapTitre.pack(pady=25, padx=50)
 
-label_TitreRecap = ctk.CTkLabel(master= frame_recapTitre, text="Récapitulatif des incidents négatifs commises")
+label_TitreRecap = ctk.CTkLabel(master= frame_recapTitre, text="Récapitulatif des incidents négatifs")
 label_TitreRecap.pack(pady=10, padx=50)
 label_TitreRecap.configure(font=("Helvetica", 35))
 
@@ -684,22 +684,32 @@ def sauvegarder_modif() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
+    df = pd.read_excel(excel_path)
+
+    para = int(df['Parameter'])
+
+
+    if  para == 3:
+        nouveau_para = 0
+    else:
+        nouveau_para = para
+
     if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
-                df = pd.read_excel(excel_path)
 
                 updates = {
-                    "Type" : type,
-                    "Faute" : faute,
-                    "Importance" : niveau_importance,
-                    "Description" : description ,
-                    "Concentration" : niveau_concentration ,
-                    "Distrait" : distraction,
-                    "NatureDistraction" : natureDistration ,
-                    "Fatigue" : niveau_fatigue ,
-                    "Difficulte" : niveau_difficulte}
+                    "Parameter" : [nouveau_para] ,
+                    "Type" : [type],
+                    "Faute" : [faute],
+                    "Importance" : [niveau_importance],
+                    "Description" : [description] ,
+                    "Concentration" : [niveau_concentration] ,
+                    "Distrait" : [distraction],
+                    "NatureDistraction" : [natureDistration] ,
+                    "Fatigue" : [niveau_fatigue] ,
+                    "Difficulte" : [niveau_difficulte]}
 
                 for column, new_value in updates.items():
                     df.at[row_modif, column] = new_value
@@ -726,18 +736,17 @@ def sauvegarder_modif() :
         elif (distraction == "Non"):
             if (natureDistration == ''):
 
-                df = pd.read_excel(excel_path)
-
                 updates = {
-                    "Type" : type,
-                    "Faute" : faute,
-                    "Importance": niveau_importance,
-                    "Description": description,
-                    "Concentration": niveau_concentration,
-                    "Distrait": distraction,
-                    "NatureDistraction": natureDistration,
-                    "Fatigue": niveau_fatigue,
-                    "Difficulte": niveau_difficulte}
+                    "Parameter": [nouveau_para],
+                    "Type" : [type],
+                    "Faute" : [faute],
+                    "Importance": [niveau_importance],
+                    "Description": [description],
+                    "Concentration": [niveau_concentration],
+                    "Distrait": [distraction],
+                    "NatureDistraction": [natureDistration],
+                    "Fatigue": [niveau_fatigue],
+                    "Difficulte": [niveau_difficulte]}
 
                 for column, new_value in updates.items():
                     df.at[row_modif, column] = new_value
@@ -1743,16 +1752,12 @@ def sauvegarderQuest() :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
-                if dernier_parametre == 3:
-                    nouveau_para = 0
-                else :
-                    nouveau_para = dernier_parametre
 
                 nouvelle_ligne = pd.DataFrame({
                     "ID" : [dernier_id],
                     "Path" : [path],
                     "Timecode" : [dernier_time_code],
-                    "Parameter" : [nouveau_para],
+                    "Parameter" : [dernier_parametre],
                     "ID Cible" : [''],
                     "Type" : [type],
                     "Faute" : [faute],
