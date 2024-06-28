@@ -321,11 +321,11 @@ def generer_ano() :
 
     #On récupère la dernière ligne de la colonne "N_ano" et ajoute 1 pour le nouveau numéro d'ano
     global n_anonymat
-    n_anonymat = int(df_anonymat["N_ano"].iloc[-1]) +1
+    n_anonymat = int(df_anonymat["N_Ano"].iloc[-1]) +1
 
     #Ajoute le n_anonymat à la fin du tableau
 
-    nouvelle_ligne = pd.DataFrame({"N_ano": [n_anonymat]})
+    nouvelle_ligne = pd.DataFrame({"N_Ano": [n_anonymat]})
     df_anonymat = pd.concat([df_anonymat, nouvelle_ligne], ignore_index=True)
     df_anonymat.to_excel("../Sources/anonymat.xlsx", index=False)
 
@@ -382,6 +382,18 @@ button_versB = ctk.CTkButton(master = frame_info, text="Compris !", width= 250, 
 button_versB.configure(font=("Helvetica", 30, "bold"))
 button_versB.pack(pady=10, padx=10)
 
+def on_enter2(event):
+    button_acc_f4.configure(text="❌ Fermer")
+def on_leave2(event):
+    button_acc_f4.configure(text="❌")
+
+button_acc_f4 = ctk.CTkButton(master = frame_info, text="❌", width=15, command=lambda : arretExpe(True))
+button_acc_f4.configure(fg_color="red", hover_color="white", text_color="black")
+button_acc_f4.pack()
+button_acc_f4.place(x=5,y=5)
+
+button_acc_f4.bind("<Enter>", on_enter2)
+button_acc_f4.bind("<Leave>", on_leave2)
 
 ########################################################################### Frame 2 : Questionnaire de participant
 
@@ -463,28 +475,19 @@ button_versB = ctk.CTkButton(master = frame_participant, text="Suivant", width= 
 button_versB.configure(font=("Helvetica", 20, "bold"))
 button_versB.pack(pady=10, padx=10)
 
-# global n_anonymat
-# n_anonymat = int(entry_n_anonymat.get())
 
+########## bouton f4 page participant
+def on_enter3(event):
+    button_participant_f4.configure(text="❌ Fermer")
+def on_leave3(event):
+    button_participant_f4.configure(text="❌")
 
-########################################################################### Frame 3 :  Page Bouton
+button_participant_f4 = ctk.CTkButton(master = frame_participant, text="❌", width=15, command=lambda : arretExpe(True))
+button_participant_f4.configure(fg_color="red", hover_color="white", text_color="black")
+button_participant_f4.place(x=5,y=5)
 
-
-
-
-########## bouton f4
-def on_enter2(event):
-    button_acc_f4.configure(text="❌ Fermer")
-def on_leave2(event):
-    button_acc_f4.configure(text="❌")
-
-button_acc_f4 = ctk.CTkButton(master = frame_info, text="❌", width=15, command=lambda : arretExpe(True))
-button_acc_f4.configure(fg_color="red", hover_color="white", text_color="black")
-button_acc_f4.pack()
-button_acc_f4.place(x=5,y=5)
-
-button_acc_f4.bind("<Enter>", on_enter2)
-button_acc_f4.bind("<Leave>", on_leave2)
+button_participant_f4.bind("<Enter>", on_enter3)
+button_participant_f4.bind("<Leave>", on_leave3)
 
 
 
