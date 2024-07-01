@@ -1105,9 +1105,9 @@ def versBouton() :
         frame_button.pack(pady=20, padx=50, fill="both", expand=True)
         frame_button_err.pack(pady=((height / 2) - 200,0), anchor='center')
 
-        button_errForget.pack(pady=10, padx=10)
-        button_voir_err.pack(pady=0, padx=10)
-        label_image_btn.pack(pady=(15, 10), padx=(0, 105))
+        frame_button_forget.pack(pady=10, anchor='center')
+        frame_button_recap.pack(pady=10, anchor='center')
+        frame_button_rapide.pack(pady=10,anchor='center')
         entry_cachee.focus_set()
     else :
         print("Pas bien")
@@ -1139,17 +1139,29 @@ def forgottenErr1() :
     button_errForget.pack_forget()
 
 #On unpack les boutons d'après puis on les remettera pour qu'ils soient dans le bon ordre
-    button_voir_err.pack_forget()
-    label_image_btn.pack_forget()
+    frame_button_recap.pack_forget()
+
 
 #On affiche la frame contenant l'entry et le bouton valider
     frame_button_cadre.pack(pady=10, padx=10)
+
+
+#Unpack l'aide puis la repack pour qu'elle apparaisse du bon coté
+    aide_button_forget.pack_forget()
+
+    frame_button_cadre.pack(side=tk.LEFT)
+
+    aide_button_forget.pack(padx=10,side=tk.LEFT)
+
+
+#On fait apparaitre les boutons suivants dans le bon ordre
 #Si jamais la description rapide du bouton ajout rapide est affichée, on l'enlève
     unpack_textbox()
 
-#On fait apparaitre les boutons suivants dans le bon ordre
-    button_voir_err.pack(pady=0, padx = 10)
-    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
+    frame_button_rapide.pack_forget()
+    frame_button_recap.pack(padx = 10,anchor='center')
+
+    frame_button_rapide.pack(pady=10, anchor='center')
 
 
 def forgottenErr2() :
@@ -1175,15 +1187,8 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
     # Retier la page bouton
     frame_button.pack_forget()
 
-    button_errForget.pack_forget()
-    entry_forgotten.pack_forget()
-    button_errForget2.pack_forget()
-    button_voir_err.pack_forget()
-    label_image_btn.pack_forget()
-    label_forget.pack_forget()
-
-
     frame_quest.pack(pady=20, padx=50, fill="both", expand=True)
+
     creation_boutons_type()
     Concentration_Type()
 
@@ -1243,10 +1248,17 @@ def unpack_textbox() :
     textbox_description.pack_forget()
     textbov_validation.pack_forget()
 
+    label_image_btn.pack_forget()
+    aide_button_rapide.pack_forget()
+    label_image_btn.pack(pady=(15, 10), padx=(0, 105), side=tk.LEFT)
+    aide_button_rapide.pack(side=tk.LEFT)
+
 def pack_text_box() :
-    textbox_description.pack(pady=10, padx=10)
-    textbov_validation.pack(pady=10, padx=10)
-    # textbox_description.focus_set()
+    label_image_btn.pack_forget()
+    aide_button_rapide.pack_forget()
+    textbox_description.pack(pady=10, padx=10,side=tk.LEFT)
+    textbov_validation.pack(pady=10, padx=10,side=tk.LEFT)
+    aide_button_rapide.pack(side=tk.LEFT)
 
 def recup_desc() :
     # Récupère la description :
@@ -1255,13 +1267,18 @@ def recup_desc() :
 
     #Stimule :
     stimulation(3)
+    #Remets les boutons
     unpack_textbox()
+    aide_button_rapide.pack_forget()
+    label_image_btn.pack(pady=(15, 10), padx=(0, 105), side=tk.LEFT)
+    aide_button_rapide.pack(side=tk.LEFT)
 
 
 
+frame_button_rapide = ctk.CTkFrame(master=frame_button,fg_color="#2b2b2b")
 
-textbox_description = ctk.CTkEntry(master= frame_button, width= 200, placeholder_text="Rapide description...")
-textbov_validation = ctk.CTkButton(master = frame_button, text= "Valider ou Ignorer", command=recup_desc)
+textbox_description = ctk.CTkEntry(master= frame_button_rapide, width= 200, placeholder_text="Rapide description...")
+textbov_validation = ctk.CTkButton(master = frame_button_rapide, text= "Valider ou Ignorer", command=recup_desc)
 
 
 
@@ -1280,7 +1297,7 @@ image_btnf_resized = image_btnf.resize((100, 100), Image.LANCZOS)
 photo_btnf = ctk.CTkImage(light_image=image_btnf_resized, dark_image=image_btnf_resized, size=(55, 55))
 
 # Afficher l'image dans un label
-label_image_btn = ctk.CTkLabel(master=frame_button, image=photo_btn ,text='                                        Ajout Rapide', cursor="hand2")
+label_image_btn = ctk.CTkLabel(master=frame_button_rapide, image=photo_btn ,text='                                        Ajout Rapide', cursor="hand2")
 label_image_btn.configure(font=('Helvetica',15))
 
 
@@ -1288,11 +1305,42 @@ label_image_btn.bind("<Button-1>", command=lambda x: pack_text_box())
 label_image_btn.bind("<Enter>", on_enter3)
 label_image_btn.bind("<Leave>", on_leave3)
 
+#AIDE Button Rapide
+
+def Enter_aide1(event) :
+    """Grise le help et fait apparaitre une tooltip avec une description"""
+    aide_button_rapide.configure(image=photo_aide_button_rapidef)
+    # TODO Tooltip
+
+
+def Leave_aide1(event) :
+    aide_button_rapide.configure(image=photo_aide_button_rapide)
+    #TODO Tooltip
+
+image_aide_button_rapide = Image.open(path_img_aide)
+image_aide_button_rapide_resized = image_aide_button_rapide.resize((100, 100), Image.LANCZOS)
+photo_aide_button_rapide = ctk.CTkImage(dark_image=image_aide_button_rapide_resized, size=(20, 20))
+
+image_aide_button_rapidef = Image.open(path_img_aidef)
+image_aide_button_rapidef_resized = image_aide_button_rapidef.resize((100, 100), Image.LANCZOS)
+photo_aide_button_rapidef = ctk.CTkImage(light_image=image_aide_button_rapidef_resized, dark_image=image_aide_button_rapidef_resized, size=(20, 20))
+
+# Afficher l'image dans un label
+aide_button_rapide = ctk.CTkLabel(master=frame_button_rapide, image=photo_aide_button_rapide ,text='', cursor="hand2")
+aide_button_rapide.configure(font=('Helvetica',15))
+
+aide_button_rapide.bind("<Enter>", Enter_aide1)
+aide_button_rapide.bind("<Leave>", Leave_aide1)
+
+
+label_image_btn.pack(pady=(15, 10), padx=(0, 105),side=tk.LEFT)
+aide_button_rapide.pack(side=tk.LEFT)
+
 
 
 ###############--Bouton forget
 
-frame_button_forget = ctk.CTkFrame(master= frame_button)
+frame_button_forget = ctk.CTkFrame(master= frame_button,fg_color="#2b2b2b")
 
 frame_button_cadre = ctk.CTkFrame(master=frame_button_forget)
 
@@ -1308,10 +1356,45 @@ entry_forgotten.bind("<Return>", lambda x : forgottenErr2())
 
 button_errForget2 = ctk.CTkButton(master = frame_button_cadre, text="Valider", command=forgottenErr2)
 
+
+
+###-_-Aide forget :
+
+def Enter_aide2(event) :
+    """Grise le help et fait apparaitre une tooltip avec une description"""
+    aide_button_forget.configure(image=photo_aide_button_forgetf)
+    # TODO Tooltip
+
+
+def Leave_aide2(event) :
+    aide_button_forget.configure(image=photo_aide_button_forget)
+    #TODO Tooltip
+
+
+image_aide_button_forget = Image.open(path_img_aide)
+image_aide_button_forget_resized = image_aide_button_forget.resize((100, 100), Image.LANCZOS)
+photo_aide_button_forget = ctk.CTkImage(dark_image=image_aide_button_forget_resized, size=(20, 20))
+
+image_aide_button_forgetf = Image.open(path_img_aidef)
+image_aide_button_forgetf_resized = image_aide_button_forgetf.resize((100, 100), Image.LANCZOS)
+photo_aide_button_forgetf = ctk.CTkImage(light_image=image_aide_button_forgetf_resized, dark_image=image_aide_button_forgetf_resized, size=(20, 20))
+
+# Afficher l'image dans un label
+aide_button_forget = ctk.CTkLabel(master=frame_button_forget, image=photo_aide_button_forget ,text='', cursor="hand2")
+aide_button_forget.configure(font=('Helvetica',15))
+
+aide_button_forget.bind("<Enter>", Enter_aide2)
+aide_button_forget.bind("<Leave>", Leave_aide2)
+
+button_errForget.pack(padx=10,side=tk.LEFT)
+aide_button_forget.pack(side=tk.LEFT)
+
 label_forget.pack(pady=10, padx=10)
 entry_forgotten.pack(pady=5, padx=10)
 button_errForget2.pack(pady=5, padx=10)
 
+
+# label_image_btn.pack(pady=(15, 10), padx=(0, 105)
 
 ######################
 
@@ -1348,10 +1431,43 @@ def vers_frame_tab_err() :
 
     frame_recap.pack(pady=15, padx=30, fill="both", expand=True)
 
-button_voir_err = ctk.CTkButton(master = frame_button, text="Voir ses incidents négatifs", command=vers_frame_tab_err)
+frame_button_recap = ctk.CTkFrame(master= frame_button,fg_color="#2b2b2b")
+
+
+button_voir_err = ctk.CTkButton(master = frame_button_recap, text="Voir ses incidents négatifs", command=vers_frame_tab_err)
 button_voir_err.configure(font=("Helvetica",15))
 button_voir_err.configure(height=50, width=300)
 
+###-_-Aide Voir Recap :
+
+def Enter_aide3(event) :
+    """Grise le help et fait apparaitre une tooltip avec une description"""
+    aide_button_voir_recap.configure(image=photo_aide_button_voir_recapf)
+    # TODO Tooltip
+
+
+def Leave_aide3(event) :
+    aide_button_voir_recap.configure(image=photo_aide_button_voir_recap)
+    #TODO Tooltip
+
+
+image_aide_button_voir_recap = Image.open(path_img_aide)
+image_aide_button_voir_recap_resized = image_aide_button_voir_recap.resize((100, 100), Image.LANCZOS)
+photo_aide_button_voir_recap = ctk.CTkImage(dark_image=image_aide_button_voir_recap_resized, size=(20, 20))
+
+image_aide_button_voir_recapf = Image.open(path_img_aidef)
+image_aide_button_voir_recapf_resized = image_aide_button_voir_recapf.resize((100, 100), Image.LANCZOS)
+photo_aide_button_voir_recapf = ctk.CTkImage(light_image=image_aide_button_voir_recapf_resized, dark_image=image_aide_button_voir_recapf_resized, size=(20, 20))
+
+# Afficher l'image dans un label
+aide_button_voir_recap = ctk.CTkLabel(master=frame_button_recap, image=photo_aide_button_voir_recap ,text='', cursor="hand2")
+aide_button_voir_recap.configure(font=('Helvetica',15))
+
+aide_button_voir_recap.bind("<Enter>", Enter_aide3)
+aide_button_voir_recap.bind("<Leave>", Leave_aide3)
+
+button_voir_err.pack(padx= 10,side=tk.LEFT)
+aide_button_voir_recap.pack(side=tk.LEFT)
 
 ########################################################################### Frame Speciale : Voir erreurs
 
