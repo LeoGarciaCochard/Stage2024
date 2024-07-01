@@ -3,15 +3,15 @@ from datetime import datetime
 import customtkinter as ctk
 import pandas as pd
 
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("green")
-
-root = ctk.CTk()
-root.title("Exemple avec CTk")
-root.geometry("1080x720")
+# ctk.set_appearance_mode("dark")
+# ctk.set_default_color_theme("green")
+#
+# root = ctk.CTk()
+# root.title("Exemple avec CTk")
+# root.geometry("1080x720")
 
 frame_participant = ctk.CTkFrame(master=root)
-frame_participant.pack(pady=20, padx=20, fill="both", expand=True)
+# frame_participant.pack(pady=20, padx=20, fill="both", expand=True)
 
 frame_quest_participant = ctk.CTkFrame(master=frame_participant)
 frame_quest_participant.pack(pady=20, padx=20, fill="both", expand=True)
