@@ -1,6 +1,7 @@
 import tkinter as tk
 from datetime import datetime
 import customtkinter as ctk
+import pandas as pd
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
@@ -21,7 +22,7 @@ dic_stress= {
     0: "Sans stress",  # 11 caractères
     16: "Pas trop stressé(e)",  # 12 caractères
     33: "Légèrement stressé(e)",  # 20 caractères
-    50: "Neutre",  # 6 caractères
+    48.5: "Neutre",  # 6 caractères
     66: "Assez stressé(e)",  # 13 caractères
     83: "Très stressé(e)",  # 12 caractères
     100: "Extrêmement stressé(e)"
@@ -38,20 +39,21 @@ dic_Hability_inf = {
 }
 
 dic_Passion = {
-    0: "Pas du tout passionné",        # 20 caractères
-    16: "Très peu passionné",          # 18 caractères
-    33: "Légèrement passionné",        # 21 caractères
-    50: "Passion neutre",              # 14 caractères
-    66: "Passionné",                   # 9 caractères
-    83: "Très passionné",              # 15 caractères
-    100: "Extrêmement passionné"       # 22 caractères
+    0: "Pas du tout passionné(e)",        # 20 caractères
+    16: "Très peu passionné(e)",          # 18 caractères
+    33: "Peu passionné(e)",        # 21 caractères
+    50: "Passion neutre(e)",              # 14 caractères
+    66: "Légèrement passionné(e)",                   # 9 caractères
+    83: "Très passionné(e)",              # 15 caractères
+    100: "Extrêmement passionné(e)"       # 22 caractères
 }
+
 
 dic_Bruit = {
     0: "Pas du tout bruyant",          # 19 caractères
     16: "Très peu bruyant",            # 16 caractères
     33: "Légèrement bruyant",          # 20 caractères
-    50: "Bruit neutre",                # 12 caractères
+    53.5: "Normal",                # 12 caractères
     66: "Assez bruyant",               # 13 caractères
     83: "Très bruyant",                # 12 caractères
     100: "Extrêmement bruyant"         # 21 caractères
@@ -70,7 +72,7 @@ selected_var_genre = tk.StringVar()
 
 selected_var_sommeil = tk.StringVar()
 selected_var_trouble_sommeil = tk.StringVar()
-selected_var_stress = dic_stress[50]
+selected_var_stress = dic_stress[48.5]
 
 selected_var_cafeine = tk.StringVar()
 selected_var_quantite_cafeine = 0
@@ -84,8 +86,8 @@ selected_var_Hability_inf = dic_Hability_inf[53]
 selected_var_experience = tk.StringVar()
 selected_var_Passion = dic_Passion[50]
 
-selected_var_distractions_travail = tk.StringVar()
-selected_var_Bruit = dic_Bruit[50]
+# selected_var_distractions_travail = tk.StringVar()
+selected_var_Bruit = dic_Bruit[53.5]
 
 ########## Titre :
 
@@ -213,7 +215,7 @@ combobox_sommeil.grid(row=1,column=1)
 
 def magnet_likert_Stress(valeur_actuelle) :
     """Magnetise la valeur à la plus proche sur l'echelle de likert """
-    liste = [0, 16 , 33 , 50, 66, 83, 100]
+    liste = [0, 16 , 33 , 48.5, 66, 83, 100]
 
     nouvelle_val = min(liste, key=lambda val: abs(val - valeur_actuelle))
     sliderStress.set(nouvelle_val)
@@ -246,7 +248,7 @@ label_Stress_2 = ctk.CTkLabel(master = cadreStress,text=dic_stress[33])
 label_Stress_2.grid(row=0, column=2, padx=10)
 label_Stress_2.configure(font=("Helvetica",13),text_color='green')
 
-label_Stress_3 = ctk.CTkLabel(master = cadreStress,text=dic_stress[50])
+label_Stress_3 = ctk.CTkLabel(master = cadreStress,text=dic_stress[48.5])
 label_Stress_3.grid(row=0, column=3, padx=10)
 label_Stress_3.configure(font=("Helvetica",13),text_color='white')
 
@@ -265,6 +267,7 @@ label_Stress_6.configure(font=("Helvetica",13),text_color='red')
 
 sliderStress = ctk.CTkSlider(master = frame_Stress, from_=0, to=100, width=700, command=magnet_likert_Stress)
 sliderStress.pack()
+sliderStress.set(48.5)
 
 ######### Caféine
 
@@ -277,6 +280,7 @@ def change_cafeine(rep):
     #Actver la quantité si rep == oui
     if rep == "Oui" :
         combobox_quantite_cafeine.configure(state='readonly')
+        combobox_quantite_cafeine.set("0")
     #Sinon remettre en disabled et réinitialiser la valeur
     else :
         combobox_quantite_cafeine.set("0")
@@ -299,6 +303,7 @@ label_cafeine.grid(row=1,column=0, ipadx=20, ipady=5)
 combobox_quantite_cafeine = ctk.CTkComboBox(master=frame_cafeine, values=["0","1","2","3","4","Plus de 5"], state="disabled", command= lambda x : change_tasses_cafeine(x))
 combobox_quantite_cafeine.grid(row=1,column=1)
 
+
 ######### Nicotine
 
 frame_nicotine = ctk.CTkFrame(master=frame_quest_participant)
@@ -310,6 +315,7 @@ def change_nicotine(rep):
     #Actver la quantité si rep == oui
     if rep == "Oui" :
         combobox_quantite_nicotine.configure(state='readonly')
+        combobox_quantite_nicotine.set("0")
     #Sinon remettre en disabled et réinitialiser la valeur
     else :
         combobox_quantite_nicotine.set("0")
@@ -332,19 +338,75 @@ label_nicotine.grid(row=1,column=0, ipadx=20, ipady=5)
 combobox_quantite_nicotine = ctk.CTkComboBox(master=frame_nicotine, values=["0","1","2","3","4","Plus de 5"], state="disabled", command= lambda x : change_cigarettes_nicotine(x))
 combobox_quantite_nicotine.grid(row=1,column=1)
 
+
+def versPart2():
+    frame_quest_participant.pack_forget()
+    frame_quest_participant2.pack(pady=20, padx=20, fill="both", expand=True)
+
+
+button_part2 = ctk.CTkButton(master=frame_quest_participant, text="Suivant", width=250, height=60, command=versPart2)
+button_part2.configure(font=("Helvetica", 20, "bold"))
+button_part2.pack(pady=20, padx=10)
+
+
+
+
+
+
 ##########PAGE 2
 
 frame_quest_participant2 = ctk.CTkFrame(master=frame_participant)
+
+def versPart1():
+    frame_quest_participant2.pack_forget()
+    frame_quest_participant.pack(pady=20, padx=20, fill="both", expand=True)
+
+
+button_part1 = ctk.CTkButton(master=frame_quest_participant2, text="Retour", width=200, height=30, command=versPart1)
+button_part1.configure(font=("Helvetica", 20, "bold"))
+button_part1.pack(pady=10, padx=10)
+
+
+def on_enter3(event):
+    button_participant_f4.configure(text="❌ Fermer")
+def on_leave3(event):
+    button_participant_f4.configure(text="❌")
+
+button_participant_f4 = ctk.CTkButton(master = frame_quest_participant, text="❌", width=15, command=lambda : arretExpe(True))
+button_participant_f4.configure(fg_color="red", hover_color="white", text_color="black")
+button_participant_f4.place(x=5,y=5)
+
+button_participant_f4.bind("<Enter>", on_enter3)
+button_participant_f4.bind("<Leave>", on_leave3)
+
+
+
 ########## Situation Professionelle :
 
 ########## Titre SPro (Situation Professionelle) :
 
 cadre_participantSPro = ctk.CTkFrame(master=frame_quest_participant2)
-cadre_participantSPro.pack(pady=10, padx=50)
+cadre_participantSPro.pack(pady=(30,10), padx=50)
 
 label_participantSPro = ctk.CTkLabel(master= cadre_participantSPro, text="Situation professionelle :")
 label_participantSPro.pack(pady=5, padx=50)
 label_participantSPro.configure(font=("Helvetica", 15))
+
+########## expérience :
+
+frame_experience = ctk.CTkFrame(master=frame_quest_participant2)
+frame_experience.pack(padx= 50, pady=10, fill="both")
+
+def change_expe_travail(rep):
+    global selected_var_experience
+    selected_var_experience = rep
+
+label_expe = ctk.CTkLabel(master=frame_experience, text="Depuis combien de temps faites-vous ce travail ?")
+label_expe.grid(row=1,column=0, ipadx=5, ipady=5)
+
+combobox_expe = ctk.CTkComboBox(master=frame_experience, values=["Moins d'un an", "2 ans", "3 ans"," 4 ans", "plus de 5 ans", "plus de 10 ans"], state="readonly", command= lambda x : change_expe_travail(x))
+combobox_expe.grid(row=1,column=1)
+
 
 ########## Habilité informatique :
 
@@ -405,44 +467,243 @@ sliderHability_inf.pack()
 sliderHability_inf.set(53)
 
 
+########## Passion :
+
+def magnet_likert_Passion(valeur_actuelle) :
+    """Magnetise la valeur à la plus proche sur l'echelle de likert """
+    liste = [0, 16 , 33 , 50, 66, 83, 100]
+
+    nouvelle_val = min(liste, key=lambda val: abs(val - valeur_actuelle))
+    sliderPassion.set(nouvelle_val)
+    global selected_var_Passion
+    selected_var_Passion= dic_Passion[nouvelle_val]
+
+
+frame_Passion = ctk.CTkFrame(master=frame_quest_participant2)
+frame_Passion.pack(pady=10, padx=50, fill="both")
+
+label_Passion = ctk.CTkLabel(master = frame_Passion,text="A quel point aimez-vous ce travail ?: ")
+label_Passion.pack(pady=10)
+label_Passion.configure(font=("Helvetica", 15))
+
+###Slider
+
+cadrePassion = ctk.CTkFrame(master=frame_Passion)
+cadrePassion.pack(anchor=tk.CENTER, pady=10)
+
+
+label_Passion_0 = ctk.CTkLabel(master = cadrePassion,text=dic_Passion[0])
+label_Passion_0.grid(row=0, column=0, padx=10)
+label_Passion_0.configure(font=("Helvetica",13),text_color='green')
+
+label_Passion_1 = ctk.CTkLabel(master = cadrePassion,text=dic_Passion[16])
+label_Passion_1.grid(row=0, column=1, padx=10)
+label_Passion_1.configure(font=("Helvetica",13),text_color='green')
+
+label_Passion_2 = ctk.CTkLabel(master = cadrePassion,text=dic_Passion[33])
+label_Passion_2.grid(row=0, column=2, padx=10)
+label_Passion_2.configure(font=("Helvetica",13),text_color='green')
+
+label_Passion_3 = ctk.CTkLabel(master = cadrePassion,text=dic_Passion[50])
+label_Passion_3.grid(row=0, column=3, padx=10)
+label_Passion_3.configure(font=("Helvetica",13),text_color='white')
+
+
+label_Passion_4 = ctk.CTkLabel(master = cadrePassion,text=dic_Passion[66])
+label_Passion_4.grid(row=0, column=4, padx=10)
+label_Passion_4.configure(font=("Helvetica",13),text_color='red')
+
+label_Passion_5 = ctk.CTkLabel(master = cadrePassion,text=dic_Passion[83])
+label_Passion_5.grid(row=0, column=5, padx=10)
+label_Passion_5.configure(font=("Helvetica",13),text_color='red')
+
+label_Passion_6 = ctk.CTkLabel(master = cadrePassion,text=dic_Passion[100])
+label_Passion_6.grid(row=0, column=6, padx=10)
+label_Passion_6.configure(font=("Helvetica",13),text_color='red')
+
+sliderPassion = ctk.CTkSlider(master = frame_Passion, from_=0, to=100, width=800, command=magnet_likert_Passion)
+sliderPassion.pack()
+sliderPassion.set(50)
 
 
 
 
+########## Envorinemment de travail :
+
+########## Titre ET (Envorinemment de travail) :
+
+cadre_participantET = ctk.CTkFrame(master=frame_quest_participant2)
+cadre_participantET.pack(pady=(40,10), padx=50)
+
+label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Envorinemment de travail :")
+label_participantET.pack(pady=5, padx=50)
+label_participantET.configure(font=("Helvetica", 15))
 
 
+########## Bruit environnant :
+
+def magnet_likert_Bruit(valeur_actuelle) :
+    """Magnetise la valeur à la plus proche sur l'echelle de likert """
+    liste = [0, 16 , 33 , 53.5, 66, 83, 100]
+
+    nouvelle_val = min(liste, key=lambda val: abs(val - valeur_actuelle))
+    sliderBruit.set(nouvelle_val)
+    global selected_var_Bruit
+    selected_var_Bruit= dic_Bruit[nouvelle_val]
+
+
+frame_Bruit = ctk.CTkFrame(master=frame_quest_participant2)
+frame_Bruit.pack(pady=10, padx=53.5, fill="both")
+
+label_Bruit = ctk.CTkLabel(master = frame_Bruit,text="Le niveau de bruit dans votre environnement de travail est : ")
+label_Bruit.pack(pady=10)
+label_Bruit.configure(font=("Helvetica", 15))
+
+###Slider
+
+cadreBruit = ctk.CTkFrame(master=frame_Bruit)
+cadreBruit.pack(anchor=tk.CENTER, pady=10)
+
+
+label_Bruit_0 = ctk.CTkLabel(master = cadreBruit,text=dic_Bruit[0])
+label_Bruit_0.grid(row=0, column=0, padx=10)
+label_Bruit_0.configure(font=("Helvetica",13),text_color='green')
+
+label_Bruit_1 = ctk.CTkLabel(master = cadreBruit,text=dic_Bruit[16])
+label_Bruit_1.grid(row=0, column=1, padx=10)
+label_Bruit_1.configure(font=("Helvetica",13),text_color='green')
+
+label_Bruit_2 = ctk.CTkLabel(master = cadreBruit,text=dic_Bruit[33])
+label_Bruit_2.grid(row=0, column=2, padx=10)
+label_Bruit_2.configure(font=("Helvetica",13),text_color='green')
+
+label_Bruit_3 = ctk.CTkLabel(master = cadreBruit,text=dic_Bruit[53.5])
+label_Bruit_3.grid(row=0, column=3, padx=10)
+label_Bruit_3.configure(font=("Helvetica",13),text_color='white')
+
+
+label_Bruit_4 = ctk.CTkLabel(master = cadreBruit,text=dic_Bruit[66])
+label_Bruit_4.grid(row=0, column=4, padx=10)
+label_Bruit_4.configure(font=("Helvetica",13),text_color='red')
+
+label_Bruit_5 = ctk.CTkLabel(master = cadreBruit,text=dic_Bruit[83])
+label_Bruit_5.grid(row=0, column=5, padx=10)
+label_Bruit_5.configure(font=("Helvetica",13),text_color='red')
+
+label_Bruit_6 = ctk.CTkLabel(master = cadreBruit,text=dic_Bruit[100])
+label_Bruit_6.grid(row=0, column=6, padx=10)
+label_Bruit_6.configure(font=("Helvetica",13),text_color='red')
+
+sliderBruit = ctk.CTkSlider(master = frame_Bruit, from_=0, to=100, width=653.5, command=magnet_likert_Bruit)
+sliderBruit.pack()
+sliderBruit.set(53.5)
 
 
 ######### Bouton + Vérif
+# n_anonymat = 1
 
-def printed() :
-    print(  selected_var_heure,
-            selected_var_age,
-            selected_var_genre,
 
-            selected_var_sommeil,
-            selected_var_trouble_sommeil,
-            selected_var_stress,
+def validate_variables():
+    variables = [
+        selected_var_age,
+        selected_var_genre,
+        selected_var_sommeil,
+        selected_var_trouble_sommeil,
+        selected_var_cafeine,
+        selected_var_nicotine,
+        selected_var_experience
+    ]
+    i= 0
+    for var in variables:
+        print(var,type(var))
+        if type(var) == int or type(var)== str :
+            print("---------------C'est un str ou int")
+            i+=1
 
-            selected_var_cafeine,
-            selected_var_quantite_cafeine,
+    print(i)
+    if i == 7 :
+        return True
+    else :
+        return False
 
-            selected_var_nicotine,
-            selected_var_quantite_nicotine,
+def versBouton() :
+    """
+    Récupère les données de l'utilisateur
+    Donne un numéro de candidat
+    Crée le répertoire
+    stock les données utilisateur dans un csv
+    lance le rec
+    Affiche la page suivante
+    """
 
-            selected_var_Hability_inf,
-            selected_var_experience,
-            selected_var_Passion,
+    # recuperation_donnees_participant
+    generer_ano()
 
-            selected_var_distractions_travail,
-            selected_var_Bruit)
+    if validate_variables() :
+        df = pd.read_excel("../Sources/info_participants.xlsx", index_col='N_Ano')
+        global n_anonymat
 
-    frame_quest_participant.pack_forget()
-    frame_quest_participant2.pack(pady=20, padx=20, fill="both", expand=True)
+        nouvelle_ligne ={
+            "N_Ano" : n_anonymat,
+            "Heure" : selected_var_heure,
+            "Age" : selected_var_age,
+            "Genre" : selected_var_genre,
 
-button_versB = ctk.CTkButton(master = frame_quest_participant, text="Suivant", width= 250, height=60, command=printed)
+            "Sommeil"  : selected_var_sommeil,
+            "Troubles du sommeil"  : selected_var_trouble_sommeil,
+            "Stress" : selected_var_stress,
+
+            "Caféine"   : selected_var_cafeine,
+            "Quantité de caféine"  : selected_var_quantite_cafeine,
+
+            "Nicotine" : selected_var_nicotine,
+            "Quantité de nicotine" : selected_var_quantite_nicotine,
+
+            "Maîtrise de l'informatique"  : selected_var_Hability_inf,
+            "Experience" : selected_var_experience,
+            "Passion"  : selected_var_Passion,
+            "Bruit"  : selected_var_Bruit
+        }
+        df.iloc[-1] = nouvelle_ligne
+        df.to_excel("../Sources/info_participants.xlsx", index=True)
+
+        # versBouton
+        creer_repertoire(n_anonymat)
+
+        # Stock les données
+
+        start_recording_thread()
+
+        # Afficher page bouton
+
+        frame_participant.pack_forget()
+        frame_button.pack(pady=20, padx=50, fill="both", expand=True)
+        button_err.pack(pady=((height / 2) - 100, 30), padx=10)
+
+        button_errForget.pack(pady=10, padx=10)
+        button_voir_err.pack(pady=0, padx=10)
+        label_image_btn.pack(pady=(15, 10), padx=(0, 105))
+        entry_cachee.focus_set()
+    else :
+        print("Pas bien")
+
+button_versB = ctk.CTkButton(master = frame_quest_participant2, text="Terminé !", width= 250, height=60, command=versBouton)
 button_versB.configure(font=("Helvetica", 20, "bold"))
-button_versB.pack(pady=10, padx=10)
+button_versB.pack(pady=10, padx=10,side=tk.BOTTOM)
+
+def on_enter4(event):
+    button_participant_f4_2.configure(text="❌ Fermer")
+def on_leave4(event):
+    button_participant_f4_2.configure(text="❌")
+
+button_participant_f4_2 = ctk.CTkButton(master = frame_quest_participant2, text="❌", width=15, command=lambda : arretExpe(True))
+button_participant_f4_2.configure(fg_color="red", hover_color="white", text_color="black")
+button_participant_f4_2.place(x=5,y=5)
+
+button_participant_f4_2.bind("<Enter>", on_enter4)
+button_participant_f4_2.bind("<Leave>", on_leave4)
+
+
 
 
 root.mainloop()

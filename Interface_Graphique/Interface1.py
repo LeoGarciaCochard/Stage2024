@@ -317,7 +317,7 @@ def creer_repertoire(n) :
 #Anonymat
 
 def generer_ano() :
-    df_anonymat = pd.read_excel("../Sources/anonymat.xlsx")
+    df_anonymat = pd.read_excel("../Sources/info_participants.xlsx", index_col='N_Ano')
 
     #On récupère la dernière ligne de la colonne "N_ano" et ajoute 1 pour le nouveau numéro d'ano
     global n_anonymat
@@ -326,8 +326,13 @@ def generer_ano() :
     #Ajoute le n_anonymat à la fin du tableau
 
     nouvelle_ligne = pd.DataFrame({"N_Ano": [n_anonymat]})
-    df_anonymat = pd.concat([df_anonymat, nouvelle_ligne], ignore_index=True)
-    df_anonymat.to_excel("../Sources/anonymat.xlsx", index=False)
+    df_anonymat = pd.concat([df_anonymat, nouvelle_ligne], ignore_index=False)
+
+    if n_anonymat == 1 : #On supprime la colonne 0 si n = 1
+        df_anonymat.drop(0, inplace=True)
+
+
+    df_anonymat.to_excel("../Sources/anonymat.xlsx", index=True)
 
 
 
@@ -439,55 +444,8 @@ cadre_demande_info3.pack(pady=5, padx=50, fill="both", expand=True)
 
 #On récupère n_anonymat, et on lance les rec
 
-def versBouton() :
-    """
-    Récupère les données de l'utilisateur
-    Donne un numéro de candidat
-    Crée le répertoire
-    stock les données utilisateur dans un csv
-    lance le rec
-    Affiche la page suivante
-    """
-    # recuperation_donnees_participant
 
-    generer_ano()
-    creer_repertoire(n_anonymat)
-
-    # Stock les données
-
-    start_recording_thread()
-
-    # Afficher page bouton
-
-    frame_participant.pack_forget()
-    frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-    button_err.pack(pady=((height / 2) -100  , 30), padx=10)
-
-    button_errForget.pack(pady=10, padx=10)
-    button_voir_err.pack(pady=0, padx=10)
-    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
-    entry_cachee.focus_set()
-
-
-
-
-button_versB = ctk.CTkButton(master = frame_participant, text="Suivant", width= 250, height=60, command=versBouton)
-button_versB.configure(font=("Helvetica", 20, "bold"))
-button_versB.pack(pady=10, padx=10)
-
-
-########## bouton f4 page participant
-def on_enter3(event):
-    button_participant_f4.configure(text="❌ Fermer")
-def on_leave3(event):
-    button_participant_f4.configure(text="❌")
-
-button_participant_f4 = ctk.CTkButton(master = frame_participant, text="❌", width=15, command=lambda : arretExpe(True))
-button_participant_f4.configure(fg_color="red", hover_color="white", text_color="black")
-button_participant_f4.place(x=5,y=5)
-
-button_participant_f4.bind("<Enter>", on_enter3)
-button_participant_f4.bind("<Leave>", on_leave3)
+# import page_particpant.py #TODO
 
 
 
