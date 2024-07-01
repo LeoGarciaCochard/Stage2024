@@ -1,20 +1,23 @@
+
+Heure de la journée au moment de l'étude ?
+
+
 ##Informations personnelles :
 
 Âge 								(Nombre)
 Genre 								(Femme / Homme / Autre)
 
-##Informations de contexte :
+##Situation personelle :
 
-Heure de la journée au moment de l'étude ?
 Temps de sommeil 						(Heures)
 Troubles du sommeil ? 						(Oui/Non)
 Niveau de stress 						(auto-évaluation sur une échelle de Likert)
 Consommation de caféine 					(Oui/Non) si oui, combien par jour
 Consommation de nicotine 					(Oui/Non) si oui, combien par jour
-Habileté à l'informatique 					(auto-évaluation sur une échelle de Likert)
 
 ##Travail :
 
+Habileté à l'informatique 					(auto-évaluation sur une échelle de Likert)
 Depuis combien de temps faites-vous ce travail ? 		(Moins d'un an, 2 ans, 3 ans, 4 ans, plus de 5 ans, plus de 10 ans)
 Aimez-vous ce travail ? 					(auto-évaluation sur une échelle de Likert)
 
@@ -22,4 +25,5 @@ Aimez-vous ce travail ? 					(auto-évaluation sur une échelle de Likert)
 
 Fréquence des distractions (collègues, pauses..) 		(auto-évaluation sur une échelle de Likert)
 Niveau de bruit de l'environnement de travail 			(auto-évaluation sur une échelle de Likert)		
+
 

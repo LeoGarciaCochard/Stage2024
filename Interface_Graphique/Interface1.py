@@ -25,7 +25,7 @@ from tkinter import Toplevel, Label
 ########################################################################### Variables Globales
 
 screen_width = 3072
-width = 1000                        #Taille de la fenêtre
+width = 400                        #Taille de la fenêtre
 height = 800                          #Taille de la fenêtre
 time_start = None
 temps_stim = None
@@ -69,6 +69,8 @@ dic_likert_Fatigue =    { 0: "Pas fatigué",
 path_img_btn = "../Sources/btn.png"
 path_img_btnf = "../Sources/btn_f.png"
 
+path_img_aide = "../Sources/aide.png"
+path_img_aidef = "../Sources/aide_f.png"
 ########################################################################### Lancement de l'interface
 
 ctk.set_appearance_mode("dark")
@@ -505,8 +507,9 @@ selected_var_Hability_inf = dic_Hability_inf[53]
 selected_var_experience = "+de 10"
 selected_var_Passion = dic_Passion[50]
 
-# selected_var_distractions_travail = tk.StringVar()
 selected_var_Bruit = dic_Bruit[53.5]
+
+
 
 ########## Titre :
 
@@ -1100,7 +1103,7 @@ def versBouton() :
 
         frame_participant.pack_forget()
         frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-        button_err.pack(pady=((height / 2) - 100, 30), padx=10)
+        frame_button_err.pack(pady=((height / 2) - 200,0), anchor='center')
 
         button_errForget.pack(pady=10, padx=10)
         button_voir_err.pack(pady=0, padx=10)
@@ -1132,14 +1135,19 @@ button_participant_f4_2.bind("<Leave>", on_leave4)
 
 def forgottenErr1() :
 
+#On unpack le bouton j'ai oublié
     button_errForget.pack_forget()
+
+#On unpack les boutons d'après puis on les remettera pour qu'ils soient dans le bon ordre
     button_voir_err.pack_forget()
     label_image_btn.pack_forget()
+
+#On affiche la frame contenant l'entry et le bouton valider
     frame_button_cadre.pack(pady=10, padx=10)
+#Si jamais la description rapide du bouton ajout rapide est affichée, on l'enlève
     unpack_textbox()
-    label_forget.pack(pady=10, padx=10)
-    entry_forgotten.pack(pady=5, padx=10)
-    button_errForget2.pack(pady=5, padx=10)
+
+#On fait apparaitre les boutons suivants dans le bon ordre
     button_voir_err.pack(pady=0, padx = 10)
     label_image_btn.pack(pady=(15, 10), padx=(0, 105))
 
@@ -1166,6 +1174,7 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
 
     # Retier la page bouton
     frame_button.pack_forget()
+
     button_errForget.pack_forget()
     entry_forgotten.pack_forget()
     button_errForget2.pack_forget()
@@ -1179,27 +1188,70 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
     Concentration_Type()
 
 
+
+################################################--Frame Bouton
+
 frame_button = ctk.CTkFrame(master=root)
-button_err = ctk.CTkButton(master = frame_button, text="Renseigner un incident négatif",command=lambda : stimulation(0))
+
+#########--BOUTON ERR PRINCIPAL
+
+frame_button_err = ctk.CTkFrame(master = frame_button, fg_color="#2b2b2b")
+
+button_err = ctk.CTkButton(master = frame_button_err, text="Renseigner un incident négatif",command=lambda : stimulation(0))
 button_err.configure(height=200, width=200, corner_radius=20, font=("Helvetica", 30, "bold") )
 
+#AIDE Button ERR
 
-#TODO AjoutRapide
+def Enter_aide1(event) :
+    """Grise le help et fait apparaitre une tooltip avec une description"""
+    aide_button_err.configure(image=photo_aide_button_errf)
+    # TODO Tooltip
+
+
+def Leave_aide1(event) :
+    aide_button_err.configure(image=photo_aide_button_err)
+    #TODO Tooltip
+
+image_aide_button_err = Image.open(path_img_aide)
+image_aide_button_err_resized = image_aide_button_err.resize((100, 100), Image.LANCZOS)
+photo_aide_button_err = ctk.CTkImage(dark_image=image_aide_button_err_resized, size=(20, 20))
+
+image_aide_button_errf = Image.open(path_img_aidef)
+image_aide_button_errf_resized = image_aide_button_errf.resize((100, 100), Image.LANCZOS)
+photo_aide_button_errf = ctk.CTkImage(light_image=image_aide_button_errf_resized, dark_image=image_aide_button_errf_resized, size=(20, 20))
+
+# Afficher l'image dans un label
+aide_button_err = ctk.CTkLabel(master=frame_button_err, image=photo_aide_button_err ,text='', cursor="hand2")
+aide_button_err.configure(font=('Helvetica',15))
+
+aide_button_err.bind("<Enter>", Enter_aide1)
+aide_button_err.bind("<Leave>", Leave_aide1)
+
+
+button_err.pack(pady=0, padx=10,side=tk.LEFT)
+aide_button_err.pack(side=tk.LEFT,pady=100)
+
+
+
+
+
+
+#TODO AjoutRapide stimulation
 
 def unpack_textbox() :
-    textbox_description.delete("1.0", tk.END)
+    textbox_description.delete(0,tk.END)
     textbox_description.pack_forget()
     textbov_validation.pack_forget()
 
 def pack_text_box() :
     textbox_description.pack(pady=10, padx=10)
     textbov_validation.pack(pady=10, padx=10)
-    textbox_description.focus_set()
+    # textbox_description.focus_set()
 
 def recup_desc() :
     # Récupère la description :
     global description_rapide
-    description_rapide = textbox_description.get("1.0", tk.END).strip()
+    description_rapide = textbox_description.get().strip()
 
     #Stimule :
     stimulation(3)
@@ -1208,7 +1260,7 @@ def recup_desc() :
 
 
 
-textbox_description = ctk.CTkTextbox(master= frame_button, width= 100, height=50)
+textbox_description = ctk.CTkEntry(master= frame_button, width= 200, placeholder_text="Rapide description...")
 textbov_validation = ctk.CTkButton(master = frame_button, text= "Valider ou Ignorer", command=recup_desc)
 
 
@@ -1237,12 +1289,15 @@ label_image_btn.bind("<Enter>", on_enter3)
 label_image_btn.bind("<Leave>", on_leave3)
 
 
-#TODO Trouver bonne forme
 
-frame_button_cadre = ctk.CTkFrame(master=frame_button)
+###############--Bouton forget
+
+frame_button_forget = ctk.CTkFrame(master= frame_button)
+
+frame_button_cadre = ctk.CTkFrame(master=frame_button_forget)
 
 
-button_errForget = ctk.CTkButton(master = frame_button, text="J'ai oublié de renseigner un incident négatif", command=forgottenErr1)
+button_errForget = ctk.CTkButton(master = frame_button_forget, text="J'ai oublié de renseigner un incident négatif", command=forgottenErr1)
 button_errForget.configure(font=("Helvetica",15),height=50, width=300)
 
 label_forget = ctk.CTkLabel(master = frame_button_cadre, text="Combien de temps s'est-il passé depuis l'incident négatif ? \n (En minutes)")
@@ -1252,6 +1307,13 @@ entry_forgotten = ctk.CTkEntry(master = frame_button_cadre, placeholder_text=("T
 entry_forgotten.bind("<Return>", lambda x : forgottenErr2())
 
 button_errForget2 = ctk.CTkButton(master = frame_button_cadre, text="Valider", command=forgottenErr2)
+
+label_forget.pack(pady=10, padx=10)
+entry_forgotten.pack(pady=5, padx=10)
+button_errForget2.pack(pady=5, padx=10)
+
+
+######################
 
 entry_cachee = ctk.CTkEntry(master = frame_button)                               #Subterfuge pour appuyer sur le bouton Erreur avec "entrée"
 entry_cachee.pack()                                                              #Subterfuge pour appuyer sur le bouton Erreur avec "entrée"
