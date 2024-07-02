@@ -123,7 +123,7 @@ path_recordStim_ov = r""
 
 
 dico_aide = {
-    "Erreur" : "En cliquant sur ce bouton, vous signalez un incident. Un questionnaire s'ouvrira. \nMerci de remplir au moins la première page. Si vous avez le temps, complétez le reste. Sinon, \ncliquez sur 'Envoyer'. Vous pourrez toujours le compléter plus tard en cliquant sur \n'Voir Récapitulatif'.",
+    "Erreur" : "En cliquant sur ce bouton, vous signalez un incident. Un questionnaire s'ouvrira. \nMerci de remplir au moins la première page. Si vous avez le temps, complétez le reste. Sinon, \ncliquez sur 'Envoyer en l'état'. Vous pourrez toujours le compléter plus tard en \ncliquant sur 'Voir Récapitulatif'.",
     "Forget" : "En cliquant sur ce bouton, vous signalez un incident a posteriori, c'est-à-dire que \nvous aviez oublié de le signaler en temps voulu. Vous devez indiquer un nombre \napproximatif de minutes depuis la survenue de l'erreur. Ensuite, le questionnaire s'ouvrira \navec les mêmes instructions que pour un signalement normal.",
     "Recap"  : "En cliquant sur ce bouton, vous pourrez voir un récapitulatif des incidents déjà \nsignalés. Vous aurez la possibilité de modifier vos réponses en cliquant sur 'Modifier' \nà la ligne correspondante. Deux tableaux sont disponibles : \n--Le premier, 'Informations complétées', indique les incidents pour lesquels au moins la \npremière page est renseignée. \n--Le second, 'Informations à compléter', indique ceux qu'il vous reste à compléter, \npar exemple ceux renseignés via 'Ajout Rapide'.",
     "Rapide" : "En cliquant sur ce bouton, vous pouvez signaler un incident de manière rapide. Vous \npouvez, si vous le souhaitez, fournir une brève description (facultatif) pour vous aider à le \ncompléter plus tard. Cet incident sera placé dans le tableau 'Informations à compléter' \nsur la page du récapitulatif."
@@ -291,8 +291,10 @@ def start_recording_thread():
 def stimulation(parametre ,t = 0) :
     """
     Paramètre : 0 si l'erreur est déclarée sur le moment
-                1 si l'erreur est déclérée à posteriori
+                1 si l'erreur est déclarée à posteriori
                 2 le moment ou l'erreur est déclarée à posteriori
+                3 Ajout rapide
+                4 Anulation, avec id cible
 
     t :  t = 0 si sur le moment t = minutes rentrées par l'utilisateur en cas d'oubli
 
@@ -817,7 +819,7 @@ def versPart2():
 
 button_part2 = ctk.CTkButton(master=frame_quest_participant, text="Suivant", width=250, height=60, command=versPart2)
 button_part2.configure(font=("Helvetica", 20, "bold"))
-button_part2.pack(pady=20, padx=10, side=tk.BOTTOM)
+button_part2.pack(pady=10, padx=10, side=tk.BOTTOM)
 
 
 
@@ -1665,6 +1667,235 @@ def on_frame_configure2(event=None):
 
 scrollable_frame2.bind("<Configure>", on_frame_configure2)
 
+def choisir_envoyer_etat() :
+    if button_quit_Modif.winfo_ismapped() :
+        envoyer_en_l_etat_modif()
+    else :
+        envoyer_en_l_etat()
+
+def envoyer_en_l_etat() :
+    # Récupération des données :
+
+    type = get_selected_button_value()
+    faute = selected_option_Bad.get()
+    niveau_importance = dic_likert_Importance[sliderImportance.get()]
+    description = entry_Commentaire.get("1.0", tk.END).strip()
+    niveau_concentration = dic_likert_Concentration[sliderConcentration.get()]
+    distraction = selected_optionDistraction.get()
+    natureDistration = entry_Distraction.get()
+    niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
+    niveau_difficulte = selected_optionDifficulte.get()
+
+    if id_time_code - 1 >= 0:  # ID d'erreurs indiquées au bon moment ont un id positif et de param 0
+        parameter = 0  # Les erreurs oubliées ont un id négatif et sont donc de param 1
+    else:
+        parameter = 1
+
+    path = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
+
+
+    if (distraction == "Oui"):
+        if (natureDistration != ''):
+            nouvelle_ligne = pd.DataFrame({
+                "ID": [dernier_id],
+                "Path": [path],
+                "Timecode": [dernier_time_code],
+                "Parameter": [dernier_parametre],
+                "ID Cible": [''],
+                "Type": [type],
+                "Faute": [faute],
+                "Importance": [niveau_importance],
+                "Description": [description],
+                "Concentration": [niveau_concentration],
+                "Distrait": [distraction],
+                "NatureDistraction": [natureDistration],
+                "Fatigue": [niveau_fatigue],
+                "Difficulte": [niveau_difficulte]})
+
+            df = pd.read_excel(excel_path)
+            df = pd.concat([df, nouvelle_ligne])
+            df.to_excel(excel_path, index=False)
+            reset_entry()
+            retourPage2()
+
+    elif (distraction == "Non"):
+        if (natureDistration == ''):
+            nouvelle_ligne = pd.DataFrame({
+                "ID": [dernier_id],
+                "Path": [path],
+                "Timecode": [dernier_time_code],
+                "Parameter": [dernier_parametre],
+                "ID Cible": [''],
+                "Type": [type],
+                "Faute": [faute],
+                "Importance": [niveau_importance],
+                "Description": [description],
+                "Concentration": [niveau_concentration],
+                "Distrait": [distraction],
+                "NatureDistraction": [natureDistration],
+                "Fatigue": [niveau_fatigue],
+                "Difficulte": [niveau_difficulte]})
+
+            df = pd.read_excel(excel_path)
+            df = pd.concat([df, nouvelle_ligne])
+            df.to_excel(excel_path, index=False)
+            reset_entry()
+            retourPage2()
+    else :
+        nouvelle_ligne = pd.DataFrame({
+            "ID": [dernier_id],
+            "Path": [path],
+            "Timecode": [dernier_time_code],
+            "Parameter": [dernier_parametre],
+            "ID Cible": [''],
+            "Type": [type],
+            "Faute": [faute],
+            "Importance": [niveau_importance],
+            "Description": [description],
+            "Concentration": [niveau_concentration],
+            "Distrait": [distraction],
+            "NatureDistraction": [natureDistration],
+            "Fatigue": [niveau_fatigue],
+            "Difficulte": [niveau_difficulte]})
+
+        df = pd.read_excel(excel_path)
+        df = pd.concat([df, nouvelle_ligne])
+        df.to_excel(excel_path, index=False)
+        reset_entry()
+        retourPage2()
+
+def verifier_quest1_complet() :
+
+    type = get_selected_button_value()
+    faute = selected_option_Bad.get().strip()
+    description = entry_Commentaire.get("1.0", tk.END).strip()
+
+    rep = (type != '' and faute != '' and description != "Description de l'incident négatif...")
+    rep_vide = (type != 'nan' and faute != 'nan' and description != "nan")
+
+    print(type, faute, description, rep, rep_vide)
+    print(selected_option_Bad.get())
+
+    return rep and rep_vide
+
+
+def verifier_quest1_complet_xlsx(row) :
+
+    type = str(row['Type'])
+    faute = str(row['Faute'])
+    description = str(row['Description'])
+
+
+    rep = (type != '' and faute != '' and description != "Description de l'incident négatif...")
+    rep_vide = (type != 'nan' and faute != 'nan' and description != "nan")
+
+    return rep and rep_vide
+
+
+def envoyer_en_l_etat_modif() :
+    print("sauvegarder modif ")
+
+    global excel_path, row_modif
+
+    type = get_selected_button_value()
+    faute = selected_option_Bad.get()
+    niveau_importance = dic_likert_Importance[sliderImportance.get()]
+    description = entry_Commentaire.get("1.0", tk.END).strip()
+    niveau_concentration = dic_likert_Concentration[sliderConcentration.get()]
+    distraction = selected_optionDistraction.get()
+    natureDistration = entry_Distraction.get()
+    niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
+    niveau_difficulte = selected_optionDifficulte.get()
+
+    df = pd.read_excel(excel_path)
+
+
+    if (distraction == "Oui"):
+        if (natureDistration != ''):
+
+            updates = {
+                "Type": type,
+                "Faute": faute,
+                "Importance": niveau_importance,
+                "Description": description,
+                "Concentration": niveau_concentration,
+                "Distrait": distraction,
+                "NatureDistraction": natureDistration,
+                "Fatigue": niveau_fatigue,
+                "Difficulte": niveau_difficulte}
+
+            for column, new_value in updates.items():
+                df.at[row_modif, column] = new_value
+
+            df.to_excel(excel_path, index=False)
+
+            reset_entry()
+            button_done_modif.pack_forget()
+            button_quit_Modif.place_forget()
+
+            button_quit.place(x=5, y=5)
+            frame_quest.pack_forget()
+
+            frame_button.pack(pady=20, padx=50, fill="both", expand=True)
+
+            pack_button_tout()
+
+    elif (distraction == "Non"):
+        if (natureDistration == ''):
+
+            updates = {
+                "Type": type,
+                "Faute": faute,
+                "Importance": niveau_importance,
+                "Description": description,
+                "Concentration": niveau_concentration,
+                "Distrait": distraction,
+                "NatureDistraction": natureDistration,
+                "Fatigue": niveau_fatigue,
+                "Difficulte": niveau_difficulte}
+
+            for column, new_value in updates.items():
+                df.at[row_modif, column] = new_value
+
+            df.to_excel(excel_path, index=False)
+
+            reset_entry()
+            button_done_modif.pack_forget()
+            button_quit_Modif.place_forget()
+
+            button_quit.place(x=5, y=5)
+            frame_quest.pack_forget()
+
+            frame_button.pack(pady=20, padx=50, fill="both", expand=True)
+
+            pack_button_tout()
+    else :
+        updates = {
+            "Type": type,
+            "Faute": faute,
+            "Importance": niveau_importance,
+            "Description": description,
+            "Concentration": niveau_concentration,
+            "Distrait": distraction,
+            "NatureDistraction": natureDistration,
+            "Fatigue": niveau_fatigue,
+            "Difficulte": niveau_difficulte}
+
+        for column, new_value in updates.items():
+            df.at[row_modif, column] = new_value
+
+        df.to_excel(excel_path, index=False)
+
+        reset_entry()
+        button_done_modif.pack_forget()
+        button_quit_Modif.place_forget()
+
+        button_quit.place(x=5, y=5)
+        frame_quest.pack_forget()
+
+        frame_button.pack(pady=20, padx=50, fill="both", expand=True)
+
+        pack_button_tout()
 
 
 def sauvegarder_modif() :
@@ -1688,20 +1919,11 @@ def sauvegarder_modif() :
 
     df = pd.read_excel(excel_path)
 
-    para = int(df.at[row_modif,'Parameter'])
-    print(para)
-
-    if  para == 3:
-        nouveau_para = 0
-    else:
-        nouveau_para = para
-
     if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
                 updates = {
-                    "Parameter": nouveau_para,
                     "Type": type,
                     "Faute": faute,
                     "Importance": niveau_importance,
@@ -1732,7 +1954,6 @@ def sauvegarder_modif() :
             if (natureDistration == ''):
 
                 updates = {
-                    "Parameter": nouveau_para,
                     "Type" : type,
                     "Faute" : faute,
                     "Importance": niveau_importance,
@@ -1812,15 +2033,7 @@ def display_table(columns_to_exclude=["Path","ID Cible" ,"Timecode", "Parameter"
     df = pd.read_excel(excel_path)
 
     # Filtrer les colonnes indésirables :
-
-    df_filtered = df[df['Parameter'] != 2]
-    #Supprimer les lignes dont la colonne "Parameter" est == 2
-
-    df_filtered = df[df['Parameter'] != 3]
-    # Supprimer les lignes dont la colonne "Parameter" est == 3
-
-    df_filtered = df_filtered.drop(columns=columns_to_exclude)
-
+    df_filtered = df.drop(columns=columns_to_exclude)
 
     frame_tableau = ctk.CTkFrame(master=scrollable_frame)
     frame_tableau.pack(fill="both", expand=True)
@@ -1831,18 +2044,20 @@ def display_table(columns_to_exclude=["Path","ID Cible" ,"Timecode", "Parameter"
         header = ctk.CTkLabel(frame_tableau, text=col_name)
         header.grid(row=0, column=col_num, padx=10, pady=5)
 
-    # Insérer les données et les boutons
-    for row_num, row in df_filtered.iterrows():
-        # Ajouter un bouton dans la première colonne
-        button = ctk.CTkButton(frame_tableau, text="Modifier", width=50,
-                               command=lambda row=row_num: modifier_ligne(row))
-        button.grid(row=row_num + 1, column=0, padx=10, pady=5)
+        # Insérer les données et les boutons
+        for row_num, row in df_filtered.iterrows():
+  # On vérifie que la première page du quest est complétée pour l'afficher sur le bon tableau
+            if verifier_quest1_complet_xlsx(row):
+                # Ajouter un bouton dans la première colonne
+                button = ctk.CTkButton(frame_tableau, text="Modifier", width=50,
+                                       command=lambda row=row_num: modifier_ligne(row))
+                button.grid(row=row_num + 1, column=0, padx=10, pady=5)
 
-        # Ajouter les autres cellules
-        for col_num, value in enumerate(row):
-            cell = ctk.CTkLabel(frame_tableau, text=value)
-            cell.grid(row=row_num + 1, column=col_num + 1, padx=10, pady=5)
-    on_frame_configure()
+                # Ajouter les autres cellules
+                for col_num, value in enumerate(row):
+                    cell = ctk.CTkLabel(frame_tableau, text=value)
+                    cell.grid(row=row_num + 1, column=col_num + 1, padx=10, pady=5)
+        on_frame_configure()
 
 
 def clear_table():
@@ -1861,11 +2076,24 @@ def modifier_ligne2(row) :
     reset_entry(liste)
 
     """
-    global excel_path, row_modif, description_rapide
+    global excel_path, row_modif
     row_modif = row
+    df = pd.read_excel(excel_path)
 
-    reset_entry()
-    reset_entry(['','',50,description_rapide,50,'','',50,''])
+    ligne = df.loc[df['ID'] == row_modif]
+    ligne_liste = ligne.values.flatten().tolist()[5:]
+    ligne_liste[3] = description_rapide
+
+    try :
+        ligne_liste[2] = {value: key for key, value in dic_likert_Importance.items()}[ligne_liste[2]]
+        ligne_liste[4] = {value: key for key, value in dic_likert_Concentration.items()}[ligne_liste[4]]
+        ligne_liste[7] = {value: key for key, value in dic_likert_Fatigue.items()}[ligne_liste[7]]
+    except :
+        ligne_liste[2] = 50
+        ligne_liste[4] =  50
+        ligne_liste[7] = 50
+
+    reset_entry(ligne_liste)
     clear_table()
     clear_table2()
     frame_recap.pack_forget()
@@ -1878,6 +2106,10 @@ def modifier_ligne2(row) :
 
 
 
+
+
+
+
 def display_table2(columns_to_keep=["ID","Description",]):
     global excel_path, frame_tableau2
 
@@ -1885,10 +2117,7 @@ def display_table2(columns_to_keep=["ID","Description",]):
 
     # Filtrer les colonnes indésirables :
 
-    df_filtered = df[df['Parameter'] == 3]
-    #Supprimer les lignes dont la colonne "Parameter" n'est pas == 3
-
-    df_filtered = df_filtered[columns_to_keep]
+    df_filtered = df[columns_to_keep]
 
 
     frame_tableau2 = ctk.CTkFrame(master=scrollable_frame2)
@@ -1902,15 +2131,16 @@ def display_table2(columns_to_keep=["ID","Description",]):
 
     # Insérer les données et les boutons
     for row_num, row in df_filtered.iterrows():
-        # Ajouter un bouton dans la première colonne
-        button = ctk.CTkButton(frame_tableau2, text="Modifier", width=50,
-                               command=lambda row=row_num: modifier_ligne2(row))
-        button.grid(row=row_num + 1, column=0, padx=10, pady=5)
+        if not verifier_quest1_complet():
+            # Ajouter un bouton dans la première colonne
+            button = ctk.CTkButton(frame_tableau2, text="Modifier", width=50,
+                                   command=lambda row=row_num: modifier_ligne2(row))
+            button.grid(row=row_num + 1, column=0, padx=10, pady=5)
 
-        # Ajouter les autres cellules
-        for col_num, value in enumerate(row):
-            cell = ctk.CTkLabel(frame_tableau2, text=value)
-            cell.grid(row=row_num + 1, column=col_num + 1, padx=10, pady=5)
+            # Ajouter les autres cellules
+            for col_num, value in enumerate(row):
+                cell = ctk.CTkLabel(frame_tableau2, text=value)
+                cell.grid(row=row_num + 1, column=col_num + 1, padx=10, pady=5)
     on_frame_configure2()
 
 
@@ -2695,4 +2925,6 @@ button_done = ctk.CTkButton(master=frame_quest, text="Envoyer le questionnaire",
 
 button_done_modif = ctk.CTkButton(master=frame_quest, text="Sauvegarder les changements", command=lambda : sauvegarder_modif())
 
+bouton_envoyer_etat = ctk.CTkButton(master=frame_quest, text="Envoyer en l'état",command=choisir_envoyer_etat)
+bouton_envoyer_etat.pack(pady=10, side=tk.BOTTOM)
 root.mainloop()
