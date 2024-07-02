@@ -7,7 +7,6 @@
 
 ########################################################################### Imports
 
-from tkinter import ttk
 import tkinter as tk
 import customtkinter as ctk
 import os
@@ -18,15 +17,14 @@ import threading
 from datetime import datetime
 import time
 from PIL import Image, ImageTk
-from tkinter import Toplevel, Label
-
+from tkinter import Toplevel
 
 
 ########################################################################### Variables Globales
 
 screen_width = 3072
 width = 400                        #Taille de la fenêtre
-height = 800                          #Taille de la fenêtre
+height = 800                       #Taille de la fenêtre
 time_start = None
 temps_stim = None
 id_time_code = 0
@@ -100,15 +98,15 @@ root.bind("<Escape>", end_fullscreen)
 
 ########################################################################### Path
 
-openvibe_executable = r"C:\Program Files\openvibe-3.6.0-64bit\bin\openvibe-designer.exe"
-
-scenario_file_Ecriture = r"C:\Users\milio\PycharmProjects\Stage\OpenVibe\Scenario\EcritureEEG.xml"
-scenario_file_Stim = r"C:\Users\milio\PycharmProjects\Stage\OpenVibe\Scenario\placementStimulation.xml"
-
-record_ov = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/record.ov"
-
-path_recordStim_edf = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.edf"
-path_recordStim_ov = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.ov"
+# openvibe_executable = r"C:\Program Files\openvibe-3.6.0-64bit\bin\openvibe-designer.exe"
+#
+# scenario_file_Ecriture = r"C:\Users\milio\PycharmProjects\Stage\OpenVibe\Scenario\EcritureEEG.xml"
+# scenario_file_Stim = r"C:\Users\milio\PycharmProjects\Stage\OpenVibe\Scenario\placementStimulation.xml"
+#
+# record_ov = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/record.ov"
+#
+# path_recordStim_edf = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.edf"
+# path_recordStim_ov = r"C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.ov"
 
 #TODO Retirer POUR REC INFO
 
@@ -387,8 +385,8 @@ def creer_repertoire(n) :
                     #Création du fichier Excel s'il n'existe pas déjà
 
     if not os.path.exists(excel_path):                  #On veérifie que le fichier n'existe pas
-        colonnes = ["ID", "Path", "Timecode", "Parameter","ID Cible" , "Type","Faute", "Importance","Description", "Concentration",
-                    "Distrait","NatureDistraction", "Fatigue", "Difficulte"]
+        colonnes = ["ID", "Path", "Timecode", "Parameter","ID Cible" , "Type","Faute", "Importance","Description",
+                    "Concentration","Distrait","NatureDistraction", "Fatigue", "Difficulte"]
         df = pd.DataFrame(columns=colonnes)
         df.to_excel(excel_path, index=False)                                                                    #S'il n'éxiste pas on enregistre le fichier Excel
 
@@ -415,30 +413,6 @@ def generer_ano() :
 
 
 ########################################################################### Frame 1 : Informations
-
-# def affichePageB() :
-#     """
-#     Retire la page 1 (frame_acc) et affiche la 2 (frame_button)
-#     """
-#     frame_participant.pack_forget()
-#     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-#     button_err.pack(pady=((height / 2) -100  , 30), padx=10)
-#
-#     button_errForget.pack(pady=10, padx=10)
-#     button_voir_err.pack(pady=0, padx=10)
-#     label_image_btn.pack(pady=(15, 10), padx=(0, 105))
-#     entry_cachee.focus_set()
-#
-# def versB() :
-#     affichePageB()
-#     creer_repertoire(n_anonymat)
-#     start_recording_thread()
-#
-# def versParticipant() :
-#     frame_info.pack_forget()
-#     frame_button.pack(pady=15, padx=30, fill="both", expand=True)
-#     versB()
-#     pass
 
 
 def versParticipant() :
@@ -877,6 +851,36 @@ button_participant_f4.bind("<Enter>", on_enter3)
 button_participant_f4.bind("<Leave>", on_leave3)
 
 
+def forget_retour_normal() :
+    entry_forgotten.delete(0, tk.END)
+    frame_button_cadre.pack_forget()
+    aide_button_forget.pack_forget()
+
+    button_errForget.pack(padx=10,side=tk.LEFT)
+    aide_button_forget.pack(side=tk.LEFT)
+
+
+def pack_button_tout() :
+
+    #On unpack tout
+    frame_button_err.pack_forget()
+    frame_button_forget.pack_forget()
+    frame_button_recap.pack_forget()
+    frame_button_rapide.pack_forget()
+
+    # On repack dans l'ordre
+    frame_button_err.pack(pady=((height / 2) - 200, 0), anchor='center')
+    frame_button_forget.pack(pady=10, anchor='center')
+    frame_button_recap.pack(pady=10, anchor='center')
+    frame_button_rapide.pack(pady=10, anchor='center')
+
+    #Repacker forget et rapide dans le bon sens
+
+    forget_retour_normal()
+    unpack_textbox()
+
+
+
 
 ########## Situation Professionelle :
 
@@ -1178,12 +1182,9 @@ def versBouton() :
 
         frame_participant.pack_forget()
         frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-        frame_button_err.pack(pady=((height / 2) - 200,0), anchor='center')
 
-        frame_button_forget.pack(pady=10, anchor='center')
-        frame_button_recap.pack(pady=10, anchor='center')
-        frame_button_rapide.pack(pady=10,anchor='center')
-        entry_cachee.focus_set()
+        pack_button_tout()
+
     else :
         print("Pas bien")
 
@@ -1213,30 +1214,16 @@ def forgottenErr1() :
 #On unpack le bouton j'ai oublié
     button_errForget.pack_forget()
 
-#On unpack les boutons d'après puis on les remettera pour qu'ils soient dans le bon ordre
-    frame_button_recap.pack_forget()
-
-
-#On affiche la frame contenant l'entry et le bouton valider
+#On retir l'aide et le bouton
+    aide_button_forget.pack_forget()
     frame_button_cadre.pack(pady=10, padx=10)
 
+#On affiche la frame contenant l'entry et le bouton valider, ainsi que l'aide au bon endroit
+    frame_button_cadre.pack(padx=10,side=tk.LEFT)
+    aide_button_forget.pack(side=tk.LEFT)
 
-#Unpack l'aide puis la repack pour qu'elle apparaisse du bon coté
-    aide_button_forget.pack_forget()
-
-    frame_button_cadre.pack(side=tk.LEFT)
-
-    aide_button_forget.pack(padx=10,side=tk.LEFT)
-
-
-#On fait apparaitre les boutons suivants dans le bon ordre
 #Si jamais la description rapide du bouton ajout rapide est affichée, on l'enlève
     unpack_textbox()
-
-    frame_button_rapide.pack_forget()
-    frame_button_recap.pack(padx = 10,anchor='center')
-
-    frame_button_rapide.pack(pady=10, anchor='center')
 
 
 def forgottenErr2() :
@@ -1332,11 +1319,18 @@ def unpack_textbox() :
     aide_button_rapide.pack(side=tk.LEFT)
 
 def pack_text_box() :
+
+#On retire tout
     label_image_btn.pack_forget()
     aide_button_rapide.pack_forget()
+
+#On pack dans le bon ordre
     textbox_description.pack(pady=10, padx=10,side=tk.LEFT)
     textbov_validation.pack(pady=10, padx=10,side=tk.LEFT)
     aide_button_rapide.pack(side=tk.LEFT)
+
+#On remets forget fermé si jamais :
+    forget_retour_normal()
 
 def recup_desc() :
     # Récupère la description :
@@ -1561,15 +1555,9 @@ def sortir_recap() :
     """
     frame_recap.pack_forget()
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-    button_err.pack(pady=((height / 2) - 100, 30), padx=10)
-    button_errForget.pack(pady=10, padx=10)
-    frame_button_cadre.pack_forget()
-    button_voir_err.pack_forget()
-    unpack_textbox()
-    label_image_btn.pack_forget()
 
-    button_voir_err.pack(pady=0, padx=10)
-    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
+    pack_button_tout()
+
     entry_cachee.focus_set()
     clear_table2()
     clear_table()
@@ -1738,13 +1726,7 @@ def sauvegarder_modif() :
 
                 frame_button.pack(pady=20, padx=50, fill="both", expand=True)
 
-                entry_forgotten.delete(0, tk.END)
-                frame_button_cadre.pack_forget()
-                unpack_textbox()
-                label_image_btn.pack_forget()
-                button_errForget.pack(pady=10, padx=10)
-                button_voir_err.pack(pady=0, padx=10)
-                label_image_btn.pack(pady=(15, 10), padx=(0, 105))
+                pack_button_tout()
 
         elif (distraction == "Non"):
             if (natureDistration == ''):
@@ -1775,14 +1757,7 @@ def sauvegarder_modif() :
 
                 frame_button.pack(pady=20, padx=50, fill="both", expand=True)
 
-                entry_forgotten.delete(0, tk.END)
-                frame_button_cadre.pack_forget()
-                unpack_textbox()
-                label_image_btn.pack_forget()
-                button_errForget.pack(pady=10, padx=10)
-                button_voir_err.pack(pady=0, padx=10)
-                label_image_btn.pack(pady=(15, 10), padx=(0, 105))
-
+                pack_button_tout()
 
 
             #ANNULER MODIF PRESENT ET SauvegarderModif aussi après utilisation
@@ -2053,13 +2028,7 @@ def retourPage2(supp=0) :
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)       #Puis faire apparaitre la page des buttons
 
                  # On réinitialise les cadres de la page bouton
-    entry_forgotten.delete(0, tk.END)
-    frame_button_cadre.pack_forget()
-    unpack_textbox()
-    label_image_btn.pack_forget()
-    button_errForget.pack(pady=10, padx=10)
-    button_voir_err.pack(pady=0, padx=10)
-    label_image_btn.pack(pady=(15, 10), padx=(0, 105))
+    pack_button_tout()
 
     # Si on venait de la modification, en entre à nouveau dans la page du récap
     if vers_tab :
