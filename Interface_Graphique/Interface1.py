@@ -683,7 +683,7 @@ cadre_participantIP.pack(pady=10, padx=50)
 
 label_participantIP = ctk.CTkLabel(master= cadre_participantIP, text="Informations personelles :")
 label_participantIP.pack(pady=5, padx=50)
-label_participantIP.configure(font=("Helvetica", 15))
+label_participantIP.configure(font=("Helvetica", 25))
 
 ########## Age :
 
@@ -725,8 +725,8 @@ def set_selected_age(age):
     selected_var_age = age
     label_box_age.configure(text=f"Veuillez cliquer ici pour renseigner votre âge :   {str(selected_var_age)}")
 
-frame_age= ctk.CTkFrame(master=frame_quest_participant)
-frame_age.pack(padx= 50, pady=10, fill="both")
+frame_age= ctk.CTkFrame(master=frame_quest_participant, fg_color="#333333")
+frame_age.pack(ipadx= 10, pady=10, anchor='center')
 
 label_box_age = ctk.CTkLabel(master=frame_age, text="Veuillez cliquer ici pour renseigner votre âge :   ...", cursor="hand2")
 label_box_age.grid(row=0,column=0, ipadx=5, ipady=5)
@@ -739,8 +739,8 @@ def change_genre(genre):
     global selected_var_genre
     selected_var_genre = genre
 
-frame_genre = ctk.CTkFrame(master=frame_quest_participant)
-frame_genre.pack(padx= 50, pady=10, fill="both")
+frame_genre = ctk.CTkFrame(master=frame_quest_participant, fg_color="#333333")
+frame_genre.pack(ipadx= 10, pady=10, anchor='center')
 
 label_genre = ctk.CTkLabel(master=frame_genre, text="Veuillez renseigner votre genre : ")
 label_genre.grid(row=0,column=0, ipadx=5, ipady=5)
@@ -753,16 +753,16 @@ combobox_genre.grid(row=0,column=1)
 ########## Titre SP (Situation personelle) :
 
 cadre_participantSP = ctk.CTkFrame(master=frame_quest_participant)
-cadre_participantSP.pack(pady=10, padx=50)
+cadre_participantSP.pack(pady=(30,10), padx=50)
 
 label_participantSP = ctk.CTkLabel(master= cadre_participantSP, text="Situation personelle :")
 label_participantSP.pack(pady=5, padx=50)
-label_participantSP.configure(font=("Helvetica", 15))
+label_participantSP.configure(font=("Helvetica", 25))
 
 ########## Sommeil :
 
-frame_sommeil = ctk.CTkFrame(master=frame_quest_participant)
-frame_sommeil.pack(padx= 50, pady=10, fill="both")
+frame_sommeil = ctk.CTkFrame(master=frame_quest_participant, fg_color="#333333")
+frame_sommeil.pack(ipadx= 10, pady=10, anchor='center')
 
 ## Temps de sommeil :
 
@@ -800,11 +800,11 @@ def magnet_likert_Stress(valeur_actuelle) :
     selected_var_stress= dic_stress[nouvelle_val]
 
 
-frame_Stress = ctk.CTkFrame(master=frame_quest_participant)
-frame_Stress.pack(pady=10, padx=50, fill="both")
+frame_Stress = ctk.CTkFrame(master=frame_quest_participant, fg_color="#333333")
+frame_Stress.pack(ipadx= 10, pady=10, anchor='center')
 
 label_Stress = ctk.CTkLabel(master = frame_Stress,text="De manière générale, comment décrivez vous votre état de stress")
-label_Stress.pack(pady=10)
+label_Stress.pack(pady=(10,3))
 label_Stress.configure(font=("Helvetica", 15))
 
 ###Slider
@@ -848,8 +848,8 @@ sliderStress.set(48.5)
 
 ######### Caféine
 
-frame_cafeine = ctk.CTkFrame(master=frame_quest_participant)
-frame_cafeine.pack(padx= 50, pady=10, fill="both")
+frame_cafeine = ctk.CTkFrame(master=frame_quest_participant, fg_color="#333333")
+frame_cafeine.pack(ipadx= 10, pady=10, anchor='center')
 def change_cafeine(rep):
     global selected_var_cafeine
     selected_var_cafeine = rep
@@ -883,8 +883,8 @@ combobox_quantite_cafeine.grid(row=1,column=1)
 
 ######### Nicotine
 
-frame_nicotine = ctk.CTkFrame(master=frame_quest_participant)
-frame_nicotine.pack(padx= 50, pady=10, fill="both")
+frame_nicotine = ctk.CTkFrame(master=frame_quest_participant, fg_color="#333333")
+frame_nicotine.pack(ipadx= 10, pady=10, anchor='center')
 def change_nicotine(rep):
     global selected_var_nicotine
     selected_var_nicotine = rep
@@ -997,12 +997,12 @@ cadre_participantSPro.pack(pady=(30,10), padx=50)
 
 label_participantSPro = ctk.CTkLabel(master= cadre_participantSPro, text="Situation professionelle :")
 label_participantSPro.pack(pady=5, padx=50)
-label_participantSPro.configure(font=("Helvetica", 15))
+label_participantSPro.configure(font=("Helvetica", 25))
 
 ########## expérience :
 
-frame_experience = ctk.CTkFrame(master=frame_quest_participant2)
-frame_experience.pack(padx= 50, pady=10, fill="both")
+frame_experience = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
+frame_experience.pack(ipadx= 10, pady=10, anchor='center')
 
 def change_expe_travail(rep):
     global selected_var_experience
@@ -1027,11 +1027,11 @@ def magnet_likert_Hability_inf(valeur_actuelle) :
     selected_var_Hability_inf= dic_Hability_inf[nouvelle_val]
 
 
-frame_Hability_inf = ctk.CTkFrame(master=frame_quest_participant2)
-frame_Hability_inf.pack(pady=10, padx=50, fill="both")
+frame_Hability_inf = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
+frame_Hability_inf.pack(ipadx= 10, pady=10, anchor='center')
 
 label_Hability_inf = ctk.CTkLabel(master = frame_Hability_inf,text="A quel point êtes vous à l'aise avec les outils informatiques : ")
-label_Hability_inf.pack(pady=10)
+label_Hability_inf.pack(pady=(10,0))
 label_Hability_inf.configure(font=("Helvetica", 15))
 
 ###Slider
@@ -1086,11 +1086,11 @@ def magnet_likert_Passion(valeur_actuelle) :
     selected_var_Passion= dic_Passion[nouvelle_val]
 
 
-frame_Passion = ctk.CTkFrame(master=frame_quest_participant2)
-frame_Passion.pack(pady=10, padx=50, fill="both")
+frame_Passion = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
+frame_Passion.pack(ipadx= 10, pady=10, anchor='center')
 
 label_Passion = ctk.CTkLabel(master = frame_Passion,text="A quel point aimez-vous ce travail ?: ")
-label_Passion.pack(pady=10)
+label_Passion.pack(pady=(10,0))
 label_Passion.configure(font=("Helvetica", 15))
 
 ###Slider
@@ -1144,7 +1144,7 @@ cadre_participantET.pack(pady=(40,10), padx=50)
 
 label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Environemment de travail :")
 label_participantET.pack(pady=5, padx=50)
-label_participantET.configure(font=("Helvetica", 15))
+label_participantET.configure(font=("Helvetica", 25))
 
 
 ########## Bruit environnant :
@@ -1159,11 +1159,11 @@ def magnet_likert_Bruit(valeur_actuelle) :
     selected_var_Bruit= dic_Bruit[nouvelle_val]
 
 
-frame_Bruit = ctk.CTkFrame(master=frame_quest_participant2)
-frame_Bruit.pack(pady=10, padx=53.5, fill="both")
+frame_Bruit = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
+frame_Bruit.pack(ipadx= 10, pady=10, anchor='center')
 
 label_Bruit = ctk.CTkLabel(master = frame_Bruit,text="Le niveau de bruit dans votre environnement de travail est : ")
-label_Bruit.pack(pady=10)
+label_Bruit.pack(pady=(10,0))
 label_Bruit.configure(font=("Helvetica", 15))
 
 ###Slider
