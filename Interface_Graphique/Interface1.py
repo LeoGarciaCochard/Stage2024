@@ -50,6 +50,7 @@ dic_likert_Importance = { 0: "Insignifiante",
 dic_likert_Concentration ={0: "Très Faible",
                          16: "Faible",
                          33: "Plutôt Faible",
+                         50.1 : ' ',
                          50: "Neutre",
                          66: "Plutôt élevé",
                          83: "Elevé",
@@ -59,6 +60,7 @@ dic_likert_Concentration ={0: "Très Faible",
 dic_likert_Fatigue =    { 0: "Pas fatigué",
                          16: "Très peu fatigué",
                          33: "Peu fatigué",
+                         50.1 : ' ',
                          50: "Neutre",
                          66: "Plutôt fatigué",
                          83: "Fatigué",
@@ -1118,12 +1120,9 @@ def validate_variables():
     ]
     i= 0
     for var in variables:
-        print(var,type(var))
         if type(var) == int or type(var)== str :
-            print("---------------C'est un str ou int")
             i+=1
 
-    print(i)
     if i == 7 :
         return True
     else :
@@ -1338,6 +1337,7 @@ def recup_desc() :
     # Récupère la description :
     global description_rapide
     description_rapide = textbox_description.get().strip()
+
 
     #Stimule :
     stimulation(3)
@@ -1693,6 +1693,8 @@ def envoyer_en_l_etat() :
 
     path = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
 
+    if description == "Description de l'incident négatif...":
+        description = ''
 
     if (distraction == "Oui"):
         if (natureDistration != ''):
@@ -1764,21 +1766,6 @@ def envoyer_en_l_etat() :
         reset_entry()
         retourPage2()
 
-def verifier_quest1_complet() :
-
-    type = get_selected_button_value()
-    faute = selected_option_Bad.get().strip()
-    description = entry_Commentaire.get("1.0", tk.END).strip()
-
-    rep = (type != '' and faute != '' and description != "Description de l'incident négatif...")
-    rep_vide = (type != 'nan' and faute != 'nan' and description != "nan")
-
-    print(type, faute, description, rep, rep_vide)
-    print(selected_option_Bad.get())
-
-    return rep and rep_vide
-
-
 def verifier_quest1_complet_xlsx(row) :
 
     type = str(row['Type'])
@@ -1809,6 +1796,8 @@ def envoyer_en_l_etat_modif() :
 
     df = pd.read_excel(excel_path)
 
+    if description == "Description de l'incident négatif..." :
+        description= ''
 
     if (distraction == "Oui"):
         if (natureDistration != ''):
@@ -1919,7 +1908,7 @@ def sauvegarder_modif() :
 
     df = pd.read_excel(excel_path)
 
-    if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
+    if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') and (niveau_concentration != ' ') and (niveau_fatigue != ' ') :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
@@ -2024,6 +2013,7 @@ def modifier_ligne(row) :
     if entry_Distraction.get() == 'NaN' :
         entry_Distraction.delete(0, tk.END)
 
+
     affiche_Quest_Modif()
 
 
@@ -2055,6 +2045,8 @@ def display_table(columns_to_exclude=["Path","ID Cible" ,"Timecode", "Parameter"
 
                 # Ajouter les autres cellules
                 for col_num, value in enumerate(row):
+                    if str(value) == 'nan' or str(value) == ' ':
+                        value = '--'
                     cell = ctk.CTkLabel(frame_tableau, text=value)
                     cell.grid(row=row_num + 1, column=col_num + 1, padx=10, pady=5)
         on_frame_configure()
@@ -2082,7 +2074,7 @@ def modifier_ligne2(row) :
 
     ligne = df.loc[df['ID'] == row_modif]
     ligne_liste = ligne.values.flatten().tolist()[5:]
-    ligne_liste[3] = description_rapide
+
 
     try :
         ligne_liste[2] = {value: key for key, value in dic_likert_Importance.items()}[ligne_liste[2]]
@@ -2104,41 +2096,48 @@ def modifier_ligne2(row) :
 
     affiche_Quest_Modif()
 
+    if entry_Commentaire.get("1.0", "end-1c") == 'NaN' :
+        entry_Commentaire.delete("1.0", tk.END)
+        add_placeholder()
 
 
 
 
 
 
-def display_table2(columns_to_keep=["ID","Description",]):
+
+def display_table2(columns_to_keep=["ID","Description"]):
     global excel_path, frame_tableau2
 
     df = pd.read_excel(excel_path)
 
     # Filtrer les colonnes indésirables :
 
-    df_filtered = df[columns_to_keep]
+
 
 
     frame_tableau2 = ctk.CTkFrame(master=scrollable_frame2)
     frame_tableau2.pack(fill="both", expand=True)
 
     # Ajout des en-têtes de colonnes
-    headers = ["Modifier"] + list(df_filtered.columns)
+    headers = ["Modifier"] + list(df[columns_to_keep].columns)
     for col_num, col_name in enumerate(headers):
         header = ctk.CTkLabel(frame_tableau2, text=col_name)
         header.grid(row=0, column=col_num, padx=10, pady=5)
 
     # Insérer les données et les boutons
-    for row_num, row in df_filtered.iterrows():
-        if not verifier_quest1_complet():
+    for row_num, row in df.iterrows():
+        if not verifier_quest1_complet_xlsx(row):
             # Ajouter un bouton dans la première colonne
             button = ctk.CTkButton(frame_tableau2, text="Modifier", width=50,
                                    command=lambda row=row_num: modifier_ligne2(row))
             button.grid(row=row_num + 1, column=0, padx=10, pady=5)
 
             # Ajouter les autres cellules
-            for col_num, value in enumerate(row):
+            filtered_row = row[columns_to_keep]
+            for col_num, value in enumerate(filtered_row):
+                if str(value) == 'nan' or str(value) == ' ':
+                    value = '--'
                 cell = ctk.CTkLabel(frame_tableau2, text=value)
                 cell.grid(row=row_num + 1, column=col_num + 1, padx=10, pady=5)
     on_frame_configure2()
@@ -2555,7 +2554,7 @@ entry_Commentaire = ctk.CTkTextbox(master=frame_questCommentaire, width=400, hei
 entry_Commentaire.pack(pady=5)
 
 # Fonction pour ajouter le placeholder
-def add_placeholder(event):
+def add_placeholder(event=None):
     if entry_Commentaire.get("1.0", "end-1c") == "":
         entry_Commentaire.insert("1.0", "Description de l'incident négatif...")
 
@@ -2639,6 +2638,7 @@ label_Concentration_6.configure(font=("Helvetica",13),text_color='red')
 
 sliderConcentration = ctk.CTkSlider(master = frame_questConcentration, from_=0, to=100, width=425, command=magnet_likert_concentration)
 sliderConcentration.pack()
+sliderConcentration.set(50.1)
 
 #### #TODO Distraction
 
@@ -2737,6 +2737,7 @@ label_Fatigue_6.configure(font=("Helvetica",13),text_color='red')
 
 sliderFatigue = ctk.CTkSlider(master = frame_questFatigue, from_=0, to=100, width=500, command=magnet_likert_Fatigue)
 sliderFatigue.pack()
+sliderFatigue.set(50.1)
 
 ####### Difficulte
 
@@ -2773,7 +2774,7 @@ button_difficult_5.grid(row=1, column=4, pady=5, padx=0)
 
 
 # # ✔ TODO "Annuler" et fin "done" retour page bouton + fontion reset_entry()
-def reset_entry(list_val = ['','',50,"",50,'','',50,'']) :
+def reset_entry(list_val = ['','',50,"",50.1,'','',50.1,'']) :
     """
     Fait en sorte que les entry soient mises sur les val correspondantes lors de la prochaine ouverture de la page questionnaire
     """
@@ -2867,7 +2868,7 @@ def sauvegarderQuest() :
     path = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
 
 
-    if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') :
+    if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') and (niveau_concentration != ' ') and (niveau_fatigue != ' ') :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
@@ -2921,7 +2922,13 @@ def sauvegarderQuest() :
 
 
 
-button_done = ctk.CTkButton(master=frame_quest, text="Envoyer le questionnaire", command=lambda : sauvegarderQuest())
+button_done = ctk.CTkButton(master=frame_quest, text="Envoyer le questionnaire Complet", command=lambda : sauvegarderQuest())
+
+text_button_done = "Si vous avez intentionnellement laissé les échelles sur neutre, \nil est nécessaire de les déplacer puis de les remettre sur neutre afin que la réponse soit prise en compte."
+
+button_done.bind("<Enter>",lambda event,text = text_button_done: show_tooltip(event, text))
+button_done.bind("<Leave>", hide_tooltip)
+button_done.bind("<Motion>", move_tooltip)
 
 button_done_modif = ctk.CTkButton(master=frame_quest, text="Sauvegarder les changements", command=lambda : sauvegarder_modif())
 
