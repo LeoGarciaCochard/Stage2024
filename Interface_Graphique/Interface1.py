@@ -359,6 +359,54 @@ def stimulation(parametre ,t = 0) :
     print("stimulé !")
 
 
+def tout_complet() :
+    """
+    Regarde le fichier excel: Renvoie True si toutes les erreurs ont été renseignées complement (au moins première page)
+    """
+    df = pd.read_excel(excel_path)
+    rep = True
+    for n, row in df.iterrows() :
+        if not verifier_quest1_complet_xlsx(row) :
+            rep = False
+    return rep
+
+def affiche_message_incomplet() :
+    """ Affiche une notification demande la confirmation de l'arret ou de retourner renseigner"""
+
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("green")
+
+    notif = ctk.CTk()
+
+    notif.geometry("420x100")
+    notif.title("IMPORTANT")
+
+    label = ctk.CTkLabel(notif, text="  Tous les incidents n'ont pas été renseignés correctement  ")
+    label.pack(pady=10, ipadx=(5))
+    label.configure(fg_color="#2b2b2b", font=("Helvetica", 15))
+
+    button_frame = ctk.CTkFrame(notif, fg_color="#242424")
+    button_frame.pack(pady=(5, 15))
+
+    def arret_force():
+        """Enregistre le rec, ferme app et notif"""
+        #arreterRecEEG()
+        root.destroy()
+        notif.destroy()
+
+    close_button = ctk.CTkButton(button_frame, text="Fermer quand même", command=arret_force)
+    close_button.grid(row=0, column=0, padx=10)
+
+    def retourner():
+        """Ferme la notif et ouvre le menu recap"""
+        vers_frame_tab_err()
+        notif.destroy()
+
+    complete_button = ctk.CTkButton(button_frame, text="Compléter les renseignements", command=retourner)
+    complete_button.grid(row=0, column=1, padx=10)
+
+    # Lancer l'application
+    notif.mainloop()
 
 
 def arretExpe(acc=False) :
@@ -366,9 +414,12 @@ def arretExpe(acc=False) :
     if acc :
         root.destroy()
     else :
-        # arreterRecEEG() #TODO REMETTRE POUR REC INFO
-        root.destroy()
 
+        if tout_complet() :
+            # arreterRecEEG() #TODO REMETTRE POUR REC INFO
+            root.destroy()
+        else :
+            affiche_message_incomplet()
 
 def creer_repertoire(n) :
     """
@@ -1767,6 +1818,10 @@ def envoyer_en_l_etat() :
         retourPage2()
 
 def verifier_quest1_complet_xlsx(row) :
+    """
+    :param row: Ligne de df
+    :return: True si la première page est complétée, False sinon
+    """
 
     type = str(row['Type'])
     faute = str(row['Faute'])
