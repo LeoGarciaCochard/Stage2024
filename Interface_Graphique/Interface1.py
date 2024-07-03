@@ -18,13 +18,18 @@ from datetime import datetime
 import time
 from PIL import Image, ImageTk
 from tkinter import Toplevel
-
+from screeninfo import get_monitors
 
 ########################################################################### Variables Globales
 
-screen_width = 3072
-width = 400                        #Taille de la fenêtre
-height = 800                       #Taille de la fenêtre
+
+
+
+
+# Stocker la largeur et la hauteur de l'écran dans des variables
+screen_width = get_monitors()[0].width
+width = 800                        #Taille de la fenêtre
+height = 600                       #Taille de la fenêtre
 time_start = None
 temps_stim = None
 id_time_code = 0
@@ -71,6 +76,51 @@ path_img_btnf = "../Sources/btn_f.png"
 
 path_img_aide = "../Sources/aide.png"
 path_img_aidef = "../Sources/aide_f.png"
+
+########################################################################### Donnée écran
+
+def affiche_explication():
+    """ Affiche une notification demande la confirmation de l'arret ou de retourner renseigner"""
+
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("green")
+
+    notif = ctk.CTk()
+
+    notif.geometry("420x180")
+    notif.title("Avant de commencer")
+
+    explication = "L'application suivante doit être utilisée en plein écran. \nPour ce faire vous pouvez appuyer sur la touche 'F11'"
+
+    label = ctk.CTkLabel(notif, text=explication)
+    label.pack(pady=10, ipadx=(5))
+    label.configure(fg_color="#2b2b2b", font=("Helvetica", 15))
+
+    label = ctk.CTkLabel(notif, text="Veuillez entrer la largeur de votre écran en px")
+    label.pack(pady=(0,5))
+
+    global screen_width
+    entry = ctk.CTkEntry(notif, placeholder_text=screen_width)
+    entry.pack()
+
+    def verif():
+        global screen_width
+        try:
+            screen_width = int(entry.get())
+        except:
+            pass
+
+        if isinstance(screen_width, int):
+            notif.destroy()
+
+    close_button = ctk.CTkButton(notif, text="Compris !", command=verif)
+    close_button.pack(pady=(15,10), padx=(10))
+
+    # Lancer l'application
+    notif.mainloop()
+
+
+# affiche_explication()
 ########################################################################### Lancement de l'interface
 
 ctk.set_appearance_mode("dark")
@@ -97,6 +147,7 @@ fullscreen = False
 root.bind("<F11>", toggle_fullscreen)
 root.bind("<Escape>", end_fullscreen)
 
+toggle_fullscreen()
 
 ########################################################################### Path
 
@@ -296,7 +347,7 @@ def stimulation(parametre ,t = 0) :
                 1 si l'erreur est déclarée à posteriori
                 2 le moment ou l'erreur est déclarée à posteriori
                 3 Ajout rapide
-                4 Anulation, avec id cible
+                4 Anulation d'une erreur
 
     t :  t = 0 si sur le moment t = minutes rentrées par l'utilisateur en cas d'oubli
 
@@ -1084,14 +1135,14 @@ sliderPassion.set(50)
 
 
 
-########## Envorinemment de travail :
+########## Environemment de travail :
 
-########## Titre ET (Envorinemment de travail) :
+########## Titre ET (Environemment de travail) :
 
 cadre_participantET = ctk.CTkFrame(master=frame_quest_participant2)
 cadre_participantET.pack(pady=(40,10), padx=50)
 
-label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Envorinemment de travail :")
+label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Environemment de travail :")
 label_participantET.pack(pady=5, padx=50)
 label_participantET.configure(font=("Helvetica", 15))
 
@@ -2293,11 +2344,15 @@ def retourPage2(supp=0) :
         df = df.drop(df.index[-1])
         global id_time_code
         id_time_code -=1
-
         print("déstimulé")
 
         df.to_csv(path_time_code, index=False)
         df.to_csv(path_time_code_BackUp, index=False)
+
+
+        #Stimulation Label 4 pour signaler l'annulement d'une erreur
+
+        stimulation(4)
 
     elif supp == 1 :
         button_quit_Modif.place_forget()
