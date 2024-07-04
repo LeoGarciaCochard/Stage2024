@@ -515,6 +515,7 @@ def generer_ano() :
 
     df_anonymat.to_excel("../Sources/info_participants.xlsx", index=False)
 
+    label_n_ano.configure(text=f"N°anonymat : \n{n_anonymat}")
 
 
 
@@ -968,6 +969,8 @@ def forget_retour_normal() :
 
 def pack_button_tout() :
 
+    frame_button_titre.pack_forget()
+
     #On unpack tout
     frame_button_err.pack_forget()
     frame_button_forget.pack_forget()
@@ -975,7 +978,8 @@ def pack_button_tout() :
     frame_button_rapide.pack_forget()
 
     # On repack dans l'ordre
-    frame_button_err.pack(pady=((height / 2) - 200, 0), anchor='center')
+    frame_button_titre.pack(ipady=10,ipadx=100,pady=100, anchor='center')
+    frame_button_err.pack(pady=10, anchor='center')
     frame_button_forget.pack(pady=10, anchor='center')
     frame_button_recap.pack(pady=10, anchor='center')
     frame_button_rapide.pack(pady=10, anchor='center')
@@ -1364,6 +1368,13 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
 
 frame_button = ctk.CTkFrame(master=root)
 
+#########-- Titre
+
+frame_button_titre = ctk.CTkFrame(master = frame_button, corner_radius=360,fg_color="#2b2b2b",border_color="#106a43",border_width=2)
+label_titre_button = ctk.CTkLabel(master = frame_button_titre, text="ERRARE HUMANUM EST")
+label_titre_button.configure(font=('Helvetica',50,"bold"))
+label_titre_button.pack(pady=(15,5))
+
 #########--BOUTON ERR PRINCIPAL
 
 frame_button_err = ctk.CTkFrame(master = frame_button, fg_color="#2b2b2b")
@@ -1413,8 +1424,7 @@ aide_button_err.pack(side=tk.LEFT,pady=100)
 
 def unpack_textbox() :
     textbox_description.delete(0,tk.END)
-    textbox_description.pack_forget()
-    textbov_validation.pack_forget()
+    frame_button_rapide_vertical.pack_forget()
 
     label_image_btn.pack_forget()
     aide_button_rapide.pack_forget()
@@ -1428,12 +1438,14 @@ def pack_text_box() :
     aide_button_rapide.pack_forget()
 
 #On pack dans le bon ordre
-    textbox_description.pack(pady=10, padx=10,side=tk.LEFT)
-    textbov_validation.pack(pady=10, padx=10,side=tk.LEFT)
+    frame_button_rapide_vertical.pack(padx=20,side=tk.LEFT)
     aide_button_rapide.pack(side=tk.LEFT)
 
 #On remets forget fermé si jamais :
     forget_retour_normal()
+
+    textbox_description.focus_set()
+
 
 def recup_desc() :
     # Récupère la description :
@@ -1453,11 +1465,17 @@ def recup_desc() :
 
 frame_button_rapide = ctk.CTkFrame(master=frame_button,fg_color="#2b2b2b")
 
-textbox_description = ctk.CTkEntry(master= frame_button_rapide, width= 200, placeholder_text="Rapide description...")
-textbov_validation = ctk.CTkButton(master = frame_button_rapide, text= "Valider ou Ignorer", command=recup_desc)
+frame_button_rapide_vertical = ctk.CTkFrame(master=frame_button_rapide, fg_color="#242424")
 
+textbox_label = ctk.CTkLabel(master=frame_button_rapide_vertical, text="Vous pouvez renseigner une brève description (Facultatif)")
+textbox_description = ctk.CTkEntry(master= frame_button_rapide_vertical, width= 200,height=50, placeholder_text="Rapide description...")
+textbov_validation = ctk.CTkButton(master = frame_button_rapide_vertical, text= "Valider ou Ignorer", command=recup_desc)
 
+textbox_label.pack(padx=10)
+textbox_description.pack(pady=(5,10), padx=10)
+textbov_validation.pack(pady=10, padx=10)
 
+textbox_description.bind("<Return>",lambda x : recup_desc())
 def on_enter3(event):
     label_image_btn.configure(image=photo_btnf)
 def on_leave3(event):
@@ -1575,8 +1593,6 @@ entry_forgotten.pack(pady=5, padx=10)
 button_errForget2.pack(pady=5, padx=10)
 
 
-# label_image_btn.pack(pady=(15, 10), padx=(0, 105)
-
 ######################
 
 entry_cachee = ctk.CTkEntry(master = frame_button)                               #Subterfuge pour appuyer sur le bouton Erreur avec "entrée"
@@ -1584,19 +1600,30 @@ entry_cachee.pack()                                                             
 entry_cachee.place(x = 0,y=10000)
 entry_cachee.bind("<Return>", lambda x : stimulation(0))               #Subterfuge pour appuyer sur le bouton Erreur avec "entrée"
 
+
+frame_button_place = ctk.CTkFrame(master=frame_button,fg_color="#2b2b2b")
+
 def on_enter(event):
     button_f4.configure(text="❌ Fermer et Sauvegarder")
 def on_leave(event):
     button_f4.configure(text="❌")
 
-button_f4 = ctk.CTkButton(master = frame_button, text=" ❌ ", width=15 , command=arretExpe)
+button_f4 = ctk.CTkButton(master = frame_button_place, text=" ❌ ", width=15 , command=arretExpe)
 button_f4.configure(fg_color="red", hover_color="white", text_color="black")
-button_f4.pack()
-button_f4.place(x=5,y=5)
-
+button_f4.pack(pady=5,padx=5, side=tk.LEFT)
+# button_f4.place(x=5,y=5)
 button_f4.bind("<Enter>", on_enter)
 button_f4.bind("<Leave>", on_leave)
 
+###################### afficher n_ano
+
+frame_button_ano = ctk.CTkFrame(master = frame_button_place,corner_radius=5,fg_color="#2b2b2b",border_color="#106a43",border_width=2)
+frame_button_ano.pack(pady=5,padx=5, side=tk.LEFT)
+
+label_n_ano = ctk.CTkLabel(master=frame_button_ano,text='BONJOUR')
+label_n_ano.pack(pady=5,padx=15)
+
+frame_button_place.place(x=5,y=5)
 
 #TODO Voir ses  erreurs
 
