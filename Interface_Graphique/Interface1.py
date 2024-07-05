@@ -16,7 +16,7 @@ import subprocess
 import threading
 from datetime import datetime
 import time
-from PIL import Image, ImageTk
+from PIL import Image
 from tkinter import Toplevel
 from screeninfo import get_monitors
 
@@ -71,53 +71,64 @@ dic_likert_Fatigue =    { 0: "Pas fatigué",
                          83: "Fatigué",
                          100: "Vraiment fatigué"}
 
-path_img_btn = "../Sources/btn.png"
-path_img_btnf = "../Sources/btn_f.png"
 
-path_img_aide = "../Sources/aide.png"
-path_img_aidef = "../Sources/aide_f.png"
+path_img_btn1 = "../Sources/btn.png"
+path_img_btnf1 = "../Sources/btn_f.png"
+
+path_img_aide1 = "../Sources/aide.png"
+path_img_aidef1 = "../Sources/aide_f.png"
+
+base_path = os.path.dirname(os.path.abspath(__file__))
+
+# Construit le chemin absolu du fichier d'image
+path_img_aide = os.path.join(base_path,path_img_aide1 )
+path_img_aidef = os.path.join(base_path,path_img_aidef1 )
+
+path_img_btn = os.path.join(base_path,path_img_btn1 )
+path_img_btnf = os.path.join(base_path,path_img_btnf1 )
+
 
 ########################################################################### Donnée écran
 
-def affiche_explication():
-    """ Affiche une notification demande la confirmation de l'arret ou de retourner renseigner"""
-
-    ctk.set_appearance_mode("dark")
-    ctk.set_default_color_theme("green")
-
-    notif = ctk.CTk()
-
-    notif.geometry("420x180")
-    notif.title("Avant de commencer")
-
-    explication = "L'application suivante doit être utilisée en plein écran. \nPour ce faire vous pouvez appuyer sur la touche 'F11'"
-
-    label = ctk.CTkLabel(notif, text=explication)
-    label.pack(pady=10, ipadx=(5))
-    label.configure(fg_color="#2b2b2b", font=("Helvetica", 15))
-
-    label = ctk.CTkLabel(notif, text="Veuillez entrer la largeur de votre écran en px")
-    label.pack(pady=(0,5))
-
-    global screen_width
-    entry = ctk.CTkEntry(notif, placeholder_text=screen_width)
-    entry.pack()
-
-    def verif():
-        global screen_width
-        try:
-            screen_width = int(entry.get())
-        except:
-            pass
-
-        if isinstance(screen_width, int):
-            notif.destroy()
-
-    close_button = ctk.CTkButton(notif, text="Compris !", command=verif)
-    close_button.pack(pady=(15,10), padx=(10))
-
-    # Lancer l'application
-    notif.mainloop()
+# def affiche_explication():
+#     """ Affiche une notification demande la confirmation de l'arret ou de retourner renseigner"""
+#
+#     ctk.set_appearance_mode("dark")
+#     ctk.set_default_color_theme("green")
+#
+#     notif = ctk.CTk()
+#
+#     notif.geometry("420x180")
+#     notif.title("Avant de commencer")
+#
+#     explication = "L'application suivante doit être utilisée en plein écran. \nPour ce faire vous pouvez appuyer sur la touche 'F11'"
+#
+#     label = ctk.CTkLabel(notif, text=explication)
+#     label.pack(pady=10, ipadx=(5))
+#     label.configure(fg_color="#2b2b2b", font=("Helvetica", 15))
+#
+#     label = ctk.CTkLabel(notif, text="Veuillez entrer la largeur de votre écran en px")
+#     label.pack(pady=(0,5))
+#
+#     global screen_width
+#     entry = ctk.CTkEntry(notif, placeholder_text=screen_width)
+#     entry.pack()
+#
+#     def verif():
+#         global screen_width
+#         try:
+#             screen_width = int(entry.get())
+#         except:
+#             pass
+#
+#         if isinstance(screen_width, int):
+#             notif.destroy()
+#
+#     close_button = ctk.CTkButton(notif, text="Compris !", command=verif)
+#     close_button.pack(pady=(15,10), padx=(10))
+#
+#     # Lancer l'application
+#     notif.mainloop()
 
 
 # affiche_explication()
