@@ -88,50 +88,8 @@ path_img_btn = os.path.join(base_path,path_img_btn1 )
 path_img_btnf = os.path.join(base_path,path_img_btnf1 )
 
 
-########################################################################### Donnée écran
-
-# def affiche_explication():
-#     """ Affiche une notification demande la confirmation de l'arret ou de retourner renseigner"""
-#
-#     ctk.set_appearance_mode("dark")
-#     ctk.set_default_color_theme("green")
-#
-#     notif = ctk.CTk()
-#
-#     notif.geometry("420x180")
-#     notif.title("Avant de commencer")
-#
-#     explication = "L'application suivante doit être utilisée en plein écran. \nPour ce faire vous pouvez appuyer sur la touche 'F11'"
-#
-#     label = ctk.CTkLabel(notif, text=explication)
-#     label.pack(pady=10, ipadx=(5))
-#     label.configure(fg_color="#2b2b2b", font=("Helvetica", 15))
-#
-#     label = ctk.CTkLabel(notif, text="Veuillez entrer la largeur de votre écran en px")
-#     label.pack(pady=(0,5))
-#
-#     global screen_width
-#     entry = ctk.CTkEntry(notif, placeholder_text=screen_width)
-#     entry.pack()
-#
-#     def verif():
-#         global screen_width
-#         try:
-#             screen_width = int(entry.get())
-#         except:
-#             pass
-#
-#         if isinstance(screen_width, int):
-#             notif.destroy()
-#
-#     close_button = ctk.CTkButton(notif, text="Compris !", command=verif)
-#     close_button.pack(pady=(15,10), padx=(10))
-#
-#     # Lancer l'application
-#     notif.mainloop()
 
 
-# affiche_explication()
 ########################################################################### Lancement de l'interface
 
 ctk.set_appearance_mode("dark")
@@ -529,6 +487,66 @@ def generer_ano() :
     label_n_ano.configure(text=f"N°anonymat : \n{n_anonymat}")
 
 
+########################################################################### Frame 0
+
+def versInfo() :
+    frame_info.pack(pady=15, padx=30, fill="both", expand=True)
+
+def versBtn() :
+    frame_button.pack(pady=20, padx=50, fill="both", expand=True)
+    label_n_ano.configure(text=f"N°anonymat : \n{n_anonymat}")
+    creer_repertoire(n_anonymat)
+    start_recording_thread()
+    pack_button_tout()
+
+
+notif = ctk.CTkFrame(root,border_color="#106a43",border_width=4)
+notif.pack(pady=15, padx=30, fill="both", expand=True)
+
+explication = "Option de lancement :"
+
+
+frame_notif_titre = ctk.CTkFrame(master = notif, corner_radius=100,fg_color="#2b2b2b",border_color="#106a43",border_width=2)
+frame_notif_titre.pack(ipady=10,ipadx=100,pady=(250,75), anchor='center')
+label_titre_notif = ctk.CTkLabel(master = frame_notif_titre, text=explication)
+label_titre_notif.configure(font=('Helvetica',40,"bold"))
+label_titre_notif.pack(pady=(15,5))
+
+
+def nouveau():
+    notif.pack_forget()
+    versInfo()
+
+def existant():
+    entry.pack(pady=10)
+    btn_valider.pack(ipadx=(10),ipady=(10))
+
+
+def validation() :
+    try :
+        global n_anonymat
+        n_anonymat = int(entry.get())
+
+        notif.pack_forget()
+
+        versBtn()
+
+    except :
+        print("NON")
+
+
+btn_cadre = ctk.CTkFrame(notif, fg_color="#2b2b2b")
+btn_cadre.pack(pady=(0,10),padx = 0, anchor='center')
+
+close_button = ctk.CTkButton(btn_cadre, text="Nouveau participant", command=nouveau,font=('Helvetica',20))
+close_button.pack(pady=(15,10), padx=(10), side=tk.LEFT, ipadx=(10),ipady=(10))
+
+close_button = ctk.CTkButton(btn_cadre, text="Participant existant", command=existant,font=('Helvetica',20))
+close_button.pack(pady=(15, 10), padx=(10),side=tk.LEFT, ipadx=(10),ipady=(10))
+
+entry = ctk.CTkEntry(notif, placeholder_text="N° Anonymat..." )
+btn_valider = ctk.CTkButton(notif,text="Valider",command=validation ,font=('Helvetica',15))
+
 
 ########################################################################### Frame 1 : Informations
 
@@ -541,9 +559,8 @@ def versParticipant() :
 
 
 
-
 frame_info = ctk.CTkFrame(root)
-frame_info.pack(pady=15, padx=30, fill="both", expand=True)
+# frame_info.pack(pady=15, padx=30, fill="both", expand=True)
 
 frame_info_texte = ctk.CTkFrame(frame_info, fg_color="#2b2b2b", border_width=2, border_color="#106a43")
 frame_info_texte.pack(ipadx=20, ipady=20, pady=15, expand=True, anchor="center")
@@ -555,7 +572,7 @@ texte_p1 =("Bonjour, \n\nNous vous remercions d'avoir accepté de participer à 
             "afin de mieux comprendre leur fonctionnement et d'améliorer leur détection. À cette fin, vous avez été équipé d'un casque EEG, "
             "permettant de capter les signaux émis par votre cerveau. ")
 texte_p2 = ("Durant les prochaines heures, votre rôle consistera à travailler comme d'habitude. "
-            "Cependant, lorsque vous constatez un incident négatif (une erreur), il sera crucial de ne pas bouger pendant quelques secondes car tout mouvement "
+            "Cependant, lorsque vous constatez un incident négatif (une erreur), il sera crucial de "+"ne pas bouger pendant quelques secondes ".upper()+"car tout mouvement "
             "pourrait introduire des artefacts moteurs c'est-à-dire des bruits parasites dans les signaux EEG causés par des mouvements physiques nuisant à la précision des données. "
             "Ensuite, utilisez cette application pour le signaler et, si vous avez le temps, le décrire en répondant au questionnaire qui s'affichera. "
             "Vous pourrez ensuite reprendre votre travail jusqu'au prochain incident négatif ou à la fin du temps de participation.")
@@ -678,6 +695,7 @@ dic_Bruit = {
     100: "Extrêmement bruyant"         # 21 caractères
 }
 
+taches = ["Word","Excel","Lecture d'article scientifique","Code"]
 ########## Variables :
 
 selected_var_heure = datetime.now().strftime("%Hh%M")
@@ -707,7 +725,7 @@ selected_var_Passion = dic_Passion[50]
 
 # selected_var_distractions_travail = tk.StringVar()
 selected_var_Bruit = dic_Bruit[53.5]
-
+selected_var_tache = tk.StringVar()
 
 ####################################### TODO A SUPRUMER
 
@@ -733,6 +751,7 @@ selected_var_experience = "+de 10"
 selected_var_Passion = dic_Passion[50]
 
 selected_var_Bruit = dic_Bruit[53.5]
+selected_var_tache = taches[0]
 
 
 
@@ -1279,6 +1298,24 @@ sliderBruit.pack()
 sliderBruit.set(53.5)
 
 
+
+########## Type de travail :
+
+frame_tache = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
+frame_tache.pack(ipadx= 10, pady=10, anchor='center')
+
+def change_expe_travail(rep):
+    global selected_var_tache
+    selected_var_tache = rep
+
+label_expe = ctk.CTkLabel(master=frame_tache, text="Quel type de tâche allez vous effectuer ?\n(Vous pourrez modifier quand vous changerez)")
+label_expe.grid(row=1,column=0, ipadx=15, ipady=5)
+
+combobox_expe = ctk.CTkComboBox(master=frame_tache, values=taches, state="readonly", command= lambda x : change_expe_travail(x))
+combobox_expe.grid(row=1,column=1)
+
+
+
 ######### Bouton + Vérif
 # n_anonymat = 1
 
@@ -1342,7 +1379,8 @@ def versBouton() :
             "Maîtrise de l'informatique"  : selected_var_Hability_inf,
             "Experience" : selected_var_experience,
             "Passion"  : selected_var_Passion,
-            "Bruit"  : selected_var_Bruit
+            "Bruit"  : selected_var_Bruit,
+            "Tâche" : selected_var_tache
         }
         df.loc[n_anonymat] = nouvelle_ligne
         df.to_excel("../Sources/info_participants.xlsx", index=True)
