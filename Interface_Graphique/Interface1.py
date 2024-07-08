@@ -374,6 +374,7 @@ def stimulation(parametre ,t = 0) :
     else :
         versQuestionnaire()
 
+
     id_time_code += 1
 
     print("stimulé !")
@@ -751,7 +752,7 @@ selected_var_experience = "+de 10"
 selected_var_Passion = dic_Passion[50]
 
 selected_var_Bruit = dic_Bruit[53.5]
-selected_var_tache = taches[0]
+# selected_var_tache = taches[0]
 
 
 
@@ -1057,9 +1058,10 @@ def forget_retour_normal() :
 
 def pack_button_tout() :
 
-    frame_button_titre.pack_forget()
 
     #On unpack tout
+    frame_button_titre.pack_forget()
+    frame_tache2.pack_forget()
     frame_button_err.pack_forget()
     frame_button_forget.pack_forget()
     frame_button_recap.pack_forget()
@@ -1067,7 +1069,8 @@ def pack_button_tout() :
 
     # On repack dans l'ordre
     frame_button_titre.pack(ipady=10,ipadx=100,pady=100, anchor='center')
-    frame_button_err.pack(pady=10, anchor='center')
+    frame_tache2.pack(ipadx=10, pady=0, anchor='center')
+    frame_button_err.pack(pady=(5,10), anchor='center')
     frame_button_forget.pack(pady=10, anchor='center')
     frame_button_recap.pack(pady=10, anchor='center')
     frame_button_rapide.pack(pady=10, anchor='center')
@@ -1304,15 +1307,17 @@ sliderBruit.set(53.5)
 frame_tache = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
 frame_tache.pack(ipadx= 10, pady=10, anchor='center')
 
-def change_expe_travail(rep):
+def change_tache(rep):
     global selected_var_tache
     selected_var_tache = rep
+    print(selected_var_tache, rep)
+    combobox_tache2.set(selected_var_tache)
 
-label_expe = ctk.CTkLabel(master=frame_tache, text="Quel type de tâche allez vous effectuer ?\n(Vous pourrez modifier quand vous changerez)")
-label_expe.grid(row=1,column=0, ipadx=15, ipady=5)
+label_tache = ctk.CTkLabel(master=frame_tache, text="Quel type de tâche allez vous effectuer ?\n(Vous pourrez modifier quand vous changerez)")
+label_tache.grid(row=1,column=0, ipadx=15, ipady=5)
 
-combobox_expe = ctk.CTkComboBox(master=frame_tache, values=taches, state="readonly", command= lambda x : change_expe_travail(x))
-combobox_expe.grid(row=1,column=1)
+combobox_tache = ctk.CTkComboBox(master=frame_tache, values=taches, state="readonly", command= lambda x : change_tache(x))
+combobox_tache.grid(row=1,column=1)
 
 
 
@@ -1328,14 +1333,15 @@ def validate_variables():
         selected_var_trouble_sommeil,
         selected_var_cafeine,
         selected_var_nicotine,
-        selected_var_experience
+        selected_var_experience,
+        selected_var_tache
     ]
     i= 0
     for var in variables:
         if type(var) == int or type(var)== str :
             i+=1
 
-    if i == 7 :
+    if i == 8 :
         return True
     else :
         return False
@@ -1481,6 +1487,17 @@ frame_button_titre = ctk.CTkFrame(master = frame_button, corner_radius=360,fg_co
 label_titre_button = ctk.CTkLabel(master = frame_button_titre, text="Errare humanum est, et machinae".upper())
 label_titre_button.configure(font=('Helvetica',40,"bold"))
 label_titre_button.pack(pady=(15,5))
+
+#########--Tâche
+
+frame_tache2 = ctk.CTkFrame(master=frame_button, fg_color="#2b2b2b")
+
+label_tache2 = ctk.CTkLabel(master=frame_tache2, text="Votre tâche actuelle est : ",font=('Helvetica',20))
+label_tache2.grid(row=1,column=0, ipadx=15, ipady=5)
+
+combobox_tache2 = ctk.CTkComboBox(master=frame_tache2, values=taches, state="readonly", command= lambda x : change_tache(x))
+combobox_tache2.grid(row=1,column=1)
+
 
 #########--BOUTON ERR PRINCIPAL
 
@@ -1922,6 +1939,7 @@ def envoyer_en_l_etat() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
+
     if id_time_code - 1 >= 0:  # ID d'erreurs indiquées au bon moment ont un id positif et de param 0
         parameter = 0  # Les erreurs oubliées ont un id négatif et sont donc de param 1
     else:
@@ -2034,6 +2052,7 @@ def envoyer_en_l_etat_modif() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
+
     df = pd.read_excel(excel_path)
 
     if description == "Description de l'incident négatif..." :
@@ -2145,6 +2164,7 @@ def sauvegarder_modif() :
     natureDistration = entry_Distraction.get()
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
+
 
     df = pd.read_excel(excel_path)
 
@@ -3104,6 +3124,7 @@ def sauvegarderQuest() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
+
     if id_time_code-1 >= 0 : #ID d'erreurs indiquées au bon moment ont un id positif et de param 0
         parameter = 0       #Les erreurs oubliées ont un id négatif et sont donc de param 1
     else :
@@ -3116,6 +3137,7 @@ def sauvegarderQuest() :
         if ( distraction == "Oui") :
             if ( natureDistration != '' ) :
 
+                df = pd.read_excel(excel_path)
 
                 nouvelle_ligne = pd.DataFrame({
                     "ID" : [dernier_id],
@@ -3131,9 +3153,12 @@ def sauvegarderQuest() :
                     "Distrait" : [distraction],
                     "NatureDistraction" : [natureDistration] ,
                     "Fatigue" : [niveau_fatigue] ,
-                    "Difficulte" : [niveau_difficulte]})
+                    "Difficulte" : [niveau_difficulte],
+                    "Tâche" : [selected_var_tache]
 
-                df = pd.read_excel(excel_path)
+                })
+
+
                 df = pd.concat([df, nouvelle_ligne])
                 df.to_excel(excel_path, index=False)
                 reset_entry()
@@ -3156,7 +3181,8 @@ def sauvegarderQuest() :
                     "Distrait": [distraction],
                     "NatureDistraction": [natureDistration],
                     "Fatigue": [niveau_fatigue],
-                    "Difficulte": [niveau_difficulte]})
+                    "Difficulte": [niveau_difficulte],
+                    "Tâche" : [selected_var_tache]})
 
                 df = pd.read_excel(excel_path)
                 df = pd.concat([df, nouvelle_ligne])
