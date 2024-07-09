@@ -42,6 +42,7 @@ background_color = "#2b2b2b"
 row_modif = None
 description_rapide = None
 n_anonymat = None
+tache_modif = None
 
 
 dic_likert_Importance = { 0: "Insignifiante",
@@ -366,7 +367,9 @@ def stimulation(parametre ,t = 0) :
             "Path": [f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"],
             "Timecode": [dernier_time_code],
             "Parameter": [dernier_parametre],
-            "Description": [description_rapide]})
+            "Description": [description_rapide],
+            "Tâche" : [selected_var_tache]
+        })
         df = pd.read_excel(excel_path)
         df = pd.concat([df, nouvelle_ligne2])
         df.to_excel(excel_path, index=False)
@@ -462,7 +465,7 @@ def creer_repertoire(n) :
 
     if not os.path.exists(excel_path):                  #On veérifie que le fichier n'existe pas
         colonnes = ["ID", "Path", "Timecode", "Parameter","ID Cible" , "Type","Faute", "Importance","Description",
-                    "Concentration","Distrait","NatureDistraction", "Fatigue", "Difficulte"]
+                    "Concentration","Distrait","NatureDistraction", "Fatigue", "Difficulte","Tâche"]
         df = pd.DataFrame(columns=colonnes)
         df.to_excel(excel_path, index=False)                                                                    #S'il n'éxiste pas on enregistre le fichier Excel
 
@@ -1313,7 +1316,7 @@ def change_tache(rep):
     print(selected_var_tache, rep)
     combobox_tache2.set(selected_var_tache)
 
-label_tache = ctk.CTkLabel(master=frame_tache, text="Quel type de tâche allez vous effectuer ?\n(Vous pourrez modifier quand vous changerez)")
+label_tache = ctk.CTkLabel(master=frame_tache, text="Quelle est la tâche que vous allez effectuer en priorité ?\n(Vous pourrez modifier la tâche en cours)",font=("Helvetica", 15))
 label_tache.grid(row=1,column=0, ipadx=15, ipady=5)
 
 combobox_tache = ctk.CTkComboBox(master=frame_tache, values=taches, state="readonly", command= lambda x : change_tache(x))
@@ -1468,6 +1471,7 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
 
     # Retier la page bouton
     frame_button.pack_forget()
+    combobox_tache2.pack_forget()
 
     frame_quest.pack(pady=20, padx=50, fill="both", expand=True)
 
@@ -1492,7 +1496,7 @@ label_titre_button.pack(pady=(15,5))
 
 frame_tache2 = ctk.CTkFrame(master=frame_button, fg_color="#2b2b2b")
 
-label_tache2 = ctk.CTkLabel(master=frame_tache2, text="Votre tâche actuelle est : ",font=('Helvetica',20))
+label_tache2 = ctk.CTkLabel(master=frame_tache2, text="BOUTON Votre tâche actuelle est : ",font=('Helvetica',20))
 label_tache2.grid(row=1,column=0, ipadx=15, ipady=5)
 
 combobox_tache2 = ctk.CTkComboBox(master=frame_tache2, values=taches, state="readonly", command= lambda x : change_tache(x))
@@ -1755,6 +1759,7 @@ def vers_frame_tab_err() :
     """Retire la page 2 et affiche le récapitulatif des erreurs"""
     # reset_entry(list_val) list_val = ['',50,"",50,'','',50,'']
 
+
     frame_button.pack_forget()
     display_table()
     display_table2()
@@ -1921,8 +1926,10 @@ def on_frame_configure2(event=None):
 scrollable_frame2.bind("<Configure>", on_frame_configure2)
 
 def choisir_envoyer_etat() :
+
     if button_quit_Modif.winfo_ismapped() :
         envoyer_en_l_etat_modif()
+        frame_tache3.pack_forget()
     else :
         envoyer_en_l_etat()
 
@@ -1966,7 +1973,9 @@ def envoyer_en_l_etat() :
                 "Distrait": [distraction],
                 "NatureDistraction": [natureDistration],
                 "Fatigue": [niveau_fatigue],
-                "Difficulte": [niveau_difficulte]})
+                "Difficulte": [niveau_difficulte],
+                "Tâche" : [selected_var_tache]
+            })
 
             df = pd.read_excel(excel_path)
             df = pd.concat([df, nouvelle_ligne])
@@ -1990,7 +1999,9 @@ def envoyer_en_l_etat() :
                 "Distrait": [distraction],
                 "NatureDistraction": [natureDistration],
                 "Fatigue": [niveau_fatigue],
-                "Difficulte": [niveau_difficulte]})
+                "Difficulte": [niveau_difficulte],
+                "Tâche" : [selected_var_tache]
+            })
 
             df = pd.read_excel(excel_path)
             df = pd.concat([df, nouvelle_ligne])
@@ -2012,7 +2023,9 @@ def envoyer_en_l_etat() :
             "Distrait": [distraction],
             "NatureDistraction": [natureDistration],
             "Fatigue": [niveau_fatigue],
-            "Difficulte": [niveau_difficulte]})
+            "Difficulte": [niveau_difficulte],
+            "Tâche" : [selected_var_tache]
+        })
 
         df = pd.read_excel(excel_path)
         df = pd.concat([df, nouvelle_ligne])
@@ -2052,6 +2065,7 @@ def envoyer_en_l_etat_modif() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
+    tache = combobox_tache3.get()
 
     df = pd.read_excel(excel_path)
 
@@ -2070,7 +2084,8 @@ def envoyer_en_l_etat_modif() :
                 "Distrait": distraction,
                 "NatureDistraction": natureDistration,
                 "Fatigue": niveau_fatigue,
-                "Difficulte": niveau_difficulte}
+                "Difficulte": niveau_difficulte,
+                "Tâche" : tache}
 
             for column, new_value in updates.items():
                 df.at[row_modif, column] = new_value
@@ -2100,7 +2115,8 @@ def envoyer_en_l_etat_modif() :
                 "Distrait": distraction,
                 "NatureDistraction": natureDistration,
                 "Fatigue": niveau_fatigue,
-                "Difficulte": niveau_difficulte}
+                "Difficulte": niveau_difficulte,
+                "Tâche" : tache}
 
             for column, new_value in updates.items():
                 df.at[row_modif, column] = new_value
@@ -2127,7 +2143,8 @@ def envoyer_en_l_etat_modif() :
             "Distrait": distraction,
             "NatureDistraction": natureDistration,
             "Fatigue": niveau_fatigue,
-            "Difficulte": niveau_difficulte}
+            "Difficulte": niveau_difficulte,
+            "Tâche" : tache}
 
         for column, new_value in updates.items():
             df.at[row_modif, column] = new_value
@@ -2137,7 +2154,6 @@ def envoyer_en_l_etat_modif() :
         reset_entry()
         button_done_modif.pack_forget()
         button_quit_Modif.place_forget()
-
         button_quit.place(x=5, y=5)
         frame_quest.pack_forget()
 
@@ -2165,8 +2181,11 @@ def sauvegarder_modif() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
+    tache = combobox_tache3.get()
 
     df = pd.read_excel(excel_path)
+
+    frame_tache3.pack_forget()
 
     if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') and (niveau_concentration != ' ') and (niveau_fatigue != ' ') :
         if ( distraction == "Oui") :
@@ -2181,7 +2200,8 @@ def sauvegarder_modif() :
                     "Distrait": distraction,
                     "NatureDistraction": natureDistration,
                     "Fatigue": niveau_fatigue,
-                    "Difficulte": niveau_difficulte}
+                    "Difficulte": niveau_difficulte,
+                    "Tâche" : tache}
 
                 for column, new_value in updates.items():
                     df.at[row_modif, column] = new_value
@@ -2211,7 +2231,8 @@ def sauvegarder_modif() :
                     "Distrait": distraction,
                     "NatureDistraction": natureDistration,
                     "Fatigue": niveau_fatigue,
-                    "Difficulte": niveau_difficulte}
+                    "Difficulte": niveau_difficulte,
+                    "Tâche" : tache}
 
                 for column, new_value in updates.items():
                     df.at[row_modif, column] = new_value
@@ -2242,9 +2263,8 @@ def affiche_Quest_Modif() :
     button_quit.place_forget()
     button_quit_Modif.place(x=5, y=5)
     actualisation_options()
-    Concentration_Type()
+    Concentration_Type(1)
 
-    # button_done.pack_forget()
 
 def modifier_ligne(row) :
     """
@@ -2254,10 +2274,11 @@ def modifier_ligne(row) :
 
     """
     global excel_path, row_modif
-    row_modif = row
     df = pd.read_excel(excel_path)
+    row_modif = int(df.index[df['ID'] == row].tolist()[0])
 
-    ligne = df.loc[df['ID'] == row_modif]
+
+    ligne = df.loc[df['ID'] == row]
     ligne_liste = ligne.values.flatten().tolist()[5:]
 
     ligne_liste[2]  = {value: key for key, value in dic_likert_Importance.items()}[ligne_liste[2]]
@@ -2273,6 +2294,9 @@ def modifier_ligne(row) :
     if entry_Distraction.get() == 'NaN' :
         entry_Distraction.delete(0, tk.END)
 
+
+    global tache_modif
+    tache_modif = ligne_liste[9]
 
     affiche_Quest_Modif()
 
@@ -2298,9 +2322,10 @@ def display_table(columns_to_exclude=["Path","ID Cible" ,"Timecode", "Parameter"
         for row_num, row in df_filtered.iterrows():
   # On vérifie que la première page du quest est complétée pour l'afficher sur le bon tableau
             if verifier_quest1_complet_xlsx(row):
+                row_id = row['ID']
                 # Ajouter un bouton dans la première colonne
                 button = ctk.CTkButton(frame_tableau, text="Modifier", width=50,
-                                       command=lambda row=row_num: modifier_ligne(row))
+                                       command=lambda row=row_id: modifier_ligne(row))
                 button.grid(row=row_num + 1, column=0, padx=10, pady=5)
 
                 # Ajouter les autres cellules
@@ -2329,12 +2354,16 @@ def modifier_ligne2(row) :
 
     """
     global excel_path, row_modif
-    row_modif = row
     df = pd.read_excel(excel_path)
+    row_modif = int(df.index[df['ID'] == row].tolist()[0])
 
-    ligne = df.loc[df['ID'] == row_modif]
+
+    ligne = df.loc[df['ID'] == row]
     ligne_liste = ligne.values.flatten().tolist()[5:]
 
+    global tache_modif
+    print(ligne_liste)
+    tache_modif = ligne_liste[9]
 
     try :
         ligne_liste[2] = {value: key for key, value in dic_likert_Importance.items()}[ligne_liste[2]]
@@ -2342,8 +2371,8 @@ def modifier_ligne2(row) :
         ligne_liste[7] = {value: key for key, value in dic_likert_Fatigue.items()}[ligne_liste[7]]
     except :
         ligne_liste[2] = 50
-        ligne_liste[4] =  50
-        ligne_liste[7] = 50
+        ligne_liste[4] =  50.1
+        ligne_liste[7] = 50.1
 
     reset_entry(ligne_liste)
     clear_table()
@@ -2388,9 +2417,11 @@ def display_table2(columns_to_keep=["ID","Description"]):
     # Insérer les données et les boutons
     for row_num, row in df.iterrows():
         if not verifier_quest1_complet_xlsx(row):
+            row_id = row['ID']
+            print(row_num," : ",row)
             # Ajouter un bouton dans la première colonne
             button = ctk.CTkButton(frame_tableau2, text="Modifier", width=50,
-                                   command=lambda row=row_num: modifier_ligne2(row))
+                                   command=lambda row=row_id: modifier_ligne2(row))
             button.grid(row=row_num + 1, column=0, padx=10, pady=5)
 
             # Ajouter les autres cellules
@@ -2422,6 +2453,7 @@ def Type_Concentration():
 
     if button_quit_Modif.winfo_ismapped() :
         button_done_modif.pack_forget()
+        frame_tache3.pack_forget()
 
     frame_questType.pack_forget()
     frame_questImportance.pack_forget()
@@ -2447,7 +2479,7 @@ def Type_Concentration():
 
 
 
-def Concentration_Type():
+def Concentration_Type(rep = 0):
     frame_questConcentration.pack_forget()
     frame_questDistraction.pack_forget()
     frame_questFatigue.pack_forget()
@@ -2455,8 +2487,20 @@ def Concentration_Type():
     button_done.pack_forget()
     button_Concentration_Type.pack_forget()
 
+    #on reset :
+
+    frame_questType.pack_forget()
+    frame_questImportance.pack_forget()
+    frame_questCommentaire.pack_forget()
+    button_Type_Concentration.pack_forget()
+
     if button_quit_Modif.winfo_ismapped() :
+        frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
         button_done_modif.pack_forget()
+
+    if rep == 1 :
+        frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
+        combobox_tache3.set(tache_modif)
 
     frame_questType.pack(pady=5, padx=50, fill="both", expand=True)
     frame_questImportance.pack(pady=5, padx=50, fill="both", expand=True)
@@ -2512,6 +2556,9 @@ def retourPage2(supp=0) :
         button_quit_Modif.place_forget()
         button_quit.place(x=5,y=5)
         button_done_modif.pack_forget()
+
+        frame_tache3.pack_forget()
+        print("combobox_tache3 forget")
         vers_tab = True
 
 
@@ -2533,6 +2580,21 @@ button_quit.place(x=5,y=15)
 
 button_quit_Modif = ctk.CTkButton(master = frame_quest, text="Annuler la modification", command=lambda : retourPage2(1))
 
+### Tâche modif
+
+def modifier_tache(rep):
+    """ Modifie la tâche de la ligne"""
+    global tache_modif
+    tache_modif = rep
+
+
+frame_tache3 = ctk.CTkFrame(master=frame_quest, fg_color="#2b2b2b")
+
+label_tache3 = ctk.CTkLabel(master=frame_tache3, text="Votre tâche actuelle est : ",font=('Helvetica',20))
+label_tache3.grid(row=1,column=0, ipadx=15, ipady=5)
+
+combobox_tache3 = ctk.CTkComboBox(master=frame_tache3, values=taches, state="readonly", command= lambda x : modifier_tache(x))
+combobox_tache3.grid(row=1,column=1)
 
 
 # ✔ TODO            # Type de l'erreur
