@@ -89,7 +89,12 @@ path_img_btn = os.path.join(base_path,path_img_btn1 )
 path_img_btnf = os.path.join(base_path,path_img_btnf1 )
 
 
+df_taches = pd.read_excel("../Sources/taches.xlsx")
 
+liste_taches =list(df_taches['Tâches'])
+descriptions_tache = list(df_taches['Description'])
+
+taches = [liste_taches[i] + ' : ' + descriptions_tache[i] for i in range(len(liste_taches)) ]
 
 ########################################################################### Lancement de l'interface
 
@@ -229,19 +234,22 @@ def ranger_edf() :
     try:
         shutil.move(path_actuel_edf, nouveau_path_edf)
         print(f"Fichier déplacé et renommé avec succès à : {nouveau_path_edf}")
-    except FileNotFoundError:
-        print("Erreur : Le fichier source n'existe pas.")
-    except Exception as e:
-        print(f"Erreur lors du déplacement et du renommage du fichier : {e}")
+    # except FileNotFoundError:
+    #     print("Erreur : Le fichier source n'existe pas.")
+    # except Exception as e:
+    #     print(f"Erreur lors du déplacement et du renommage du fichier : {e}")
+    except :
+        print('Lancement sans OpenVibe.')
 
     try:
         shutil.move(path_actuel_ov, nouveau_path_ov)
-        print(f"Fichier déplacé et renommé avec succès à : {nouveau_path_ov}")
-    except FileNotFoundError:
-        print("Erreur : Le fichier source n'existe pas.")
-    except Exception as e:
-        print(f"Erreur lors du déplacement et du renommage du fichier : {e}")
-
+    #     print(f"Fichier déplacé et renommé avec succès à : {nouveau_path_ov}")
+    # except FileNotFoundError:
+    #     print("Erreur : Le fichier source n'existe pas.")
+    # except Exception as e:
+    #     print(f"Erreur lors du déplacement et du renommage du fichier : {e}")
+    except :
+        print('Lancement sans OpenVibe.')
 
 
 def ajouterStim() :
@@ -255,11 +263,12 @@ def ajouterStim() :
 
         ranger_edf() #Doit attendre que le subprocess soit terminé, mais le subprocess est à temps variable et peut-être long, il faut donc qu'il s'execute uniquement une fois que la fenêtre de openvibe est partie
 
-    except FileNotFoundError:
-        print("Erreur : fichier exécutable OpenViBE introuvable.")
-    except subprocess.CalledProcessError as e:
-        print(f"Erreur lors de l'exécution de la commande : {e}")
-
+    # except FileNotFoundError:
+    #     print("Erreur : fichier exécutable OpenViBE introuvable.")
+    # except subprocess.CalledProcessError as e:
+    #     print(f"Erreur lors de l'exécution de la commande : {e}")
+    except :
+        print('Lancement sans OpenVibe : Pas de stimulation.')
 
 
 def lancerRecEEG() : #TODO lancerRecEEG
@@ -288,11 +297,12 @@ def lancerRecEEG() : #TODO lancerRecEEG
     try:
         command = [openvibe_executable, "--no-gui", "--play", scenario_file_Ecriture]
         process = subprocess.Popen(command)
-    except FileNotFoundError:
-        print("Erreur : fichier exécutable OpenViBE introuvable.")
-    except subprocess.CalledProcessError as e:
-        print(f"Erreur lors de l'exécution de la commande : {e}")
-
+    # except FileNotFoundError:
+    #     print("Erreur : fichier exécutable OpenViBE introuvable.")
+    # except subprocess.CalledProcessError as e:
+    #     print(f"Erreur lors de l'exécution de la commande : {e}")
+    except :
+        print('Lancement sans OpenVibe.')
 
 def arreterRecEEG():
     """
@@ -380,7 +390,6 @@ def stimulation(parametre ,t = 0) :
 
     id_time_code += 1
 
-    print("stimulé !")
 
 
 def tout_complet() :
@@ -518,12 +527,11 @@ label_titre_notif.pack(pady=(15,5))
 
 
 def nouveau():
-    notif.pack_forget()
+    notif.destroy()
     versInfo()
 
 def existant():
-    entry.pack(pady=10)
-    btn_valider.pack(ipadx=(10),ipady=(10))
+    notif_exi.pack(pady=15,ipady=10, ipadx=10)
 
 
 def validation() :
@@ -531,13 +539,15 @@ def validation() :
         global n_anonymat
         n_anonymat = int(entry.get())
 
-        notif.pack_forget()
-
-        versBtn()
+        if combobox_tache0.get() != '' :
+            notif.destroy()
+            versBtn()
+            combobox_tache2.set(selected_var_tache)
 
     except :
-        print("NON")
+        pass
 
+notif_exi = ctk.CTkFrame(notif, fg_color ="#242424")
 
 btn_cadre = ctk.CTkFrame(notif, fg_color="#2b2b2b")
 btn_cadre.pack(pady=(0,10),padx = 0, anchor='center')
@@ -548,16 +558,51 @@ close_button.pack(pady=(15,10), padx=(10), side=tk.LEFT, ipadx=(10),ipady=(10))
 close_button = ctk.CTkButton(btn_cadre, text="Participant existant", command=existant,font=('Helvetica',20))
 close_button.pack(pady=(15, 10), padx=(10),side=tk.LEFT, ipadx=(10),ipady=(10))
 
-entry = ctk.CTkEntry(notif, placeholder_text="N° Anonymat..." )
-btn_valider = ctk.CTkButton(notif,text="Valider",command=validation ,font=('Helvetica',15))
+entry = ctk.CTkEntry(notif_exi, placeholder_text="N° Anonymat..." )
+btn_valider = ctk.CTkButton(notif_exi,text="Valider",command=validation ,font=('Helvetica',15))
 
+
+def modifier_tache(rep):
+    """ Modifie la tâche de la ligne"""
+    global tache_modif
+    tache_modif = rep
+
+
+def change_tache(rep):
+    global selected_var_tache
+    selected_var_tache = rep
+    combobox_tache2.set(selected_var_tache)
+
+frame_tache0 = ctk.CTkFrame(master=notif_exi, fg_color="#242424")
+
+label_tache0 = ctk.CTkLabel(master=frame_tache0, text="Quelle est la tâche que vous allez effectuer en priorité ?\n(Vous pourrez modifier la tâche en cours)",font=('Helvetica',15))
+label_tache0.grid(row=1,column=0, ipadx=15, ipady=5)
+
+combobox_tache0 = ctk.CTkComboBox(master=frame_tache0, values=taches, state="readonly", command= lambda x : change_tache(x))
+combobox_tache0.grid(row=1,column=1)
+
+entry.pack(pady=10)
+frame_tache0.pack(pady=5)
+btn_valider.pack(ipadx=(5),ipady=(5),pady=5)
+
+def on_enter0(event):
+    button_notif_f4.configure(text="❌ Fermer")
+def on_leave0(event):
+    button_notif_f4.configure(text="❌")
+
+button_notif_f4 = ctk.CTkButton(master = notif, text="❌", width=15, command=lambda : root.destroy())
+button_notif_f4.configure(fg_color="red", hover_color="white", text_color="black")
+button_notif_f4.place(x=10,y=10)
+
+button_notif_f4.bind("<Enter>", on_enter0)
+button_notif_f4.bind("<Leave>", on_leave0)
 
 ########################################################################### Frame 1 : Informations
 
 
 def versParticipant() :
 
-    frame_info.pack_forget()
+    frame_info.destroy()
     frame_participant.pack(pady=15, padx=30, fill="both", expand=True)
 
 
@@ -699,7 +744,7 @@ dic_Bruit = {
     100: "Extrêmement bruyant"         # 21 caractères
 }
 
-taches = ["Word","Excel","Lecture d'article scientifique","Code"]
+
 ########## Variables :
 
 selected_var_heure = datetime.now().strftime("%Hh%M")
@@ -730,33 +775,6 @@ selected_var_Passion = dic_Passion[50]
 # selected_var_distractions_travail = tk.StringVar()
 selected_var_Bruit = dic_Bruit[53.5]
 selected_var_tache = tk.StringVar()
-
-####################################### TODO A SUPRUMER
-
-selected_var_age = 22
-selected_var_genre = "Homme"
-
-##Informations de contexte :
-
-selected_var_sommeil = 7
-selected_var_trouble_sommeil = "Non"
-selected_var_stress = dic_stress[48.5]
-
-selected_var_cafeine = "Oui"
-selected_var_quantite_cafeine = 10
-
-selected_var_nicotine = "Non"
-selected_var_quantite_nicotine = 0
-
-##Travail :
-
-selected_var_Hability_inf = dic_Hability_inf[53]
-selected_var_experience = "+de 10"
-selected_var_Passion = dic_Passion[50]
-
-selected_var_Bruit = dic_Bruit[53.5]
-# selected_var_tache = taches[0]
-
 
 
 ########## Titre :
@@ -1310,11 +1328,7 @@ sliderBruit.set(53.5)
 frame_tache = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
 frame_tache.pack(ipadx= 10, pady=10, anchor='center')
 
-def change_tache(rep):
-    global selected_var_tache
-    selected_var_tache = rep
-    print(selected_var_tache, rep)
-    combobox_tache2.set(selected_var_tache)
+
 
 label_tache = ctk.CTkLabel(master=frame_tache, text="Quelle est la tâche que vous allez effectuer en priorité ?\n(Vous pourrez modifier la tâche en cours)",font=("Helvetica", 15))
 label_tache.grid(row=1,column=0, ipadx=15, ipady=5)
@@ -1403,13 +1417,13 @@ def versBouton() :
 
         # Afficher page bouton
 
-        frame_participant.pack_forget()
+        frame_participant.destroy()
         frame_button.pack(pady=20, padx=50, fill="both", expand=True)
 
         pack_button_tout()
 
     else :
-        print("Pas bien")
+        pass
 
 button_versB = ctk.CTkButton(master = frame_quest_participant2, text="Terminé !", width= 250, height=60, command=versBouton)
 button_versB.configure(font=("Helvetica", 20, "bold"))
@@ -1496,7 +1510,7 @@ label_titre_button.pack(pady=(15,5))
 
 frame_tache2 = ctk.CTkFrame(master=frame_button, fg_color="#2b2b2b")
 
-label_tache2 = ctk.CTkLabel(master=frame_tache2, text="BOUTON Votre tâche actuelle est : ",font=('Helvetica',20))
+label_tache2 = ctk.CTkLabel(master=frame_tache2, text="Votre tâche actuelle est : ",font=('Helvetica',20))
 label_tache2.grid(row=1,column=0, ipadx=15, ipady=5)
 
 combobox_tache2 = ctk.CTkComboBox(master=frame_tache2, values=taches, state="readonly", command= lambda x : change_tache(x))
@@ -2051,7 +2065,6 @@ def verifier_quest1_complet_xlsx(row) :
 
 
 def envoyer_en_l_etat_modif() :
-    print("sauvegarder modif ")
 
     global excel_path, row_modif
 
@@ -2167,7 +2180,6 @@ def sauvegarder_modif() :
     Récupère les données du quest
 
     """
-    print("sauvegarder modif ")
 
     global excel_path, row_modif
 
@@ -2362,7 +2374,6 @@ def modifier_ligne2(row) :
     ligne_liste = ligne.values.flatten().tolist()[5:]
 
     global tache_modif
-    print(ligne_liste)
     tache_modif = ligne_liste[9]
 
     try :
@@ -2418,7 +2429,6 @@ def display_table2(columns_to_keep=["ID","Description"]):
     for row_num, row in df.iterrows():
         if not verifier_quest1_complet_xlsx(row):
             row_id = row['ID']
-            print(row_num," : ",row)
             # Ajouter un bouton dans la première colonne
             button = ctk.CTkButton(frame_tableau2, text="Modifier", width=50,
                                    command=lambda row=row_id: modifier_ligne2(row))
@@ -2542,7 +2552,6 @@ def retourPage2(supp=0) :
         df = df.drop(df.index[-1])
         global id_time_code
         id_time_code -=1
-        print("déstimulé")
 
         df.to_csv(path_time_code, index=False)
         df.to_csv(path_time_code_BackUp, index=False)
@@ -2558,7 +2567,6 @@ def retourPage2(supp=0) :
         button_done_modif.pack_forget()
 
         frame_tache3.pack_forget()
-        print("combobox_tache3 forget")
         vers_tab = True
 
 
@@ -2581,11 +2589,6 @@ button_quit.place(x=5,y=15)
 button_quit_Modif = ctk.CTkButton(master = frame_quest, text="Annuler la modification", command=lambda : retourPage2(1))
 
 ### Tâche modif
-
-def modifier_tache(rep):
-    """ Modifie la tâche de la ligne"""
-    global tache_modif
-    tache_modif = rep
 
 
 frame_tache3 = ctk.CTkFrame(master=frame_quest, fg_color="#2b2b2b")
