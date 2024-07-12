@@ -26,6 +26,8 @@ bash :
 - OpenVibe
 - Git
 
-## EXE
+## Sous linux
 
-> pyinstaller --onefile --hidden-import=tkinter --hidden-import=customtkinter --hidden-import=screeninfo Interface1.py
+Si tkinter n'est pas installé :
+
+> sudo apt install python3-tk
