@@ -1,15 +1,26 @@
 
 ## Interface Graphique pour récupérations de données EEG sur l'ErrP
 
-#TODO ID float dans ajout rapide
 
-#TODO Type de travail : CODER/Ecrire/Lire..
+import sys
+import os
+import subprocess
+
+# requirements_file = './requirements.txt'
+#
+# try:
+#     print("Installing dependencies from requirements.txt...")
+#     subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', requirements_file])
+#     print("Dependencies installed successfully.")
+# except subprocess.CalledProcessError as e:
+#     print(f"Failed to install dependencies: {e}")
+#     sys.exit(1)
 
 ########################################################################### Imports
 
 import tkinter as tk
 import customtkinter as ctk
-import os
+
 import shutil
 import pandas as pd
 import subprocess
@@ -73,21 +84,36 @@ dic_likert_Fatigue =    { 0: "Pas fatigué",
                          100: "Vraiment fatigué"}
 
 
-path_img_btn1 = "../Sources/btn.png"
-path_img_btnf1 = "../Sources/btn_f.png"
+# path_img_btn1 = "../Sources/btn.png"
+# path_img_btnf1 = "../Sources/btn_f.png"
+#
+# path_img_aide1 = "../Sources/aide.png"
+# path_img_aidef1 = "../Sources/aide_f.png"
+#
+# base_path = os.path.dirname(os.path.abspath(__file__))
+#
+# # Construit le chemin absolu du fichier d'image
+# path_img_aide = os.path.join(base_path,path_img_aide1 )
+# path_img_aidef = os.path.join(base_path,path_img_aidef1 )
+#
+# path_img_btn = os.path.join(base_path,path_img_btn1 )
+# path_img_btnf = os.path.join(base_path,path_img_btnf1 )
+#
 
-path_img_aide1 = "../Sources/aide.png"
-path_img_aidef1 = "../Sources/aide_f.png"
+def resource_path(relative_path):
+    """ On crée un path absolut depuis le relatif """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
 
-# Construit le chemin absolu du fichier d'image
-path_img_aide = os.path.join(base_path,path_img_aide1 )
-path_img_aidef = os.path.join(base_path,path_img_aidef1 )
-
-path_img_btn = os.path.join(base_path,path_img_btn1 )
-path_img_btnf = os.path.join(base_path,path_img_btnf1 )
-
+# Paths to images
+path_img_btn = resource_path("Sources/btn.png")
+path_img_btnf = resource_path("Sources/btn_f.png")
+path_img_aide = resource_path("Sources/aide.png")
+path_img_aidef = resource_path("Sources/aide_f.png")
 
 df_taches = pd.read_excel("../Sources/taches.xlsx")
 
@@ -225,11 +251,11 @@ def ranger_edf() :
     """
 
 
-    path_actuel_edf = "../OpenVibe/enregistrements_avec_stim/recordStim.edf"
-    path_actuel_ov = "../OpenVibe/enregistrements_avec_stim/recordStim.ov"
+    path_actuel_edf = resource_path("OpenVibe/enregistrements_avec_stim/recordStim.edf")
+    path_actuel_ov = resource_path("OpenVibe/enregistrements_avec_stim/recordStim.ov")
 
-    nouveau_path_edf = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
-    nouveau_path_ov = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.ov"
+    nouveau_path_edf = resource_path(f"Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf")
+    nouveau_path_ov = resource_path(f"Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.ov")
 
     try:
         shutil.move(path_actuel_edf, nouveau_path_edf)
@@ -286,9 +312,8 @@ def lancerRecEEG() : #TODO lancerRecEEG
     global path_time_code
     global path_time_code_BackUp
 
-    path_time_code  = '../OpenVibe/enregistrement_en_cours/timecodes.csv'
-    path_time_code_BackUp = f'../Data/{str(n_anonymat)}/timecodes_BackUp{str(n_anonymat)}_{horodatage_start}.csv'
-
+    path_time_code  = resource_path('OpenVibe/enregistrement_en_cours/timecodes.csv')
+    path_time_code_BackUp = resource_path(os.path.join(path_directory, f"timecodes_BackUp{str(n_anonymat)}_{horodatage_start}.csv"))
     df.to_csv(path_time_code, index=False)
     df.to_csv(path_time_code_BackUp, index=False)
 
@@ -464,11 +489,12 @@ def creer_repertoire(n) :
     global horodatage_start
     horodatage_start = datetime.now().strftime("_%Y-%m-%d_%Hh%Mm%Ss")
 
-    path_directory = "../DATA/" + str(n)
-    os.makedirs(path_directory, exist_ok=True)                                                                          #Creation du fichier n s'il n'existe pas
-
+    global path_directory
+    path_directory = "DATA/" + str(n)
+    os.makedirs(resource_path(path_directory), exist_ok=True)                                                                          #Creation du fichier n s'il n'existe pas
+    
     global excel_path
-    excel_path = os.path.join(path_directory, f"Detail_Stim_n-{n}_{horodatage_start}.xlsx")                                                              #Path du fichier excel
+    excel_path = resource_path(os.path.join(path_directory,f"Detail_Stim_n-{n}_{horodatage_start}.xlsx"))                                                              #Path du fichier excel
 
                     #Création du fichier Excel s'il n'existe pas déjà
 
@@ -482,7 +508,7 @@ def creer_repertoire(n) :
 #Anonymat
 
 def generer_ano() :
-    df_anonymat = pd.read_excel("../Sources/info_participants.xlsx")
+    df_anonymat = pd.read_excel(resource_path("Sources/info_participants.xlsx"))
 
     #On récupère la dernière ligne de la colonne "N_ano" et ajoute 1 pour le nouveau numéro d'ano
     global n_anonymat
@@ -495,7 +521,7 @@ def generer_ano() :
 
 
 
-    df_anonymat.to_excel("../Sources/info_participants.xlsx", index=False)
+    df_anonymat.to_excel(resource_path("Sources/info_participants.xlsx"), index=False)
 
     label_n_ano.configure(text=f"N°anonymat : \n{n_anonymat}")
 

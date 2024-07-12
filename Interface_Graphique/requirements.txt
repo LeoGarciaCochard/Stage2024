@@ -1,5 +1,6 @@
-
+packaging
+openpyxl
 customtkinter~=5.2.1
-pandas~=2.2.2
+pandas
 Pillow~=10.3.0
 screeninfo~=0.8.1
