@@ -198,6 +198,9 @@ function process(box)
 
                 elseif  stimulation_info.parameter == 2 then
                     stimulation_id = 0x00008103  -- Label pour paramètre 2
+
+                elseif  stimulation_info.parameter == 4 then
+                    stimulation_id = 0x00008104  -- Label pour paramètre 4
                 end
                 
                 -- Envoyer la stimulation
