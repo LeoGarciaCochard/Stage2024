@@ -115,13 +115,13 @@ path_img_btnf = resource_path("Sources/btn_f.png")
 path_img_aide = resource_path("Sources/aide.png")
 path_img_aidef = resource_path("Sources/aide_f.png")
 
-df_taches = pd.read_excel("../Sources/taches.xlsx")
+def actualise_taches() :
+    df_taches = pd.read_excel("../Sources/taches.xlsx")
+    global taches
+    taches =list(df_taches['Tâches'])
 
-liste_taches =list(df_taches['Tâches'])
-descriptions_tache = list(df_taches['Description'])
 
-taches = [liste_taches[i] + ' : ' + descriptions_tache[i] for i in range(len(liste_taches)) ]
-
+actualise_taches()
 ########################################################################### Lancement de l'interface
 
 ctk.set_appearance_mode("dark")
@@ -578,11 +578,11 @@ notif_exi = ctk.CTkFrame(notif, fg_color ="#242424")
 btn_cadre = ctk.CTkFrame(notif, fg_color="#2b2b2b")
 btn_cadre.pack(pady=(0,10),padx = 0, anchor='center')
 
-close_button = ctk.CTkButton(btn_cadre, text="Nouveau participant", command=nouveau,font=('Helvetica',20))
-close_button.pack(pady=(15,10), padx=(10), side=tk.LEFT, ipadx=(10),ipady=(10))
+btn_nouveau_participant = ctk.CTkButton(btn_cadre, text="Nouveau participant", command=nouveau,font=('Helvetica',20))
+btn_nouveau_participant.pack(pady=(15,10), padx=(10), side=tk.LEFT, ipadx=(10),ipady=(10))
 
-close_button = ctk.CTkButton(btn_cadre, text="Participant existant", command=existant,font=('Helvetica',20))
-close_button.pack(pady=(15, 10), padx=(10),side=tk.LEFT, ipadx=(10),ipady=(10))
+btn_participant_existant = ctk.CTkButton(btn_cadre, text="Participant existant", command=existant,font=('Helvetica',20))
+btn_participant_existant.pack(pady=(15, 10), padx=(10),side=tk.LEFT, ipadx=(10),ipady=(10))
 
 entry = ctk.CTkEntry(notif_exi, placeholder_text="N° Anonymat..." )
 btn_valider = ctk.CTkButton(notif_exi,text="Valider",command=validation ,font=('Helvetica',15))
@@ -607,9 +607,82 @@ label_tache0.grid(row=1,column=0, ipadx=15, ipady=5)
 combobox_tache0 = ctk.CTkComboBox(master=frame_tache0, values=taches, state="readonly", command= lambda x : change_tache(x))
 combobox_tache0.grid(row=1,column=1)
 
+def affiche_rajouter_tache() :
+    frame_rajouter_tache.pack(pady=10, padx=10)
+    btn_valider.pack_forget()
+    btn_valider.pack(ipadx=(5), ipady=(5), pady=5)
+
+
+def Enter_Tache(event) :
+    """Grise le help et fait apparaitre une tooltip avec une description"""
+    aide_button_err.configure(image=photo_aide_button_errf)
+    # afficher_bulle_1()
+    show_tooltip(event,"Cliquez pour rajouter une nouvelle tâche")
+
+
+def Leave_Tache(event) :
+    aide_button_err.configure(image=photo_aide_button_err)
+    hide_tooltip(event)
+
+
+button_rajouter_tache = ctk.CTkButton(master = frame_tache0,text="+", corner_radius=360, width=1, command = affiche_rajouter_tache)
+button_rajouter_tache.grid(row=1,column=2,padx=5)
+
+button_rajouter_tache.bind("<Enter>", Enter_Tache)
+button_rajouter_tache.bind("<Leave>", Leave_Tache)
+button_rajouter_tache.bind("<Motion>", move_tooltip)
+
+
+
 entry.pack(pady=10)
 frame_tache0.pack(pady=5)
 btn_valider.pack(ipadx=(5),ipady=(5),pady=5)
+
+
+def actualise_les_values(rep) :
+    combobox_tache0.configure(values=taches)
+    combobox_tache.configure(values=taches)
+    combobox_tache2.configure(values=taches)
+    combobox_tache3.configure(values=taches)
+    combobox_tache0.set(rep)
+    combobox_tache.set(rep)
+    combobox_tache2.set(rep)
+    combobox_tache3.set(rep)
+
+#Rajouter tache
+
+def rajouter_tache() :
+    #On rajoute la tache au fichier excel
+    df_taches = pd.read_excel("../Sources/taches.xlsx")
+    rep = entry_rajouter_tache.get()
+    ligne = pd.DataFrame({"Tâches" : [rep]})
+
+    df_taches = pd.concat([df_taches, ligne], ignore_index=True)
+
+    df_taches.to_excel(resource_path("Sources/taches.xlsx"), index=False)
+
+    #On actualise taches ainsi que les options dans la combobox
+    actualise_taches()
+    actualise_les_values(rep)
+    #On retire la frame
+    frame_rajouter_tache.pack_forget()
+
+
+frame_rajouter_tache = ctk.CTkFrame(master=notif_exi)
+label_rajouter_tache = ctk.CTkLabel(master= frame_rajouter_tache, text="Rajouter une nouvelle tâche")
+entry_rajouter_tache = ctk.CTkEntry(master= frame_rajouter_tache, placeholder_text = "Nouvelle tâche..." , width=150)
+button_valider_rajouter_tache = ctk.CTkButton(master = frame_rajouter_tache,text="Valider", command = rajouter_tache )
+
+label_rajouter_tache.grid(row=0, column=0, padx=20, pady=20, sticky="ew", columnspan=2)
+entry_rajouter_tache.grid(row=1, column=0, padx=20, pady=(0, 20), sticky="w")
+button_valider_rajouter_tache.grid(row=1, column=1, padx=20, pady=(0, 20), sticky="w")
+
+
+
+
+
+
+
 
 def on_enter0(event):
     button_notif_f4.configure(text="❌ Fermer")
