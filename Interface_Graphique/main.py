@@ -1380,7 +1380,7 @@ sliderPassion.set(50)
 cadre_participantET = ctk.CTkFrame(master=frame_quest_participant2)
 cadre_participantET.pack(pady=(40,10), padx=50)
 
-label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Environemment de travail :")
+label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Environnemment de travail :")
 label_participantET.pack(pady=5, padx=50)
 label_participantET.configure(font=("Helvetica", 25))
 
