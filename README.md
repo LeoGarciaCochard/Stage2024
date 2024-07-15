@@ -1,33 +1,37 @@
-# Interface Graphique pour l'utilisateur participant à l'étude sur les potentiels d'erreur en milieu écologique
+# Interface graphique pour l'utilisateur participant à l'étude sur les potentiels d'erreur en milieu écologique
 
+## Information
 
+Pour l'implémentation sur la machine finale, modifier les chemins absolus dans le code `main.py` 
+Ainsi que dans les boîtes OpenVibe.
 
-## Information 
+(Pas pour le pilote).
 
-Modifier les path abs dans le code ./Interface_Graphique/Interface.py
-Seulement lors de l'utilisation d'openVibe (Inutile pour le pilote sans EEG)
+## Sous Linux
 
-## Installation  :
+Si Tkinter n'est pas installé :
 
-Utilisation de python3.9
+> sudo apt install python3-tk
 
-bash : 
->cd path/to/Interface_Graphique
+## Installation :
+
+#### Ouvrir un terminal :
+
+Se placer dans le répertoire :
+
+> cd path/to/Interface_Graphique
+
+Installer les dépendances :
 
 > pip install -r requirements.txt
 
-> Interface1.py
+Lancer l'interface :
 
+> python3 main.py
 
-## Outils 
+## Outils
 
-- Python
-- LUA 
+- Python 3.9
+- LUA
 - OpenVibe
 - Git
-
-## Sous linux
-
-Si tkinter n'est pas installé :
-
-> sudo apt install python3-tk

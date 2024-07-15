@@ -162,10 +162,10 @@ path_recordStim_ov = r""
 
 
 dico_aide = {
-    "Erreur" : "En cliquant sur ce bouton, vous signalez un incident. Un questionnaire s'ouvrira. \nMerci de remplir au moins la première page. Si vous avez le temps, complétez le reste. Sinon, \ncliquez sur 'Envoyer en l'état'. Vous pourrez toujours le compléter plus tard en \ncliquant sur 'Voir Récapitulatif'.",
+    "Erreur" : "En cliquant sur ce bouton, vous signalez un incident. Un questionnaire s'ouvrira. \n Si vous avez le temps, complétez le. Sinon, cliquez sur 'Envoyer en l'état'. Vous pourrez toujours le compléter plus tard en \ncliquant sur 'Voir Récapitulatif'.",
     "Forget" : "En cliquant sur ce bouton, vous signalez un incident a posteriori, c'est-à-dire que \nvous aviez oublié de le signaler en temps voulu. Vous devez indiquer un nombre \napproximatif de minutes depuis la survenue de l'erreur. Ensuite, le questionnaire s'ouvrira \navec les mêmes instructions que pour un signalement normal.",
-    "Recap"  : "En cliquant sur ce bouton, vous pourrez voir un récapitulatif des incidents déjà \nsignalés. Vous aurez la possibilité de modifier vos réponses en cliquant sur 'Modifier' \nà la ligne correspondante. Deux tableaux sont disponibles : \n--Le premier, 'Informations complétées', indique les incidents pour lesquels au moins la \npremière page est renseignée. \n--Le second, 'Informations à compléter', indique ceux qu'il vous reste à compléter, \npar exemple ceux renseignés via 'Ajout Rapide'.",
-    "Rapide" : "En cliquant sur ce bouton, vous pouvez signaler un incident de manière rapide. Vous \npouvez, si vous le souhaitez, fournir une brève description (facultatif) pour vous aider à le \ncompléter plus tard. Cet incident sera placé dans le tableau 'Informations à compléter' \nsur la page du récapitulatif."
+    "Recap"  : "En cliquant sur ce bouton, vous pourrez voir un récapitulatif des incidents déjà \nsignalés. Vous aurez la possibilité de modifier vos réponses en cliquant sur 'Modifier' \nà la ligne correspondante. Deux tableaux sont disponibles : \n--Le premier, 'Informations complétées', indique les incidents pour lesquels au moins la \npremière page est renseignée. \n--Le second, 'Informations à compléter', indique ceux qu'il vous reste à compléter, \npar exemple ceux signalés via 'Ajout Rapide'.",
+    "Rapide" : "En cliquant sur ce bouton, vous pouvez signaler un incident de manière rapide. Vous \npouvez, si vous le souhaitez, fournir une brève description (facultative) pour vous aider à le \ncompléter plus tard. Cet incident sera placé dans le tableau 'Informations à compléter' \nsur la page du récapitulatif."
 }
 
 
@@ -605,18 +605,26 @@ image_btnf_resized = image_btnf.resize((100, 100), Image.LANCZOS)
 photo_btnfTache = ctk.CTkImage(light_image=image_btnf_resized, dark_image=image_btnf_resized, size=(25, 25))
 
 
-def actualise_les_values() :
+def actualise_les_values(rep) :
     try :
         combobox_tache0.configure(values=taches)
+        combobox_tache0.set(rep)
     except :
         pass
     try:
         combobox_tache.configure(values=taches)
+        combobox_tache.set(rep)
     except :
         pass
 
     combobox_tache1.configure(values=taches)
     combobox_tache2.configure(values=taches)
+
+    global selected_var_tache
+    selected_var_tache = rep
+
+    combobox_tache1.set(rep)
+    combobox_tache2.set(rep)
 
 
 def affiche_rajouter_tache(event):
@@ -633,7 +641,7 @@ def affiche_rajouter_tache(event):
 
         # On actualise taches ainsi que les options dans la combobox
         actualise_taches()
-        actualise_les_values()
+        actualise_les_values(rep)
         # On retire la frame
         popup.destroy()
 
@@ -666,7 +674,7 @@ def affiche_rajouter_tache(event):
 def Enter_Tache(event) :
     """Grise le btn et fait apparaitre une tooltip avec une description"""
     button_rajouter_tache.configure(image=photo_btnfTache)
-    show_tooltip(event,"Cliquez pour rajouter une nouvelle tâche")
+    show_tooltip(event,"Si la tâche que vous effectuez n'apparaît pas dans la liste, \n Cliquez pour rajouter une nouvelle tâche")
 
 def Leave_Tache(event) :
     hide_tooltip(event)
@@ -827,12 +835,12 @@ dic_stress= {
 
 dic_Hability_inf = {
     0: "Aucunes compétences",        # 19 caractères
-    16: "Très peu compétent",          # 18 caractères
-    39: "Peu compétent",        # 21 caractères
+    16: "Très peu compétent(e)",          # 18 caractères
+    39: "Peu compétent(e)",        # 21 caractères
     53: "Moyen",          # 18 caractères
-    66: "Compétent",                   # 9 caractères
-    83: "Très compétent",              # 15 caractères
-    100: "Extrêmement compétent"       # 22 caractères
+    66: "Compétent(e)",                   # 9 caractères
+    83: "Très compétent(e)",              # 15 caractères
+    100: "Extrêmement compétent(e)"       # 22 caractères
 }
 
 dic_Passion = {
@@ -928,7 +936,7 @@ def ouvrir_menu_age(event) :
     y = event.y_root
 
     menu = ctk.CTk()
-    menu.title("Exemple avec CTk")
+    menu.title("Choix de l'âge..")
     menu.geometry(f"100x300+{x}+{y}")
 
     scrollable_frame = ctk.CTkScrollableFrame(master=menu)
