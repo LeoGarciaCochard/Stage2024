@@ -617,7 +617,6 @@ def actualise_les_values() :
 
     combobox_tache1.configure(values=taches)
     combobox_tache2.configure(values=taches)
-    # combobox_tache3.configure(values=taches)
 
 
 def affiche_rajouter_tache(event):
@@ -2636,14 +2635,6 @@ def Concentration_Type(rep = 0):
     frame_questImportance.pack_forget()
     frame_questCommentaire.pack_forget()
     button_Type_Concentration.pack_forget()
-    #
-    # if button_quit_Modif.winfo_ismapped() :
-    #     frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
-    #     button_done_modif.pack_forget()
-
-    # if rep == 1 :
-    #     frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
-    #     combobox_tache3.set(tache_modif)
 
     frame_questType.pack(pady=5, padx=50, fill="both", expand=True)
     frame_questImportance.pack(pady=5, padx=50, fill="both", expand=True)
@@ -2721,26 +2712,6 @@ button_quit.place(x=5,y=15)
 
 button_quit_Modif = ctk.CTkButton(master = frame_quest, text="Annuler la modification", command=lambda : retourPage2(1))
 
-### Tâche modif
-
-
-# frame_tache3 = ctk.CTkFrame(master=frame_quest, fg_color="#2b2b2b")
-#
-# label_tache3 = ctk.CTkLabel(master=frame_tache3, text="Tâche au moment de l'incident : ",font=('Helvetica',20))
-# label_tache3.grid(row=1,column=0, ipadx=15, ipady=5)
-#
-# combobox_tache3 = ctk.CTkComboBox(master=frame_tache3, values=taches, state="readonly", command= lambda x : modifier_tache(x))
-# combobox_tache3.grid(row=1,column=1)
-#
-# # Afficher le btn + et le toplevel pour ajouter une tache
-# button_rajouter_tache = ctk.CTkLabel(master=frame_tache3, image=photo_btnTache, text=' ' ,cursor="hand2")
-# button_rajouter_tache.grid(row=1,column=2,padx=5)
-#
-# button_rajouter_tache.bind("<Button-1>",affiche_rajouter_tache)
-# button_rajouter_tache.bind("<Enter>", Enter_Tache)
-# button_rajouter_tache.bind("<Leave>", Leave_Tache)
-# button_rajouter_tache.bind("<Motion>", move_tooltip)
-
 
 # ✔ TODO            # Type de l'erreur
 
@@ -2774,80 +2745,10 @@ def auto_toogle(val):
 
 def actualisation_options(event=None):
     entered_text = entry_actualise_options.get().lower()
-    # filtered_options = [option for option in options if entered_text in option.lower()]
-#
-#     # Supprimer tous les boutons existants
-#     for widget in affichage_boutons.winfo_children():
-#         widget.destroy()
-#
-#     for btn in button_states :
-#         button_states[btn] = False
-#
-#     # Recréer les boutons filtrés
-#     i, j = 0, 0
-#     for e in filtered_options:
-#         button_states[e] = False
-#         def create_button(e):
-#             button = ctk.CTkButton(affichage_boutons, text=e, fg_color="#2FA572", width=button_width, height=button_height)
-#             button.configure(command=lambda btn=button, opt=e: toggle_button(btn, opt))
-#             return button
-#         button = create_button(e)
-#         button.grid(row=j, column=i, pady=5, padx=5)
-#         if i + 1 == 6:
-#             i = 0
-#             j += 1
-#         else:
-#             i += 1
     auto_toogle(entered_text)
 
 
 entry_actualise_options = ctk.CTkEntry(master=frame_questType,width=200 ,placeholder_text=("Rechercher                                   🔎"))
-# entry_actualise_options.pack(pady=5)
-# entry_actualise_options.bind("<KeyRelease>", actualisation_options)
-
-# def rajouterType():
-#     """Rajoute un type d'erreur"""
-#     df_types = pd.read_excel("../Sources/types_err.xlsx")
-#
-#     type = entry_rajouter_typeErreur.get()
-#     description = entry_rajouter_typeErreurD.get()
-#
-#     global options
-#
-#     if (not type in options) and (type != '') and (description != ''):
-#
-#         nouvelle_erreur = pd.DataFrame({"Types": [type], "Description": [description]})
-#         df_types = pd.concat([df_types, nouvelle_erreur])
-#         df_types.to_excel("../Sources/types_err.xlsx", index=False)
-#         print("Fait")
-#
-#         afficherPlus()
-#
-#         options = list(df_types["Types"])
-#         entry_actualise_options.delete(0, tk.END)
-#         entry_actualise_options.insert(tk.END, type)
-#         actualisation_options()
-
-
-# cadreNouveauType = ctk.CTkFrame(master=frame_questType)
-#
-# entry_rajouter_typeErreur = ctk.CTkEntry(master=cadreNouveauType,width=175, placeholder_text="Rajouter un type d'erreur")
-# entry_rajouter_typeErreur.grid(row=0, column=0, pady=10, padx=10)
-# entry_rajouter_typeErreurD = ctk.CTkEntry(master=cadreNouveauType, width=250,placeholder_text="Rajouter la description du type d'erreur")
-# entry_rajouter_typeErreurD.grid(row=0, column=1, pady=10, padx=10)
-#
-# entry_rajouter_typeErreurD.bind("<Return>", lambda x: rajouterType())
-#
-# button_rajouter_typeErreur = ctk.CTkButton(master=cadreNouveauType, text="Rajouter", command=rajouterType)
-# button_rajouter_typeErreur.grid(row=0, column=2, pady=10, padx=10)
-
-# def afficherPlus():
-#     if cadreNouveauType.winfo_ismapped():
-#         cadreNouveauType.pack_forget()
-#     else:
-#         cadreNouveauType.pack(anchor=tk.CENTER, padx=10, pady=10)
-#
-# button_plus = ctk.CTkButton(master=frame_questType, text="Votre type d'erreur n'apparait pas ?", command=afficherPlus)
 
 
 affichage_boutons = ctk.CTkFrame(master=frame_questType)
@@ -2859,14 +2760,6 @@ button_states = {}
 
 
 # Fonction pour gérer le clic sur un bouton
-
-# def toggle_button(button, option): #Plusieurs boutons
-#     if button_states[option]:
-#         button.configure(fg_color="#2FA572")
-#     else:
-#         button.configure(fg_color="#106A43")
-#     button_states[option] = not button_states[option]
-
 def toggle_button(button, option):
     # Vérifier si un autre bouton est sélectionné
     selected_button = None
@@ -3271,18 +3164,6 @@ def reset_entry(list_val = ['','',50,"",50.1,'','',50.1,'']) :
 
     entry_actualise_options.delete(0,tk.END)
     entry_actualise_options.insert(tk.END, list_val[0])
-
-    # entry_rajouter_typeErreur.delete(0,tk.END)
-    # entry_rajouter_typeErreur.insert(tk.END, list_val[0])
-    #
-    # entry_rajouter_typeErreurD.delete(0,tk.END)
-    # entry_rajouter_typeErreurD.insert(tk.END, list_val[0])
-    #
-    # if cadreNouveauType.winfo_ismapped():
-    #     cadreNouveauType.pack_forget()
-    #
-    # for widget in affichage_boutons.winfo_children():
-    #     widget.destroy()
 
 #Faute
 
