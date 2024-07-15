@@ -84,21 +84,6 @@ dic_likert_Fatigue =    { 0: "Pas fatigué",
                          100: "Vraiment fatigué"}
 
 
-# path_img_btn1 = "../Sources/btn.png"
-# path_img_btnf1 = "../Sources/btn_f.png"
-#
-# path_img_aide1 = "../Sources/aide.png"
-# path_img_aidef1 = "../Sources/aide_f.png"
-#
-# base_path = os.path.dirname(os.path.abspath(__file__))
-#
-# # Construit le chemin absolu du fichier d'image
-# path_img_aide = os.path.join(base_path,path_img_aide1 )
-# path_img_aidef = os.path.join(base_path,path_img_aidef1 )
-#
-# path_img_btn = os.path.join(base_path,path_img_btn1 )
-# path_img_btnf = os.path.join(base_path,path_img_btnf1 )
-#
 
 def resource_path(relative_path):
     """ On crée un path absolut depuis le relatif """
@@ -607,30 +592,99 @@ label_tache0.grid(row=1,column=0, ipadx=15, ipady=5)
 combobox_tache0 = ctk.CTkComboBox(master=frame_tache0, values=taches, state="readonly", command= lambda x : change_tache(x))
 combobox_tache0.grid(row=1,column=1)
 
-def affiche_rajouter_tache() :
-    frame_rajouter_tache.pack(pady=10, padx=10)
-    btn_valider.pack_forget()
-    btn_valider.pack(ipadx=(5), ipady=(5), pady=5)
+
+
+#Rajouter tache
+
+image_btn = Image.open(path_img_btn)
+image_btn_resized = image_btn.resize((100, 100), Image.LANCZOS)
+photo_btnTache = ctk.CTkImage(light_image=image_btn_resized, dark_image=image_btn_resized, size=(25, 25))
+
+image_btnf = Image.open(path_img_btnf)
+image_btnf_resized = image_btnf.resize((100, 100), Image.LANCZOS)
+photo_btnfTache = ctk.CTkImage(light_image=image_btnf_resized, dark_image=image_btnf_resized, size=(25, 25))
+
+
+def actualise_les_values() :
+    try :
+        combobox_tache0.configure(values=taches)
+    except :
+        pass
+    try:
+        combobox_tache.configure(values=taches)
+    except :
+        pass
+
+    combobox_tache1.configure(values=taches)
+    combobox_tache2.configure(values=taches)
+    # combobox_tache3.configure(values=taches)
+
+
+def affiche_rajouter_tache(event):
+
+    def rajouter_tache():
+        # On rajoute la tache au fichier excel
+        df_taches = pd.read_excel("../Sources/taches.xlsx")
+        rep = entry_rajouter_tache.get()
+        ligne = pd.DataFrame({"Tâches": [rep]})
+
+        df_taches = pd.concat([df_taches, ligne], ignore_index=True)
+
+        df_taches.to_excel(resource_path("Sources/taches.xlsx"), index=False)
+
+        # On actualise taches ainsi que les options dans la combobox
+        actualise_taches()
+        actualise_les_values()
+        # On retire la frame
+        popup.destroy()
+
+    #Pop-up
+
+    x = event.x_root
+    y = event.y_root
+
+    popup = ctk.CTkToplevel(root)
+    popup.geometry(f"375x110+{x}+{y}")
+    popup.title("Ajout d'une tâche")
+
+    frame_rajouter_tache = ctk.CTkFrame(master=popup)
+    label_rajouter_tache = ctk.CTkLabel(master= frame_rajouter_tache, text="Rajouter une nouvelle tâche")
+    entry_rajouter_tache = ctk.CTkEntry(master= frame_rajouter_tache, placeholder_text = "Nouvelle tâche..." , width=150)
+    button_valider_rajouter_tache = ctk.CTkButton(master = frame_rajouter_tache,text="Valider", command = rajouter_tache )
+
+    frame_rajouter_tache.pack(expand=True,fill="both")
+    label_rajouter_tache.grid(row=0, column=0, padx=20, pady=20, sticky="ew", columnspan=2)
+    entry_rajouter_tache.grid(row=1, column=0, padx=20, pady=(0, 20), sticky="w")
+    button_valider_rajouter_tache.grid(row=1, column=1, padx=20, pady=(0, 20), sticky="w")
+
+    entry_rajouter_tache.bind("<Return>", lambda x : rajouter_tache())
+
+    popup.lift()
+    popup.grab_set()
+    popup.focus_force()
 
 
 def Enter_Tache(event) :
-    """Grise le help et fait apparaitre une tooltip avec une description"""
-    aide_button_err.configure(image=photo_aide_button_errf)
-    # afficher_bulle_1()
+    """Grise le btn et fait apparaitre une tooltip avec une description"""
+    button_rajouter_tache.configure(image=photo_btnfTache)
     show_tooltip(event,"Cliquez pour rajouter une nouvelle tâche")
 
-
 def Leave_Tache(event) :
-    aide_button_err.configure(image=photo_aide_button_err)
     hide_tooltip(event)
+    button_rajouter_tache.configure(image=photo_btnTache)
 
 
-button_rajouter_tache = ctk.CTkButton(master = frame_tache0,text="+", corner_radius=360, width=1, command = affiche_rajouter_tache)
+# Afficher le btn + et le toplevel pour ajouter une tache
+button_rajouter_tache = ctk.CTkLabel(master=frame_tache0, image=photo_btnTache, text=' ' ,cursor="hand2")
 button_rajouter_tache.grid(row=1,column=2,padx=5)
 
+button_rajouter_tache.bind("<Button-1>",affiche_rajouter_tache)
 button_rajouter_tache.bind("<Enter>", Enter_Tache)
 button_rajouter_tache.bind("<Leave>", Leave_Tache)
 button_rajouter_tache.bind("<Motion>", move_tooltip)
+
+
+
 
 
 
@@ -639,50 +693,10 @@ frame_tache0.pack(pady=5)
 btn_valider.pack(ipadx=(5),ipady=(5),pady=5)
 
 
-def actualise_les_values(rep) :
-    combobox_tache0.configure(values=taches)
-    combobox_tache.configure(values=taches)
-    combobox_tache2.configure(values=taches)
-    combobox_tache3.configure(values=taches)
-    combobox_tache0.set(rep)
-    combobox_tache.set(rep)
-    combobox_tache2.set(rep)
-    combobox_tache3.set(rep)
-
-#Rajouter tache
-
-def rajouter_tache() :
-    #On rajoute la tache au fichier excel
-    df_taches = pd.read_excel("../Sources/taches.xlsx")
-    rep = entry_rajouter_tache.get()
-    ligne = pd.DataFrame({"Tâches" : [rep]})
-
-    df_taches = pd.concat([df_taches, ligne], ignore_index=True)
-
-    df_taches.to_excel(resource_path("Sources/taches.xlsx"), index=False)
-
-    #On actualise taches ainsi que les options dans la combobox
-    actualise_taches()
-    actualise_les_values(rep)
-    #On retire la frame
-    frame_rajouter_tache.pack_forget()
-
-
-frame_rajouter_tache = ctk.CTkFrame(master=notif_exi)
-label_rajouter_tache = ctk.CTkLabel(master= frame_rajouter_tache, text="Rajouter une nouvelle tâche")
-entry_rajouter_tache = ctk.CTkEntry(master= frame_rajouter_tache, placeholder_text = "Nouvelle tâche..." , width=150)
-button_valider_rajouter_tache = ctk.CTkButton(master = frame_rajouter_tache,text="Valider", command = rajouter_tache )
-
-label_rajouter_tache.grid(row=0, column=0, padx=20, pady=20, sticky="ew", columnspan=2)
-entry_rajouter_tache.grid(row=1, column=0, padx=20, pady=(0, 20), sticky="w")
-button_valider_rajouter_tache.grid(row=1, column=1, padx=20, pady=(0, 20), sticky="w")
 
 
 
-
-
-
-
+#Bouton F4
 
 def on_enter0(event):
     button_notif_f4.configure(text="❌ Fermer")
@@ -903,7 +917,7 @@ def on_enter_label(label):
 def on_exit_label(label):
     label.configure(fg_color="#242424")
 
-def ouvrir_menu_age() :
+def ouvrir_menu_age(event) :
     """
     Crée une nouvelle fenêtre et ouvrer un menu déroulant
     """
@@ -911,10 +925,12 @@ def ouvrir_menu_age() :
 
     ctk.set_appearance_mode("dark")
     ctk.set_default_color_theme("green")
+    x = event.x_root
+    y = event.y_root
 
     menu = ctk.CTk()
     menu.title("Exemple avec CTk")
-    menu.geometry("100x300")
+    menu.geometry(f"100x300+{x}+{y}")
 
     scrollable_frame = ctk.CTkScrollableFrame(master=menu)
     scrollable_frame.pack(fill="both", expand=True)
@@ -940,7 +956,7 @@ frame_age.pack(ipadx= 10, pady=10, anchor='center')
 
 label_box_age = ctk.CTkLabel(master=frame_age, text="Veuillez cliquer ici pour renseigner votre âge :   ...", cursor="hand2")
 label_box_age.grid(row=0,column=0, ipadx=5, ipady=5)
-label_box_age.bind("<Button-1>", command=lambda x: ouvrir_menu_age())
+label_box_age.bind("<Button-1>", command=ouvrir_menu_age)
 
 
 ########## Genre :
@@ -1435,6 +1451,16 @@ label_tache.grid(row=1,column=0, ipadx=15, ipady=5)
 combobox_tache = ctk.CTkComboBox(master=frame_tache, values=taches, state="readonly", command= lambda x : change_tache(x))
 combobox_tache.grid(row=1,column=1)
 
+# Afficher le btn + et le toplevel pour ajouter une tache
+button_rajouter_tache = ctk.CTkLabel(master=frame_tache, image=photo_btnTache, text=' ' ,cursor="hand2")
+button_rajouter_tache.grid(row=1,column=2,padx=5)
+
+button_rajouter_tache.bind("<Button-1>",affiche_rajouter_tache)
+button_rajouter_tache.bind("<Enter>", Enter_Tache)
+button_rajouter_tache.bind("<Leave>", Leave_Tache)
+button_rajouter_tache.bind("<Motion>", move_tooltip)
+
+
 
 
 ######### Bouton + Vérif
@@ -1590,7 +1616,7 @@ def versQuestionnaire() :       #Changer de page vers page3 : Questionnaire
 
     creation_boutons_type()
     Concentration_Type()
-
+    combobox_tache1.set(selected_var_tache)
 
 
 
@@ -1615,6 +1641,14 @@ label_tache2.grid(row=1,column=0, ipadx=15, ipady=5)
 combobox_tache2 = ctk.CTkComboBox(master=frame_tache2, values=taches, state="readonly", command= lambda x : change_tache(x))
 combobox_tache2.grid(row=1,column=1)
 
+# Afficher le btn + et le toplevel pour ajouter une tache
+button_rajouter_tache = ctk.CTkLabel(master=frame_tache2, image=photo_btnTache, text=' ' ,cursor="hand2")
+button_rajouter_tache.grid(row=1,column=2,padx=5)
+
+button_rajouter_tache.bind("<Button-1>",affiche_rajouter_tache)
+button_rajouter_tache.bind("<Enter>", Enter_Tache)
+button_rajouter_tache.bind("<Leave>", Leave_Tache)
+button_rajouter_tache.bind("<Motion>", move_tooltip)
 
 #########--BOUTON ERR PRINCIPAL
 
@@ -1870,8 +1904,6 @@ frame_button_place.place(x=5,y=5)
 
 def vers_frame_tab_err() :
     """Retire la page 2 et affiche le récapitulatif des erreurs"""
-    # reset_entry(list_val) list_val = ['',50,"",50,'','',50,'']
-
 
     frame_button.pack_forget()
     display_table()
@@ -2042,7 +2074,7 @@ def choisir_envoyer_etat() :
 
     if button_quit_Modif.winfo_ismapped() :
         envoyer_en_l_etat_modif()
-        frame_tache3.pack_forget()
+        # frame_tache3.pack_forget()
     else :
         envoyer_en_l_etat()
 
@@ -2177,7 +2209,7 @@ def envoyer_en_l_etat_modif() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
-    tache = combobox_tache3.get()
+    tache = combobox_tache1.get()
 
     df = pd.read_excel(excel_path)
 
@@ -2292,11 +2324,11 @@ def sauvegarder_modif() :
     niveau_fatigue = dic_likert_Fatigue[sliderFatigue.get()]
     niveau_difficulte = selected_optionDifficulte.get()
 
-    tache = combobox_tache3.get()
+    tache = combobox_tache1.get()
 
     df = pd.read_excel(excel_path)
 
-    frame_tache3.pack_forget()
+    # frame_tache3.pack_forget()
 
     if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') and (niveau_concentration != ' ') and (niveau_fatigue != ' ') :
         if ( distraction == "Oui") :
@@ -2371,6 +2403,7 @@ def sauvegarder_modif() :
 def affiche_Quest_Modif() :
 
     frame_quest.pack(pady=20, padx=50, fill="both", expand=True)
+    combobox_tache1.set(selected_var_tache)
     button_quit.place_forget()
     button_quit_Modif.place(x=5, y=5)
     actualisation_options()
@@ -2562,7 +2595,7 @@ def Type_Concentration():
 
     if button_quit_Modif.winfo_ismapped() :
         button_done_modif.pack_forget()
-        frame_tache3.pack_forget()
+        # frame_tache3.pack_forget()
 
     frame_questType.pack_forget()
     frame_questImportance.pack_forget()
@@ -2589,6 +2622,7 @@ def Type_Concentration():
 
 
 def Concentration_Type(rep = 0):
+    combobox_tache1.set(selected_var_tache)
     frame_questConcentration.pack_forget()
     frame_questDistraction.pack_forget()
     frame_questFatigue.pack_forget()
@@ -2602,14 +2636,14 @@ def Concentration_Type(rep = 0):
     frame_questImportance.pack_forget()
     frame_questCommentaire.pack_forget()
     button_Type_Concentration.pack_forget()
+    #
+    # if button_quit_Modif.winfo_ismapped() :
+    #     frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
+    #     button_done_modif.pack_forget()
 
-    if button_quit_Modif.winfo_ismapped() :
-        frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
-        button_done_modif.pack_forget()
-
-    if rep == 1 :
-        frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
-        combobox_tache3.set(tache_modif)
+    # if rep == 1 :
+    #     frame_tache3.pack(pady=5, padx=50, fill="both", expand=True)
+    #     combobox_tache3.set(tache_modif)
 
     frame_questType.pack(pady=5, padx=50, fill="both", expand=True)
     frame_questImportance.pack(pady=5, padx=50, fill="both", expand=True)
@@ -2665,7 +2699,7 @@ def retourPage2(supp=0) :
         button_quit.place(x=5,y=5)
         button_done_modif.pack_forget()
 
-        frame_tache3.pack_forget()
+        # frame_tache3.pack_forget()
         vers_tab = True
 
 
@@ -2690,13 +2724,22 @@ button_quit_Modif = ctk.CTkButton(master = frame_quest, text="Annuler la modific
 ### Tâche modif
 
 
-frame_tache3 = ctk.CTkFrame(master=frame_quest, fg_color="#2b2b2b")
-
-label_tache3 = ctk.CTkLabel(master=frame_tache3, text="Votre tâche actuelle est : ",font=('Helvetica',20))
-label_tache3.grid(row=1,column=0, ipadx=15, ipady=5)
-
-combobox_tache3 = ctk.CTkComboBox(master=frame_tache3, values=taches, state="readonly", command= lambda x : modifier_tache(x))
-combobox_tache3.grid(row=1,column=1)
+# frame_tache3 = ctk.CTkFrame(master=frame_quest, fg_color="#2b2b2b")
+#
+# label_tache3 = ctk.CTkLabel(master=frame_tache3, text="Tâche au moment de l'incident : ",font=('Helvetica',20))
+# label_tache3.grid(row=1,column=0, ipadx=15, ipady=5)
+#
+# combobox_tache3 = ctk.CTkComboBox(master=frame_tache3, values=taches, state="readonly", command= lambda x : modifier_tache(x))
+# combobox_tache3.grid(row=1,column=1)
+#
+# # Afficher le btn + et le toplevel pour ajouter une tache
+# button_rajouter_tache = ctk.CTkLabel(master=frame_tache3, image=photo_btnTache, text=' ' ,cursor="hand2")
+# button_rajouter_tache.grid(row=1,column=2,padx=5)
+#
+# button_rajouter_tache.bind("<Button-1>",affiche_rajouter_tache)
+# button_rajouter_tache.bind("<Enter>", Enter_Tache)
+# button_rajouter_tache.bind("<Leave>", Leave_Tache)
+# button_rajouter_tache.bind("<Motion>", move_tooltip)
 
 
 # ✔ TODO            # Type de l'erreur
@@ -2892,7 +2935,25 @@ cadre_boutons_Bad.pack(ipadx=10,pady=10)
 label_bad = ctk.CTkLabel(master=cadre_boutons_Bad, text="Selon vous, qui est responsable de l'incident ?", fg_color="#333333", corner_radius=50 )
 label_bad.pack(pady=(10,0),padx=0)
 
+#TODO Tache :
 
+frame_tache1 = ctk.CTkFrame(master=frame_questType,fg_color="#333333")
+frame_tache1.pack(ipadx=10,ipady=10,pady=10)
+
+label_tache1 = ctk.CTkLabel(master=frame_tache1, text="Tâche au moment de l'incident : ",font=('Helvetica',15))
+label_tache1.grid(row=1,column=0, ipadx=15, ipady=15)
+
+combobox_tache1 = ctk.CTkComboBox(master=frame_tache1, values=taches, state="readonly", command= lambda x : change_tache(x))
+combobox_tache1.grid(row=1,column=1)
+
+# Afficher le btn + et le toplevel pour ajouter une tache
+button_rajouter_tache1 = ctk.CTkLabel(master=frame_tache1, image=photo_btnTache, text=' ' ,cursor="hand2")
+button_rajouter_tache1.grid(row=1,column=2,padx=5)
+
+button_rajouter_tache1.bind("<Button-1>",affiche_rajouter_tache)
+button_rajouter_tache1.bind("<Enter>", Enter_Tache)
+button_rajouter_tache1.bind("<Leave>", Leave_Tache)
+button_rajouter_tache1.bind("<Motion>", move_tooltip)
 
 # Radiobutton 2
 bad_button_2 = ctk.CTkRadioButton(cadre_boutons_Bad, text="Système (Machine)", variable=selected_option_Bad, value="Système (Machine)")
