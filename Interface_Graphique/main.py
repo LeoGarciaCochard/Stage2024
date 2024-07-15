@@ -847,7 +847,7 @@ dic_Passion = {
     0: "Pas du tout passionné(e)",        # 20 caractères
     16: "Très peu passionné(e)",          # 18 caractères
     33: "Peu passionné(e)",        # 21 caractères
-    50: "Passion neutre(e)",              # 14 caractères
+    50: "Passion neutre",              # 14 caractères
     66: "Légèrement passionné(e)",                   # 9 caractères
     83: "Très passionné(e)",              # 15 caractères
     100: "Extrêmement passionné(e)"       # 22 caractères
