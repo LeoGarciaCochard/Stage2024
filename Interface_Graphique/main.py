@@ -373,7 +373,7 @@ def stimulation(parametre ,t = 0) :
             "Path": [f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"],
             "Timecode": [dernier_time_code],
             "Parameter": [dernier_parametre],
-            "ID Cible" : [int(dernier_id-1)]})
+            "ID Cible" : [int(dernier_id+1)]})
         df = pd.read_excel(excel_path)
         df = pd.concat([df, nouvelle_ligne2])
         df.to_excel(excel_path, index=False)
@@ -2549,11 +2549,7 @@ def display_table2(columns_to_keep=["ID","Description"]):
     global excel_path, frame_tableau2
 
     df = pd.read_excel(excel_path)
-
-    # Filtrer les colonnes indésirables :
-
-
-
+    df = df[df['Parameter'] != 2] #On supprimer les lignes de signalement du moment de l'oubli
 
     frame_tableau2 = ctk.CTkFrame(master=scrollable_frame2)
     frame_tableau2.pack(fill="both", expand=True)
