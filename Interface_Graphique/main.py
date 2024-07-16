@@ -164,8 +164,8 @@ path_recordStim_ov = r""
 dico_aide = {
     "Erreur" : "En cliquant sur ce bouton, vous signalez un incident. Un questionnaire s'ouvrira. \n Si vous avez le temps, complétez le. Sinon, cliquez sur 'Envoyer en l'état'. Vous pourrez toujours le compléter plus tard en \ncliquant sur 'Voir Récapitulatif'.",
     "Forget" : "En cliquant sur ce bouton, vous signalez un incident a posteriori, c'est-à-dire que \nvous aviez oublié de le signaler en temps voulu. Vous devez indiquer un nombre \napproximatif de minutes depuis la survenue de l'erreur. Ensuite, le questionnaire s'ouvrira \navec les mêmes instructions que pour un signalement normal.",
-    "Recap"  : "En cliquant sur ce bouton, vous pourrez voir un récapitulatif des incidents déjà \nsignalés. Vous aurez la possibilité de modifier vos réponses en cliquant sur 'Modifier' \nà la ligne correspondante. Deux tableaux sont disponibles : \n--Le premier, 'Informations complétées', indique les incidents pour lesquels au moins la \npremière page est renseignée. \n--Le second, 'Informations à compléter', indique ceux qu'il vous reste à compléter, \npar exemple ceux signalés via 'Ajout Rapide'.",
-    "Rapide" : "En cliquant sur ce bouton, vous pouvez signaler un incident de manière rapide. Vous \npouvez, si vous le souhaitez, fournir une brève description (facultative) pour vous aider à le \ncompléter plus tard. Cet incident sera placé dans le tableau 'Informations à compléter' \nsur la page du récapitulatif."
+    "Recap"  : "En cliquant sur ce bouton, vous pourrez voir un récapitulatif des incidents déjà \nsignalés. Vous aurez la possibilité de modifier vos réponses en cliquant sur 'Modifier' \nà la ligne correspondante. Deux tableaux sont disponibles : \n--Le premier, 'Renseignements complétés', indique les incidents pour lesquels au moins la \npremière page est renseignée. \n--Le second, 'Renseignements à compléter', indique ceux qu'il vous reste à compléter, \npar exemple ceux signalés via 'Ajout Rapide'.",
+    "Rapide" : "En cliquant sur ce bouton, vous pouvez signaler un incident de manière rapide. Vous \npouvez, si vous le souhaitez, fournir une brève description (facultative) pour vous aider à le \ncompléter plus tard. Cet incident sera placé dans le tableau 'Renseignements à compléter' \nsur la page du récapitulatif."
 }
 
 
@@ -508,7 +508,7 @@ def generer_ano() :
 
     df_anonymat.to_excel(resource_path("Sources/info_participants.xlsx"), index=False)
 
-    label_n_ano.configure(text=f"N°anonymat : \n{n_anonymat}")
+    label_n_ano.configure(text=f"N° d'anonymat : \n{n_anonymat}")
 
 
 ########################################################################### Frame 0
@@ -518,7 +518,7 @@ def versInfo() :
 
 def versBtn() :
     frame_button.pack(pady=20, padx=50, fill="both", expand=True)
-    label_n_ano.configure(text=f"N°anonymat : \n{n_anonymat}")
+    label_n_ano.configure(text=f"N° d'anonymat : \n{n_anonymat}")
     creer_repertoire(n_anonymat)
     start_recording_thread()
     pack_button_tout()
@@ -563,10 +563,10 @@ notif_exi = ctk.CTkFrame(notif, fg_color ="#242424")
 btn_cadre = ctk.CTkFrame(notif, fg_color="#2b2b2b")
 btn_cadre.pack(pady=(0,10),padx = 0, anchor='center')
 
-btn_nouveau_participant = ctk.CTkButton(btn_cadre, text="Nouveau participant", command=nouveau,font=('Helvetica',20))
+btn_nouveau_participant = ctk.CTkButton(btn_cadre, text="Générer un numéro d'anonymat", command=nouveau,font=('Helvetica',20))
 btn_nouveau_participant.pack(pady=(15,10), padx=(10), side=tk.LEFT, ipadx=(10),ipady=(10))
 
-btn_participant_existant = ctk.CTkButton(btn_cadre, text="Participant existant", command=existant,font=('Helvetica',20))
+btn_participant_existant = ctk.CTkButton(btn_cadre, text="Utiliser un numéro existant", command=existant,font=('Helvetica',20))
 btn_participant_existant.pack(pady=(15, 10), padx=(10),side=tk.LEFT, ipadx=(10),ipady=(10))
 
 entry = ctk.CTkEntry(notif_exi, placeholder_text="N° Anonymat..." )
@@ -738,8 +738,8 @@ frame_info_texte.pack(ipadx=20, ipady=20, pady=15, expand=True, anchor="center")
 texte_titre = "Information"
 texte_p1 =("Bonjour, \n\nNous vous remercions d'avoir accepté de participer à cette étude. "
             "L'objectif de cette recherche est de collecter des données sur les potentiels d'erreur pendant votre séance de travail, "
-            "afin de mieux comprendre leur fonctionnement et d'améliorer leur détection. À cette fin, vous avez été équipé d'un casque EEG, "
-            "permettant de capter les signaux émis par votre cerveau. ")
+            "dans le but de mieux comprendre leur fonctionnement et d'améliorer leur détection. À cette fin, vous avez été équipé d'un casque EEG, "
+            "(Électroencéphalogramme) permettant de capter les signaux émis par votre cerveau. ")
 texte_p2 = ("Durant les prochaines heures, votre rôle consistera à travailler comme d'habitude. "
             "Cependant, lorsque vous constatez un incident négatif (une erreur), il sera crucial de "+"ne pas bouger pendant quelques secondes ".upper()+"car tout mouvement "
             "pourrait introduire des artefacts moteurs c'est-à-dire des bruits parasites dans les signaux EEG causés par des mouvements physiques nuisant à la précision des données. "
@@ -988,7 +988,7 @@ combobox_genre.grid(row=0,column=1)
 cadre_participantSP = ctk.CTkFrame(master=frame_quest_participant)
 cadre_participantSP.pack(pady=(30,10), padx=50)
 
-label_participantSP = ctk.CTkLabel(master= cadre_participantSP, text="Situation personelle :")
+label_participantSP = ctk.CTkLabel(master= cadre_participantSP, text="Situation personnelle :")
 label_participantSP.pack(pady=5, padx=50)
 label_participantSP.configure(font=("Helvetica", 25))
 
@@ -1003,7 +1003,7 @@ def change_sommeil(heure):
     global selected_var_sommeil
     selected_var_sommeil = heure
 
-label_sommeil = ctk.CTkLabel(master=frame_sommeil, text="Combien d'heures avez-vous dormis cette nuit : ")
+label_sommeil = ctk.CTkLabel(master=frame_sommeil, text="Combien d'heures avez-vous dormi cette nuit : ")
 label_sommeil.grid(row=0,column=0, ipadx=5, ipady=5)
 
 combobox_genre = ctk.CTkComboBox(master=frame_sommeil, values=["Nuit blanche","Moins de 3h","4h","5h","6h","7h","8h","Plus de 9h"], state="readonly", command= lambda x : change_sommeil(x))
@@ -1015,7 +1015,7 @@ def change_troubles_sommeil(rep):
     global selected_var_trouble_sommeil
     selected_var_trouble_sommeil = rep
 
-label_sommeil = ctk.CTkLabel(master=frame_sommeil, text="Souffrez vous de troubles du sommeil : ")
+label_sommeil = ctk.CTkLabel(master=frame_sommeil, text="Souffrez-vous de troubles du sommeil : ")
 label_sommeil.grid(row=1,column=0, ipadx=5, ipady=5)
 
 combobox_sommeil = ctk.CTkComboBox(master=frame_sommeil, values=["Oui","Non"], state="readonly", command= lambda x : change_troubles_sommeil(x))
@@ -1036,7 +1036,7 @@ def magnet_likert_Stress(valeur_actuelle) :
 frame_Stress = ctk.CTkFrame(master=frame_quest_participant, fg_color="#333333")
 frame_Stress.pack(ipadx= 10, pady=10, anchor='center')
 
-label_Stress = ctk.CTkLabel(master = frame_Stress,text="De manière générale, comment décrivez vous votre état de stress")
+label_Stress = ctk.CTkLabel(master = frame_Stress,text="De manière générale, comment décrivez-vous votre état de stress")
 label_Stress.pack(pady=(10,3))
 label_Stress.configure(font=("Helvetica", 15))
 
@@ -1101,13 +1101,13 @@ def change_tasses_cafeine(rep):
     global selected_var_quantite_cafeine
     selected_var_quantite_cafeine = rep
 
-label_cafeine = ctk.CTkLabel(master=frame_cafeine, text="Consommez vous de la cafeine : ")
+label_cafeine = ctk.CTkLabel(master=frame_cafeine, text="Consommez-vous de la caféine : ")
 label_cafeine.grid(row=0,column=0, ipadx=5, ipady=5)
 
 combobox_cafeine = ctk.CTkComboBox(master=frame_cafeine, values=["Oui","Non"], state="readonly", command= lambda x : change_cafeine(x))
 combobox_cafeine.grid(row=0,column=1)
 
-label_cafeine = ctk.CTkLabel(master=frame_cafeine, text="Si oui, combien de tasses par jours : ")
+label_cafeine = ctk.CTkLabel(master=frame_cafeine, text="Si oui, combien de tasses par jour : ")
 label_cafeine.grid(row=1,column=0, ipadx=20, ipady=5)
 
 combobox_quantite_cafeine = ctk.CTkComboBox(master=frame_cafeine, values=["0","1","2","3","4","Plus de 5"], state="disabled", command= lambda x : change_tasses_cafeine(x))
@@ -1136,13 +1136,13 @@ def change_cigarettes_nicotine(rep):
     global selected_var_quantite_nicotine
     selected_var_quantite_nicotine = rep
 
-label_nicotine = ctk.CTkLabel(master=frame_nicotine, text="Consommez vous de la nicotine : ")
+label_nicotine = ctk.CTkLabel(master=frame_nicotine, text="Consommez-vous de la nicotine : ")
 label_nicotine.grid(row=0,column=0, ipadx=5, ipady=5)
 
 combobox_nicotine = ctk.CTkComboBox(master=frame_nicotine, values=["Oui","Non"], state="readonly", command= lambda x : change_nicotine(x))
 combobox_nicotine.grid(row=0,column=1)
 
-label_nicotine = ctk.CTkLabel(master=frame_nicotine, text="Si oui, combien de cigarettes (ou équivalent) par jours : ")
+label_nicotine = ctk.CTkLabel(master=frame_nicotine, text="Si oui, combien de cigarettes (ou équivalents) par jour : ")
 label_nicotine.grid(row=1,column=0, ipadx=20, ipady=5)
 
 combobox_quantite_nicotine = ctk.CTkComboBox(master=frame_nicotine, values=["0","1","2","3","4","Plus de 5"], state="disabled", command= lambda x : change_cigarettes_nicotine(x))
@@ -1268,7 +1268,7 @@ def magnet_likert_Hability_inf(valeur_actuelle) :
 frame_Hability_inf = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
 frame_Hability_inf.pack(ipadx= 10, pady=10, anchor='center')
 
-label_Hability_inf = ctk.CTkLabel(master = frame_Hability_inf,text="A quel point êtes vous à l'aise avec les outils informatiques : ")
+label_Hability_inf = ctk.CTkLabel(master = frame_Hability_inf,text="À quel point êtes vous à l'aise avec les outils informatiques : ")
 label_Hability_inf.pack(pady=(10,0))
 label_Hability_inf.configure(font=("Helvetica", 15))
 
@@ -1327,7 +1327,7 @@ def magnet_likert_Passion(valeur_actuelle) :
 frame_Passion = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
 frame_Passion.pack(ipadx= 10, pady=10, anchor='center')
 
-label_Passion = ctk.CTkLabel(master = frame_Passion,text="A quel point aimez-vous ce travail ?: ")
+label_Passion = ctk.CTkLabel(master = frame_Passion,text="À quel point aimez-vous ce travail ?: ")
 label_Passion.pack(pady=(10,0))
 label_Passion.configure(font=("Helvetica", 15))
 
@@ -1990,7 +1990,7 @@ label_TitreRecap.configure(font=("Helvetica", 35))
 frame_recapTitre2 = ctk.CTkFrame(master=frame_recap)
 frame_recapTitre2.pack(pady=15, padx=50)
 
-label_TitreRecap2 = ctk.CTkLabel(master= frame_recapTitre2, text="Informations complétées")
+label_TitreRecap2 = ctk.CTkLabel(master= frame_recapTitre2, text="Renseignements complétés")
 label_TitreRecap2.pack(pady=5, padx=50)
 label_TitreRecap2.configure(font=("Helvetica", 20))
 
@@ -2038,7 +2038,7 @@ scrollable_frame.bind("<Configure>", on_frame_configure)
 frame_recapTitre3 = ctk.CTkFrame(master=frame_recap)
 frame_recapTitre3.pack(pady=15, padx=50)
 
-label_TitreRecap3 = ctk.CTkLabel(master= frame_recapTitre3, text="Informations à compléter :")
+label_TitreRecap3 = ctk.CTkLabel(master= frame_recapTitre3, text="Renseignements à compléter :")
 label_TitreRecap3.pack(pady=5, padx=50)
 label_TitreRecap3.configure(font=("Helvetica", 20))
 
@@ -2985,7 +2985,7 @@ def magnet_likert_concentration(valeur_actuelle) :
 
 frame_questConcentration = ctk.CTkFrame(master = frame_quest)
 
-label_Concentration = ctk.CTkLabel(master = frame_questConcentration,text="Sur une échelle de 1 à 7, comment évalueriez-vous votre niveau de concentration \n au moment où incident négatif a été commis ?")
+label_Concentration = ctk.CTkLabel(master = frame_questConcentration,text="Sur une échelle de 1 à 7, comment évalueriez-vous votre niveau de concentration \n au moment où l'incident négatif a été commis ?")
 label_Concentration.pack(pady=10)
 label_Concentration.configure(font=("Helvetica", 15))
 
