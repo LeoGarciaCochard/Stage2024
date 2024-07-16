@@ -6,16 +6,6 @@ import sys
 import os
 import subprocess
 
-# requirements_file = './requirements.txt'
-#
-# try:
-#     print("Installing dependencies from requirements.txt...")
-#     subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', requirements_file])
-#     print("Dependencies installed successfully.")
-# except subprocess.CalledProcessError as e:
-#     print(f"Failed to install dependencies: {e}")
-#     sys.exit(1)
-
 ########################################################################### Imports
 
 import tkinter as tk
@@ -101,7 +91,7 @@ path_img_aide = resource_path("Sources/aide.png")
 path_img_aidef = resource_path("Sources/aide_f.png")
 
 def actualise_taches() :
-    df_taches = pd.read_excel("../Sources/taches.xlsx")
+    df_taches = pd.read_excel(resource_path("Sources/taches.xlsx"))
     global taches
     taches =list(df_taches['Tâches'])
 
@@ -370,7 +360,7 @@ def stimulation(parametre ,t = 0) :
     if parametre == 2:
         nouvelle_ligne2 = pd.DataFrame({
             "ID": [dernier_id],
-            "Path": [f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"],
+            "Path": [resource_path(f"Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf")],
             "Timecode": [dernier_time_code],
             "Parameter": [dernier_parametre],
             "ID Cible" : [int(dernier_id+1)]})
@@ -384,7 +374,7 @@ def stimulation(parametre ,t = 0) :
 
         nouvelle_ligne2 = pd.DataFrame({
             "ID": [id_time_code],
-            "Path": [f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"],
+            "Path": [resource_path(f"Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf")],
             "Timecode": [dernier_time_code],
             "Parameter": [dernier_parametre],
             "Description": [description_rapide],
@@ -466,8 +456,8 @@ def arretExpe(acc=False) :
 
 def creer_repertoire(n) :
     """
-    ouvre le dossier ../Data verifie s'il existe un répertoire ../DATA/n, si oui : est-ce qu'il existe ../Data/n/n.xlsx, si oui : ne rien faire (=réouverture du dossier, en cas de crash par exemple)
-                                                                        , Si non : le creer, et creer le dossier ../Data/n/n.xlsx
+    ouvre le dossier Data verifie s'il existe un répertoire DATA/n, si oui : est-ce qu'il existe Data/n/n.xlsx, si oui : ne rien faire (=réouverture du dossier, en cas de crash par exemple)
+                                                                        , Si non : le creer, et creer le dossier Data/n/n.xlsx
     :param n int: Numéro d'anonymat
     """
 
@@ -631,7 +621,7 @@ def affiche_rajouter_tache(event):
 
     def rajouter_tache():
         # On rajoute la tache au fichier excel
-        df_taches = pd.read_excel("../Sources/taches.xlsx")
+        df_taches = pd.read_excel(resource_path("Sources/taches.xlsx"))
         rep = entry_rajouter_tache.get()
         ligne = pd.DataFrame({"Tâches": [rep]})
 
@@ -795,7 +785,6 @@ info_thanks = ctk.CTkLabel(frame_thanks, text=texte_thanks, font=font_thanks, ju
 info_thanks.pack()
 frame_thanks.pack(pady=20, ipady=5, ipadx=30, anchor="center")
 
-
 button_versB = ctk.CTkButton(master = frame_info, text="Compris !", width= 250, height=60, command=versParticipant)
 button_versB.configure(font=("Helvetica", 30, "bold"))
 button_versB.pack(pady=(0,50), padx=10, side=tk.BOTTOM)
@@ -816,7 +805,6 @@ button_acc_f4.bind("<Leave>", on_leave2)
 ########################################################################### Frame 2 : Questionnaire de participant
 
 frame_participant = ctk.CTkFrame(master=root)
-# frame_participant.pack(pady=20, padx=20, fill="both", expand=True)
 
 frame_quest_participant = ctk.CTkFrame(master=frame_participant)
 frame_quest_participant.pack(pady=20, padx=20, fill="both", expand=True)
@@ -1512,7 +1500,7 @@ def versBouton() :
         # recuperation_donnees_participant
         generer_ano()
 
-        df = pd.read_excel("../Sources/info_participants.xlsx", index_col='N_Ano')
+        df = pd.read_excel(resource_path("Sources/info_participants.xlsx"), index_col='N_Ano')
         global n_anonymat
 
         nouvelle_ligne ={
@@ -1538,7 +1526,7 @@ def versBouton() :
             "Tâche" : selected_var_tache
         }
         df.loc[n_anonymat] = nouvelle_ligne
-        df.to_excel("../Sources/info_participants.xlsx", index=True)
+        df.to_excel(resource_path("Sources/info_participants.xlsx"), index=True)
 
         # versBouton
         creer_repertoire(n_anonymat)
@@ -2104,7 +2092,7 @@ def envoyer_en_l_etat() :
     else:
         parameter = 1
 
-    path = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
+    path = resource_path(f"Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf")
 
     if description == "Description de l'incident négatif...":
         description = ''
@@ -2649,6 +2637,8 @@ def Concentration_Type(rep = 0):
     entry_Commentaire.focus_set()
     entry_actualise_options.focus_set()
 
+    if button_quit_Modif.winfo_ismapped() :
+        button_done_modif.pack_forget()
 
     root.focus_set()
 
@@ -2727,7 +2717,7 @@ label_typeErreur.pack(pady=10)
 label_typeErreur.configure(font=("Helvetica", 15))
 
 
-df_types = pd.read_excel("../Sources/types_err.xlsx")
+df_types = pd.read_excel(resource_path("Sources/types_err.xlsx"))
 
 options = list(df_types['Types'])
 descriptions = list(df_types['Description'])
@@ -3216,7 +3206,7 @@ def sauvegarderQuest() :
           Verifier type :
               d'erreur.entry_get() non vide
           Stocker les entry dans des variables
-          ajouter à "../DATA/n°Ano/Data_n°Ano.xls"
+          ajouter à "DATA/n°Ano/Data_n°Ano.xls"
          Puis appeler reset_entre
          RetourPage2
 
@@ -3240,7 +3230,7 @@ def sauvegarderQuest() :
     else :
         parameter = 1
 
-    path = f"../Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
+    path = f"Data/{n_anonymat}/Record_{n_anonymat}_{horodatage_start}.edf"
 
 
     if ( type != '') and ( description != "Description de l'incident négatif...") and ( description != "") and ( distraction != '') and (niveau_difficulte != '') and (niveau_concentration != ' ') and (niveau_fatigue != ' ') :

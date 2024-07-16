@@ -31,7 +31,7 @@ Lancer l'interface :
 
 ## Outils
 
-- Python 3.9
+- Python 3.11
 - LUA
 - OpenVibe
 - Git
