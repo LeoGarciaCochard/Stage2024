@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "Stage2024"
+version = "0.1.0"
+description = "Interface Graphique Pour étute sur les potentiels d'erreurs en milieu écologique"
+authors = ["Garcica Cochard Léo <leo.garciacochard.etu@univ-lille.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0.0"
+packaging = "*"
+openpyxl = "*"
+customtkinter = "5.2.1"
+pandas = "*"
+pillow = "10.3.0"
+screeninfo = "0.8.1"
+tk = "^0.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
