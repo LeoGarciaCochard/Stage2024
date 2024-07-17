@@ -15,9 +15,37 @@ Ainsi que dans les boîtes OpenVibe.
 - Poetry
 
 ### Si non installé :
-  
+
+#### Sous linux :
+- **Installer Python3.11.9**
+```shell
+sudo apt update
+sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz
+tar -xf Python-3.11.9.tgz
+cd Python-3.11.9
+./configure --enable-optimizations
+make -j $(nproc)
+sudo make altinstall
+```
+
+
 #### Sous MacOs :
     
+- **Installer brew**
+
+```shell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+- **Installer python3.11.9**
+
+```shell
+brew install pyenv
+pyenv install 3.11.9
+pyenv global 3.11.9
+```
+
 - **Installer pipx**
 ```shell
 brew install pipx
