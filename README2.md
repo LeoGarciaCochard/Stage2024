@@ -52,12 +52,12 @@ Ainsi que dans les boîtes OpenVibe.
         ```
 
 - **Tkinter**
-  - **(Si non installé)** :
-        - **Installer Tkinter**
-        ```shell
-        sudo apt update
-        sudo apt install python3-tk
-        ```
+  - **(Si non installé) :**
+    - **Installer Tkinter :**
+    ```shell
+    sudo apt update
+    sudo apt install python3-tk
+    ```
 
 # MacOS :
 
