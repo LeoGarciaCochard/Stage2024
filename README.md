@@ -15,19 +15,19 @@ Ainsi que dans les boîtes OpenVibe.
 - Python3.11.9
 
     - **Installer Python3.11 sous linux**
-```shell
-sudo apt install python-3.11
-```
+    ```shell
+    sudo apt install python-3.11
+    ```
 
     - **Installer Python3.11 sous MacOs**
         - **Installer brew (si non installé)**
 
-```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-```shell
-brew install python@3.11
-```
+        ```shell
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        ```
+        ```shell
+        brew install python@3.11
+        ```
 
 - Poetry
 
@@ -35,43 +35,43 @@ brew install python@3.11
 
 
         - **Installer pipx**
-```shell
-sudo apt update
-sudo apt install pipx
-pipx ensurepath
-sudo pipx ensurepath --global
-```
+        ```shell
+        sudo apt update
+        sudo apt install pipx
+        pipx ensurepath
+        sudo pipx ensurepath --global
+        ```
         - **Installer poetry**
-```shell
-pipx install poetry
-pipx ensurepath
-```
+        ```shell
+        pipx install poetry
+        pipx ensurepath
+        ```
 
 
     - **Sous MacOs (Si non installé) :**
     
         - **Installer brew (si non installé)**
 
-```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+        ```shell
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        ```
 
         - **Installer pipx (si non installé)**
 
-```shell
-brew install pipx
-```
-```shell
-pipx ensurepath
-```
-```sh
-sudo pipx ensurepath --global # optional to allow pipx actions in global scope. See "Global installation" section below.
-```
-        - **Installer poetry (si non installé)**
+        ```shell
+        brew install pipx
+        ```
+        ```shell
+        pipx ensurepath
+        ```
+        ```sh
+        sudo pipx ensurepath --global # optional to allow pipx actions in global scope. See "Global installation" section below.
+        ```
+                - **Installer poetry (si non installé)**
 
-```shell
-pipx install poetry
-```
+        ```shell
+        pipx install poetry
+        ```
 
 ## Installation :
 
@@ -112,11 +112,11 @@ S'il vient d'être installé mais n'est pas recconu, vous pouvez relancer le ter
     ```
 
     
-### Sans Poetry :
+## Sans Poetry :
 
 ### Sous Linux
 
-Si Tkinter n'est pas installé :
+- Si Tkinter n'est pas installé :
 
 ```sh
 sudo apt install python3-tk
@@ -124,18 +124,18 @@ sudo apt install python3-tk
 
 ### Puis / Sinon :
 
-Se placer dans le répertoire :
+- Se placer dans le répertoire :
 
-```
+```sh
 cd path/to/Stage2024
 ```
-Installer les dépendances :
+- Installer les dépendances :
 
 ```sh
 pip install -r requirements.txt
 ```
 
-Lancer l'interface :
+- Lancer l'interface :
 
 ```sh
 python3 main.py
