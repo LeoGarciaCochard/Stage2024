@@ -89,6 +89,34 @@ Ainsi que dans les boîtes OpenVibe.
         ```shell
         pipx install poetry
         ```
+- **Tkinter sous Linux et MacOs**
+
+    - **Sous MacOs (Si non installé) :**
+    
+        - **Installer brew (si non installé)**
+
+        ```shell
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        ```
+
+        - **Installer Tkinter (si non installé)**
+
+        ```shell
+        brew install python-tk
+        ```
+
+    - **Sous linux (Si non installé)** :
+
+
+        - **Installer Tkinter**
+        ```shell
+        sudo apt update
+        sudo apt install python3-tk
+        ```
+    
+
+
+
 
 ## Installation :
 
