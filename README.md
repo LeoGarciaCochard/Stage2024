@@ -12,12 +12,9 @@ Ainsi que dans les boîtes OpenVibe.
 
 ## Prérequis :
 
-- Poetry
+- Python3.11.9
 
-### Si non installé :
-
-#### Sous linux :
-- **Installer Python3.11.9**
+    - **Installer Python3.11.9 sous linux**
 ```shell
 sudo apt update
 sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
@@ -27,6 +24,24 @@ cd Python-3.11.9
 ./configure --enable-optimizations
 make -j $(nproc)
 sudo make altinstall
+```
+
+- Poetry
+
+### Si non installé :
+
+#### Sous linux :
+
+- **Installer pipx**
+```shell
+sudo apt update
+sudo apt install pipx
+pipx ensurepath
+sudo pipx ensurepath --global
+```
+- **Installer poetry**
+```shell
+pipx install poetry
 ```
 
 
