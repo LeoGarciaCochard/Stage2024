@@ -14,55 +14,50 @@ Ainsi que dans les boîtes OpenVibe.
 
 - Python3.11.9
 
-    - **Installer Python3.11.9 sous linux**
+    - **Installer Python3.11 sous linux**
 ```shell
-sudo apt update
-sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
-wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz
-tar -xf Python-3.11.9.tgz
-cd Python-3.11.9
-./configure --enable-optimizations
-make -j $(nproc)
-sudo make altinstall
+sudo apt install python-3.11
+```
+
+    - **Installer Python3.11 sous MacOs**
+        - **Installer brew (si non installé)**
+
+```shell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+```shell
+brew install python@3.11
 ```
 
 - Poetry
 
-### Si non installé :
+    - Sous linux (Si non installé) :
 
-#### Sous linux :
 
-- **Installer pipx**
+        - **Installer pipx**
 ```shell
 sudo apt update
 sudo apt install pipx
 pipx ensurepath
 sudo pipx ensurepath --global
 ```
-- **Installer poetry**
+        - **Installer poetry**
 ```shell
 pipx install poetry
 pipx ensurepath
 ```
 
 
-#### Sous MacOs :
+    - **Sous MacOs (Si non installé) :**
     
-- **Installer brew**
+        - **Installer brew (si non installé)**
 
 ```shell
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-- **Installer python3.11.9**
+        - **Installer pipx (si non installé)**
 
-```shell
-brew install pyenv
-pyenv install 3.11.9
-pyenv global 3.11.9
-```
-
-- **Installer pipx**
 ```shell
 brew install pipx
 ```
@@ -72,7 +67,7 @@ pipx ensurepath
 ```sh
 sudo pipx ensurepath --global # optional to allow pipx actions in global scope. See "Global installation" section below.
 ```
-- **Installer poetry**  
+        - **Installer poetry (si non installé)**
 
 ```shell
 pipx install poetry
@@ -81,17 +76,22 @@ pipx install poetry
 ## Installation :
 
 
-1. **Cloner le dépôt / Extraire le .zip et se placer dans le répertoire** 
+1. **Verifier l'installation de poetry** :
+
+    ```
+    poetry --version
+    ```
+
+S'il vient d'être installé mais n'est pas recconu, vous pouvez relancer le terminal 
+
+
+2. **Cloner le dépôt / Extraire le .zip et se placer dans le répertoire** 
 
     ```
     cd path/to/Stage2024
     ```
 
-2. **Verifier l'installation de poetry** :
 
-    ```
-    poetry --version
-    ```
 
 3. **Installer les dépendances dans un environnement virtuel** :
 
@@ -110,6 +110,8 @@ pipx install poetry
     ```sh
     poetry run python main.py
     ```
+
+    
 ### Sans Poetry :
 
 ### Sous Linux
