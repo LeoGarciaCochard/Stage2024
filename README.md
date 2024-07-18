@@ -42,6 +42,7 @@ sudo pipx ensurepath --global
 - **Installer poetry**
 ```shell
 pipx install poetry
+pipx ensurepath
 ```
 
 
