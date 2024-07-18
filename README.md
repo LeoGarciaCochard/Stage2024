@@ -81,13 +81,16 @@ pipx install poetry
 ## Installation :
 
 
-1. **Cloner le dépôt / Extraire le .zip** 
-
-
-2. **Se placer dans le répertoire** :
+1. **Cloner le dépôt / Extraire le .zip et se placer dans le répertoire** 
 
     ```
     cd path/to/Stage2024
+    ```
+
+2. **Verifier l'installation de poetry** :
+
+    ```
+    poetry --version
     ```
 
 3. **Installer les dépendances dans un environnement virtuel** :
