@@ -19,31 +19,18 @@ Ainsi que dans les boîtes OpenVibe.
 
     - **Installer Python3.11**
         ```shell
-        sudo apt install python-3.11
+        sudo apt update
+        sudo apt upgrade
+        sudo apt install python3.11
         ```
-    
-        - **Si cela ne fonctionne pas :**
-        
-            ```shell
-            sudo apt install wget build-essential libssl-dev zlib1g-dev libncurses5-dev libbz2-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
-            wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz
-            tar -xf Python-3.11.0.tgz
-            cd Python-3.11.0
-            ./configure --enable-optimizations
-            make -j $(nproc)
-            sudo make altinstall
-            python3.11 --version
-            ```
+
 - Poetry
 
     - **Sous linux (Si non installé)** :
         - **Installer pipx**
 
         ```shell
-        sudo apt update
         sudo apt install pipx
-        pipx ensurepath
-        sudo pipx ensurepath --global
         ```
         - **Installer poetry**
         ```shell
