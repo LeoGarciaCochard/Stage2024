@@ -25,6 +25,9 @@ Ainsi que dans les boîtes OpenVibe.
         ```shell
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         ```
+
+        - **Installer python3.11 **
+
         ```shell
         brew install python@3.11
         ```
@@ -67,11 +70,12 @@ Ainsi que dans les boîtes OpenVibe.
         ```sh
         sudo pipx ensurepath --global # optional to allow pipx actions in global scope. See "Global installation" section below.
         ```
-                - **Installer poetry (si non installé)**
+            
+            - **Installer poetry (si non installé)**
 
-        ```shell
-        pipx install poetry
-        ```
+            ```shell
+            pipx install poetry
+            ```
 
 ## Installation :
 
