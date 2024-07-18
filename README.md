@@ -126,52 +126,28 @@ S'il vient d'être installé mais n'est pas reconnu, vous pouvez relancer le ter
     cd path/to/Stage2024
     ```
 
+3. **Update le lock** :
 
+    ```sh
+    poetry lock
+    ```
 
-3. **Installer les dépendances dans un environnement virtuel** :
+4. **Installer les dépendances dans un environnement virtuel** :
 
     ```sh
     poetry install
     ```
 
-4. **Activer l'environnement virtuel** :
+5**Activer l'environnement virtuel** :
 
     ```sh
     poetry shell
     ```
 
-5. **Lancer l'interface** :
+6. **Lancer l'interface** :
 
     ```sh
     poetry run python main.py
     ```
 
-    
-## Installation Sans Poetry sous Linux :
-
-- **Si Tkinter n'est pas installé :**
-    
-    ```sh
-    sudo apt install python3-tk
-    ```
-
-### Puis / Sinon :
-
-- **Se placer dans le répertoire :**
-
-    ```sh
-    cd path/to/Stage2024
-    ```
-  
-- **Installer les dépendances :**
-
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-- **Lancer l'interface :**
-
-    ```sh
-    python3 main.py
-    ```
 
