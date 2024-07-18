@@ -80,21 +80,16 @@ Ainsi que dans les boîtes OpenVibe.
         ```shell
         brew install pipx
         ```
-        ```shell
-        pipx ensurepath
-        ```
-        ```sh
-        sudo pipx ensurepath --global # optional to allow pipx actions in global scope. See "Global installation" section below.
-        ```
             
         - **Installer poetry (si non installé)**
 
         ```shell
         pipx install poetry
+        pipx ensurepath
         ```
 - **Tkinter**
 
-    - **Sous MacOs (Si non installé) :**
+    - **(Si non installé) :**
     
         - **Installer brew (si non installé)**
 
@@ -102,7 +97,7 @@ Ainsi que dans les boîtes OpenVibe.
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         ```
 
-        - **Installer Tkinter (si non installé)**
+        - **Installer Tkinter**
 
         ```shell
         brew install python-tk
@@ -113,7 +108,7 @@ Ainsi que dans les boîtes OpenVibe.
 
 1. **Verifier l'installation de poetry** :
 
-    ```
+    ```shell
     poetry --version
     ```
 
@@ -138,7 +133,7 @@ S'il vient d'être installé mais n'est pas reconnu, vous pouvez relancer le ter
     poetry install
     ```
 
-5**Activer l'environnement virtuel** :
+5. **Activer l'environnement virtuel** :
 
     ```sh
     poetry shell
