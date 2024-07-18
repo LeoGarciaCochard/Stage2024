@@ -15,22 +15,22 @@ Ainsi que dans les boîtes OpenVibe.
 - Python3.11.9
 
     - **Installer Python3.11 sous linux**
-    ```shell
-    sudo apt install python-3.11
-    ```
-    
-        - Si cela ne fonctionne pas :
-        
         ```shell
-        sudo apt install wget build-essential libssl-dev zlib1g-dev libncurses5-dev libbz2-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
-        wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz
-        tar -xf Python-3.11.0.tgz
-        cd Python-3.11.0
-        ./configure --enable-optimizations
-        make -j $(nproc)
-        sudo make altinstall
-        python3.11 --version
+        sudo apt install python-3.11
         ```
+    
+        - **Si cela ne fonctionne pas :**
+        
+            ```shell
+            sudo apt install wget build-essential libssl-dev zlib1g-dev libncurses5-dev libbz2-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
+            wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz
+            tar -xf Python-3.11.0.tgz
+            cd Python-3.11.0
+            ./configure --enable-optimizations
+            make -j $(nproc)
+            sudo make altinstall
+            python3.11 --version
+            ```
 
     - **Installer Python3.11 sous MacOs**
         - **Installer brew (si non installé)**
