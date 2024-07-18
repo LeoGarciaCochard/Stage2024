@@ -5,7 +5,7 @@
 
 ## Information
 
-Pour l'implémentation sur la machine finale, modifier les chemins absolus dans le code `main.py` 
+Pour déploiement sur la machine finale, modifier les chemins absolus dans le code `main.py` 
 Ainsi que dans les boîtes OpenVibe.
 
 (Pas pour le pilote).
@@ -86,7 +86,7 @@ Ainsi que dans les boîtes OpenVibe.
     poetry --version
     ```
 
-S'il vient d'être installé mais n'est pas recconu, vous pouvez relancer le terminal 
+S'il vient d'être installé mais n'est pas reconnu, vous pouvez relancer le terminal 
 
 
 2. **Cloner le dépôt / Extraire le .zip et se placer dans le répertoire** 
