@@ -13,7 +13,6 @@ customtkinter = "5.2.1"
 pandas = "*"
 pillow = "10.3.0"
 screeninfo = "0.8.1"
-tkinter = "^0.1.0"
 
 
 [build-system]
