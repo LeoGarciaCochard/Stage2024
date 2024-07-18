@@ -26,7 +26,7 @@ Ainsi que dans les boîtes OpenVibe.
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         ```
 
-        - **Installer python3.11 **
+        - **Installer python3.11**
 
         ```shell
         brew install python@3.11
@@ -34,7 +34,7 @@ Ainsi que dans les boîtes OpenVibe.
 
 - Poetry
 
-    - Sous linux (Si non installé) :
+    - **Sous linux (Si non installé)** :
 
 
         - **Installer pipx**
@@ -71,11 +71,11 @@ Ainsi que dans les boîtes OpenVibe.
         sudo pipx ensurepath --global # optional to allow pipx actions in global scope. See "Global installation" section below.
         ```
             
-            - **Installer poetry (si non installé)**
+        - **Installer poetry (si non installé)**
 
-            ```shell
-            pipx install poetry
-            ```
+        ```shell
+        pipx install poetry
+        ```
 
 ## Installation :
 
@@ -120,7 +120,7 @@ S'il vient d'être installé mais n'est pas recconu, vous pouvez relancer le ter
 
 ### Sous Linux
 
-- Si Tkinter n'est pas installé :
+- **Si Tkinter n'est pas installé :**
 
 ```sh
 sudo apt install python3-tk
@@ -128,18 +128,18 @@ sudo apt install python3-tk
 
 ### Puis / Sinon :
 
-- Se placer dans le répertoire :
+- **Se placer dans le répertoire :**
 
 ```sh
 cd path/to/Stage2024
 ```
-- Installer les dépendances :
+- **Installer les dépendances :**
 
 ```sh
 pip install -r requirements.txt
 ```
 
-- Lancer l'interface :
+- **Lancer l'interface :**
 
 ```sh
 python3 main.py
