@@ -46,65 +46,79 @@ Ainsi que dans les boîtes OpenVibe.
     sudo apt install python3-tk
     ```
 
+# PyENV Linux :
+
+- Instaler pyenv
+    ```shell
+    curl https://pyenv.run | bash
+    ```
+
+- Ajouter pyenv à la configuration de shell :
+    ```shell
+    export PATH="$HOME/.pyenv/bin:$PATH"
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    ```
+
+- Redémarrer le terminal ou recharger le fichier de configuration du shell :
+    ```shell
+    source ~/.bashrc  # Si vous utilisez bash
+    source ~/.zshrc   # Si vous utilisez zsh
+    ```
+- Installer les dépendances nécessaires
+    ```shell
+    sudo apt-get update
+    sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
+    ```
+- Installer Python 3.11 
+    ```shell
+    pyenv install 3.11
+    ```
+
+
+
 # MacOS :
 
 ## Prérequis :
 
-- **Python3.11.9**
 
-    - **Installer Python3.11**
-        - **Installer brew (si non installé)**
+- **Installer brew (si non installé)**
 
-        ```shell
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        ```
+    ```shell
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
 
-        - **Installer python3.11**
-
-        ```shell
-        brew install python@3.11
-        ```
 
 - **Poetry**
 
     - **(Si non installé) :**
     
-        - **Installer brew (si non installé)**
-
-        ```shell
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        ```
-
         - **Installer pipx (si non installé)**
 
         ```shell
         brew install pipx
         ```
             
-        - **Installer poetry (si non installé)**
+        - **Installer poetry**
 
         ```shell
         pipx install poetry
         pipx ensurepath
         ```
-- **Tkinter**
-
-    - **(Si non installé) :**
+  - **Pyenv :**
+    ```shell
+    brew install pyenv
+    brew install openssl readline sqlite3 xz zlib
     
-        - **Installer brew (si non installé)**
+    env LDFLAGS="-L$(brew --prefix openssl@1.1)/lib -L$(brew --prefix readline)/lib -L$(brew --prefix sqlite3)/lib -L$(brew --prefix xz)/lib -L$(brew --prefix zlib)/lib -L$(brew --prefix tcl-tk)/lib" \
+    CPPFLAGS="-I$(brew --prefix openssl@1.1)/include -I$(brew --prefix readline)/include -I$(brew --prefix sqlite3)/include -I$(brew --prefix xz)/include -I$(brew --prefix zlib)/include -I$(brew --prefix tcl-tk)/include" \
+    PKG_CONFIG_PATH="$(brew --prefix openssl@1.1)/lib/pkgconfig:$(brew --prefix readline)/lib/pkgconfig:$(brew --prefix sqlite3)/lib/pkgconfig:$(brew --prefix xz)/lib/pkgconfig:$(brew --prefix zlib)/lib/pkgconfig:$(brew --prefix tcl-tk)/lib/pkgconfig" \
+    pyenv install 3.11
+    ```
 
-        ```shell
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        ```
-
-        - **Installer Tkinter**
-
-        ```shell
-        brew install python-tk
-        ```
 
 # Installation avec Poetry :
-
 
 1. **Verifier l'installation de poetry** :
 
