@@ -46,38 +46,6 @@ Ainsi que dans les boîtes OpenVibe.
     sudo apt install python3-tk
     ```
 
-# PyENV Linux :
-
-- Instaler pyenv
-    ```shell
-    curl https://pyenv.run | bash
-    ```
-
-- Ajouter pyenv à la configuration de shell :
-    ```shell
-    export PATH="$HOME/.pyenv/bin:$PATH"
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-    ```
-
-- Redémarrer le terminal ou recharger le fichier de configuration du shell :
-    ```shell
-    source ~/.bashrc  # Si vous utilisez bash
-    source ~/.zshrc   # Si vous utilisez zsh
-    ```
-- Installer les dépendances nécessaires
-    ```shell
-    sudo apt-get update
-    sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
-    ```
-- Installer Python 3.11 
-    ```shell
-    pyenv install 3.11
-    ```
-
-
-
 # MacOS :
 
 ## Prérequis :
