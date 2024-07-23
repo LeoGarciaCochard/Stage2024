@@ -19,7 +19,7 @@ from PIL import Image
 from tkinter import Toplevel
 from screeninfo import get_monitors
 
-from Interface_Graphique.tools.likert import *
+from Interface_Graphique.tools.likerts import *
 
 ########################################################################### Variables Globales
 

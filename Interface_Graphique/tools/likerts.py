@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from dataclasses import dataclass, field
 from typing import List, Dict
+
 from variables_likert import *
 
 @dataclass

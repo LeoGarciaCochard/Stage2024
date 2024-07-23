@@ -517,7 +517,7 @@ def versBtn() :
 notif = ctk.CTkFrame(root,border_color="#106a43",border_width=4)
 notif.pack(pady=15, padx=30, fill="both", expand=True)
 
-explication = "Option de lancement :"
+explication = "Options de lancement :"
 
 
 frame_notif_titre = ctk.CTkFrame(master = notif, corner_radius=100,fg_color="#2b2b2b",border_color="#106a43",border_width=2)
@@ -1368,7 +1368,7 @@ sliderPassion.set(50)
 cadre_participantET = ctk.CTkFrame(master=frame_quest_participant2)
 cadre_participantET.pack(pady=(40,10), padx=50)
 
-label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Environnemment de travail :")
+label_participantET = ctk.CTkLabel(master= cadre_participantET, text="Environnement de travail :")
 label_participantET.pack(pady=5, padx=50)
 label_participantET.configure(font=("Helvetica", 25))
 
