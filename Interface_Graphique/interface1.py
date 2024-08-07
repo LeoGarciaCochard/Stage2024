@@ -1315,7 +1315,7 @@ def magnet_likert_Passion(valeur_actuelle) :
 frame_Passion = ctk.CTkFrame(master=frame_quest_participant2, fg_color="#333333")
 frame_Passion.pack(ipadx= 10, pady=10, anchor='center')
 
-label_Passion = ctk.CTkLabel(master = frame_Passion,text="À quel point aimez-vous ce travail ?: ")
+label_Passion = ctk.CTkLabel(master = frame_Passion,text="À quel point aimez-vous ce travail ? ")
 label_Passion.pack(pady=(10,0))
 label_Passion.configure(font=("Helvetica", 15))
 

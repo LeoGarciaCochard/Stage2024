@@ -2,7 +2,7 @@ import customtkinter as ctk
 from dataclasses import dataclass, field
 from typing import List, Dict
 
-from variables_likert import *
+from Interface_Graphique.var_fonc.variables_likert import *
 
 @dataclass
 class LikertLabel:
@@ -79,27 +79,27 @@ class Likert() :
 
 
 
-# if __name__ == '__main__':
-#
-#     ctk.set_appearance_mode("dark")
-#     ctk.set_default_color_theme("green")
-#
-#     root = ctk.CTk()
-#     root.geometry("1080x800")
-#     root.title("Interface Graphique ErrP")
-#
-#
-#
-#     # likert_importance = Likert(root,dic_importance,selected_var_importance,text= dico_text["importance"], Sliderwidth=600 )
-#     # likert_concentration = Likert(root,dic_concentration,selected_var_concentration, text= dico_text["concentration"], Sliderwidth=425)
-#     # likert_fatigue = Likert(root,dic_fatigue,selected_var_fatigue, text= dico_text["fatigue"], Sliderwidth=500)
-#
-#
-#     # likert_bruit = Likert(root,dic_bruit,selected_var_bruit, text= dico_text["bruit"], Sliderwidth=653.5)
-#     # likert_passion = Likert(root,dic_passion,selected_var_passion, text= dico_text["passion"], Sliderwidth=800)
-#     # likert_hability_inf = Likert(root,dic_hability_inf,selected_var_hability_inf, text= dico_text["habilite_inf"], Sliderwidth=600)
-#     # likert_stress = Likert(root,dic_stress,selected_var_stress, text= dico_text["stress"])
-#
-#
-#     root.mainloop()
+if __name__ == '__main__':
+
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("green")
+
+    root = ctk.CTk()
+    root.geometry("1080x800")
+    root.title("Interface Graphique ErrP")
+
+
+
+    likert_importance = Likert(root,dic_importance,selected_var_importance,text= dico_text["importance"], Sliderwidth=600 )
+    likert_concentration = Likert(root,dic_concentration,selected_var_concentration, text= dico_text["concentration"], Sliderwidth=425)
+    likert_fatigue = Likert(root,dic_fatigue,selected_var_fatigue, text= dico_text["fatigue"], Sliderwidth=500)
+
+
+    likert_bruit = Likert(root,dic_bruit,selected_var_bruit, text= dico_text["bruit"], Sliderwidth=653.5)
+    likert_passion = Likert(root,dic_passion,selected_var_passion, text= dico_text["passion"], Sliderwidth=800)
+    likert_hability_inf = Likert(root,dic_hability_inf,selected_var_hability_inf, text= dico_text["habilite_inf"], Sliderwidth=600)
+    likert_stress = Likert(root,dic_stress,selected_var_stress, text= dico_text["stress"])
+
+
+    root.mainloop()
 

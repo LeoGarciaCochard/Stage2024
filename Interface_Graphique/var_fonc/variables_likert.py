@@ -3,44 +3,44 @@
 #Likert
 
 dic_stress= {
-    0: "Sans stress",  # 11 caractères
-    16: "Pas trop stressé(e)",  # 12 caractères
-    33: "Légèrement stressé(e)",  # 20 caractères
-    48.5: "Neutre",  # 6 caractères
-    66: "Assez stressé(e)",  # 13 caractères
-    83: "Très stressé(e)",  # 12 caractères
+    0: "Sans stress",
+    16: "Pas trop stressé(e)",
+    33: "Légèrement stressé(e)",
+    48.5: "Neutre",
+    66: "Assez stressé(e)",
+    83: "Très stressé(e)",
     100: "Extrêmement stressé(e)"
 }
 
 dic_hability_inf = {
-    0: "Aucunes compétences",        # 19 caractères
-    16: "Très peu compétent(e)",          # 18 caractères
-    39: "Peu compétent(e)",        # 21 caractères
-    53: "Moyen",          # 18 caractères
-    66: "Compétent(e)",                   # 9 caractères
-    83: "Très compétent(e)",              # 15 caractères
-    100: "Extrêmement compétent(e)"       # 22 caractères
+    0: "Aucunes compétences",
+    16: "Très peu compétent(e)",
+    39: "Peu compétent(e)",
+    53: "Moyen",
+    66: "Compétent(e)",
+    83: "Très compétent(e)",
+    100: "Extrêmement compétent(e)"
 }
 
 dic_passion = {
-    0: "Pas du tout passionné(e)",        # 20 caractères
-    16: "Très peu passionné(e)",          # 18 caractères
-    33: "Peu passionné(e)",        # 21 caractères
-    50: "Passion neutre",              # 14 caractères
-    66: "Légèrement passionné(e)",                   # 9 caractères
-    83: "Très passionné(e)",              # 15 caractères
-    100: "Extrêmement passionné(e)"       # 22 caractères
+    0: "Pas du tout passionné(e)",
+    16: "Très peu passionné(e)",
+    33: "Peu passionné(e)",
+    50: "Passion neutre",
+    66: "Légèrement passionné(e)",
+    83: "Très passionné(e)",
+    100: "Extrêmement passionné(e)"
 }
 
 
 dic_bruit = {
-    0: "Pas du tout bruyant",          # 19 caractères
-    16: "Très peu bruyant",            # 16 caractères
-    33: "Légèrement bruyant",          # 20 caractères
-    53.5: "Normal",                # 12 caractères
-    66: "Assez bruyant",               # 13 caractères
-    83: "Très bruyant",                # 12 caractères
-    100: "Extrêmement bruyant"         # 21 caractères
+    0: "Pas du tout bruyant",
+    16: "Très peu bruyant",
+    33: "Légèrement bruyant",
+    53.5: "Normal",
+    66: "Assez bruyant",
+    83: "Très bruyant",
+    100: "Extrêmement bruyant"
 }
 
 dic_importance = {
@@ -78,7 +78,7 @@ dic_fatigue = {
 dico_text = {
     "stress" : "De manière générale, comment décrivez-vous votre état de stress",
     "bruit" : "Le niveau de bruit dans votre environnement de travail est : ",
-    "passion" : "À quel point aimez-vous ce travail ?: ",
+    "passion" : "À quel point aimez-vous ce travail ? ",
     "habilite_inf" : "À quel point êtes vous à l'aise avec les outils informatiques : ",
 
     "importance" : "Veuillez renseigner l'importance (la gravité) de l'incident négatif",
