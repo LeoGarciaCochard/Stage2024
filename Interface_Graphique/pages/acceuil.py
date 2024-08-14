@@ -6,8 +6,10 @@ from Interface_Graphique.tools.frames import Frame
 from Interface_Graphique.tools.buttons import Button, ButtonQuitter, ButtonImage
 from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.entries import Entry
+from Interface_Graphique.tools.comboboxes import Combobox
 import Interface_Graphique.var_fonc.variables_path as paths
 import Interface_Graphique.var_fonc.functions as functions
+import Interface_Graphique.var_fonc.variables_taches as variables_taches
 
 
 @dataclass
@@ -61,6 +63,9 @@ class PageAcceuil:
         self.label_tache = Label(master=self.cadre_existant.frame, column=0, row=1,
                                  text="Quelle est la tâche que vous allez effectuer en priorité ?")
 
+        self.combobox_tache = Combobox(master=self.cadre_existant.frame, values=variables_taches.taches,
+                                     variable_name="selected_var_tache", row=1, column=1, columnspan=1)
+
         self.button_rajouter_tache = ButtonImage(master = self.cadre_existant.frame,
                                                  column=2, row=1, tooltip=True,
                                                  text_tooltip="Si la tâche que vous effectuez n'apparaît pas dans la "
@@ -82,6 +87,7 @@ class PageAcceuil:
         self.cadre_existant.afficher()
         self.entry_n_ano.fixer()
         self.label_tache.fixer()
+        self.combobox_tache.fixer()
         self.button_rajouter_tache.fixer()
         self.bouton_valider_existant.fixer()
         print("existant")
@@ -109,7 +115,7 @@ class PageAcceuil:
 #     global tache_modif
 #     tache_modif = rep
 #
-#
+
 # def change_tache(rep):
 #     global selected_var_tache
 #     selected_var_tache = rep

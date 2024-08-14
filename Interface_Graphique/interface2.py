@@ -62,13 +62,7 @@ path_img_btnf = resource_path("Sources/btn_f.png")
 path_img_aide = resource_path("Sources/aide.png")
 path_img_aidef = resource_path("Sources/aide_f.png")
 
-def actualise_taches() :
-    df_taches = pd.read_excel(resource_path("Sources/taches.xlsx"))
-    global taches
-    taches =list(df_taches['Tâches'])
 
-
-actualise_taches()
 ########################################################################### Lancement de l'interface
 
 ctk.set_appearance_mode("dark")
