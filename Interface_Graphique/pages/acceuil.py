@@ -3,32 +3,33 @@ import tkinter as tk
 from dataclasses import dataclass
 
 from Interface_Graphique.tools.frames import Frame
-from Interface_Graphique.tools.buttons import Button, ButtonQuitter, ButtonImage
+from Interface_Graphique.tools.buttons import Button
+from Interface_Graphique.tools.button_quit import ButtonQuitter
 from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.entries import Entry
-from Interface_Graphique.tools.comboboxes import Combobox
-import Interface_Graphique.var_fonc.variables_path as paths
-import Interface_Graphique.var_fonc.functions as functions
-import Interface_Graphique.var_fonc.variables_taches as variables_taches
-
+from Interface_Graphique.var_fonc.variables_info import n_anonymat, dic_selected_var
+from Interface_Graphique.tools.class_taches import BarreTache
+from Interface_Graphique.var_fonc.functions import passer_definitif
+from Interface_Graphique.pages.principal import PagePrincipale
 
 @dataclass
 class PageAcceuil:
     root: ctk.CTk
 
-    bouton_nouveau_participant = None
-    label_titre = None
-    bouton_quitter = None
-    bouton_participant_existant = None
-    cadre_existant = None
-    cadre_titre = None
     page_acceuil = None
-    cadre_boutons = None
-    bouton_valider_existant = None
+    bouton_quitter = None
 
-    button_rajouter_tache = None
-    label_tache = None
+    cadre_titre = None
+    label_titre = None
+
+    cadre_boutons = None
+    bouton_participant_existant = None
+    bouton_nouveau_participant = None
+
+    cadre_existant = None
     entry_n_ano = None
+    barre_taches = None
+    bouton_valider_existant = None
 
     def __post_init__(self):
         self.create_acceuil()
@@ -55,30 +56,26 @@ class PageAcceuil:
                                                   function=self.existant, side=tk.LEFT)
 
         # Cadre existant :
-        self.cadre_existant = Frame(master=self.page_acceuil.frame)
+        self.cadre_existant = Frame(master=self.page_acceuil.frame, fg_color="#242424")
 
         self.entry_n_ano = Entry(master=self.cadre_existant.frame, placeholder="N° Anonymat...",
                                  row=0, columnspan=3,column=0)
 
-        self.label_tache = Label(master=self.cadre_existant.frame, column=0, row=1,
-                                 text="Quelle est la tâche que vous allez effectuer en priorité ?")
-
-        self.combobox_tache = Combobox(master=self.cadre_existant.frame, values=variables_taches.taches,
-                                     variable_name="selected_var_tache", row=1, column=1, columnspan=1)
-
-        self.button_rajouter_tache = ButtonImage(master = self.cadre_existant.frame,
-                                                 column=2, row=1, tooltip=True,
-                                                 text_tooltip="Si la tâche que vous effectuez n'apparaît pas dans la "
-                                                              + "liste,\n Cliquez pour rajouter une nouvelle tâche",
-                                                 path_hover=paths.img_btn_hover, path=paths.img_btn,
-                                                 function=functions.ajouter_tache)
+        self.barre_taches = BarreTache(master=self.cadre_existant.frame, column=1, row=1, choix='priorite')
 
         self.bouton_valider_existant = Button(master=self.cadre_existant.frame, text="Valider",
                                               function=self.verifier_existant, side=tk.LEFT,
                                               row=2, columnspan=3, column=0)
 
     def verifier_existant(self):
-        pass
+        try :
+            n_anoymat = [int(self.entry_n_ano.get())]
+            if dic_selected_var['selected_var_tache'] is not None :
+                page_principale = PagePrincipale(self.root)
+                passer_definitif(self,page_principale)
+        except ValueError:
+            print("Erreur :" + " Le numéro d'anonymat doit être un entier, et la tâche doit être sélectionnée")
+
 
     def nouveau(self):
         self.page_acceuil.frame.destroy()
@@ -86,9 +83,7 @@ class PageAcceuil:
     def existant(self):
         self.cadre_existant.afficher()
         self.entry_n_ano.fixer()
-        self.label_tache.fixer()
-        self.combobox_tache.fixer()
-        self.button_rajouter_tache.fixer()
+        self.barre_taches.fixer()
         self.bouton_valider_existant.fixer()
         print("existant")
 
@@ -105,6 +100,8 @@ class PageAcceuil:
 
         self.cadre_boutons.afficher()
 
+    def destroy(self):
+        self.page_acceuil.destroy()
 
 
 # btn_valider = ctk.CTkButton(notif_exi,text="Valider",command=validation ,font=('Helvetica',15))

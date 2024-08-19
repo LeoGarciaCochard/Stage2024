@@ -1,4 +1,4 @@
-from
+from Interface_Graphique.var_fonc.functions import resource_path
 
 # Paths to images
 img_btn = resource_path("../Sources/btn.png")

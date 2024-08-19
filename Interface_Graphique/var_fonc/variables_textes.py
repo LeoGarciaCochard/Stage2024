@@ -1,0 +1,7 @@
+
+dico_aide = {
+    "Erreur" : "En cliquant sur ce bouton, vous signalez un incident. Un questionnaire s'ouvrira. \n Si vous avez le temps, complétez le. Sinon, cliquez sur 'Envoyer en l'état'. Vous pourrez toujours le compléter plus tard en \ncliquant sur 'Voir Récapitulatif'.",
+    "Forget" : "En cliquant sur ce bouton, vous signalez un incident a posteriori, c'est-à-dire que \nvous aviez oublié de le signaler en temps voulu. Vous devez indiquer un nombre \napproximatif de minutes depuis la survenue de l'erreur. Ensuite, le questionnaire s'ouvrira \navec les mêmes instructions que pour un signalement normal.",
+    "Recap"  : "En cliquant sur ce bouton, vous pourrez voir un récapitulatif des incidents déjà \nsignalés. Vous aurez la possibilité de modifier vos réponses en cliquant sur 'Modifier' \nà la ligne correspondante. Deux tableaux sont disponibles : \n--Le premier, 'Renseignements complétés', indique les incidents pour lesquels au moins la \npremière page est renseignée. \n--Le second, 'Renseignements à compléter', indique ceux qu'il vous reste à compléter, \npar exemple ceux signalés via 'Ajout Rapide'.",
+    "Rapide" : "En cliquant sur ce bouton, vous pouvez signaler un incident de manière rapide. Vous \npouvez, si vous le souhaitez, fournir une brève description (facultative) pour vous aider à le \ncompléter plus tard. Cet incident sera placé dans le tableau 'Renseignements à compléter' \nsur la page du récapitulatif."
+}

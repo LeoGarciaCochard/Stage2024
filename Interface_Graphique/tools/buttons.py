@@ -60,50 +60,6 @@ class Button:
 
 
 @dataclass
-class ButtonQuitter:
-    master: ctk.CTkFrame
-    only_destroy: bool
-    root: ctk.CTk
-
-    btn = None
-
-    def __post_init__(self):
-        self.create()
-
-    def arret_expe(self, acc=False):
-        """
-        Stop l'enregistrement et ferme l'application
-        """
-        if acc:
-            self.root.destroy()
-        else:
-
-            if tout_complet():
-                # arreterRecEEG() #TODO REMETTRE POUR REC INFO
-                self.root.destroy()
-            else:
-                affiche_message_incomplet()
-
-    def on_enter(self):
-        if self.only_destroy:
-            self.btn.configure(text="❌ Fermer")
-        else:
-            self.btn.configure(text="❌ Fermer et sauvegarder")
-
-    def on_leave(self):
-        self.btn.configure(text="❌")
-
-    def create(self):
-
-        self.btn = ctk.CTkButton(master=self.master, text="❌", width=15,
-                                 command=lambda: self.arret_expe(self.only_destroy))
-        self.btn.configure(fg_color="red", hover_color="white", text_color="black")
-        self.btn.place(x=10, y=10)
-
-        self.btn.bind("<Enter>", lambda x: self.on_enter())
-        self.btn.bind("<Leave>", lambda x: self.on_leave())
-
-@dataclass
 class ButtonImage:
     master: ctk.CTkFrame
     path: str
@@ -157,10 +113,10 @@ class ButtonImage:
             Tooltip(self.button, self.text_tooltip)
 
     def enter(self, event):
-        self.button.configure(image=self.photo)
+        self.button.configure(image=self.photo_hover)
 
     def leave(self, event):
-        self.button.configure(image=self.photo_hover)
+        self.button.configure(image=self.photo)
 
     def afficher(self):
         self.button.pack(ipadx=self.ipx,

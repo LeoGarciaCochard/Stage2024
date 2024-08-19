@@ -36,6 +36,8 @@ class Entry:
                                   height=self.height,
                                   font=(self.font, self.police, self.style))
 
+    def get(self):
+        return self.entry.get()
     def afficher(self):
         self.entry.pack(ipadx=self.ipx,
                         ipady=self.ipy,
