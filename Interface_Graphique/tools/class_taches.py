@@ -11,7 +11,7 @@ from Interface_Graphique.tools.entries import Entry
 from Interface_Graphique.tools.comboboxes import Combobox
 
 from Interface_Graphique.var_fonc.variables_info import actualise_taches
-from Interface_Graphique.var_fonc.variables_info import taches, dic_selected_var
+from Interface_Graphique.var_fonc.variables_info import taches, dic_informations
 import Interface_Graphique.var_fonc.variables_path as paths
 
 from Interface_Graphique.var_fonc.functions import resource_path
@@ -65,7 +65,7 @@ class PopUpAjouterTache:
         self.combobox.combobox.configure(values=taches)
         self.combobox.combobox.set(rep)
 
-        dic_selected_var['selected_var_tache'] = rep
+        dic_informations['selected_var_tache'] = rep
         # On retire la frame
         self.root.after(100, self.root.destroy)
 
@@ -133,6 +133,8 @@ class BarreTache:
         popup.afficher()
 
     def afficher(self):
+        self.combobox_tache.combobox.set(dic_informations['selected_var_tache'])
+        print("tache : ", dic_informations['selected_var_tache'])
         self.cadre_tache.afficher()
 
     def fixer(self):

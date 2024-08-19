@@ -2,12 +2,13 @@ import customtkinter as ctk
 import tkinter as tk
 from dataclasses import dataclass
 
+from Interface_Graphique.pages.lettre_information import PageLettreInformation
 from Interface_Graphique.tools.frames import Frame
 from Interface_Graphique.tools.buttons import Button
 from Interface_Graphique.tools.button_quit import ButtonQuitter
 from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.entries import Entry
-from Interface_Graphique.var_fonc.variables_info import n_anonymat, dic_selected_var
+from Interface_Graphique.var_fonc.variables_info import dic_informations
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.var_fonc.functions import passer_definitif
 from Interface_Graphique.pages.principal import PagePrincipale
@@ -51,9 +52,11 @@ class PageAcceuil:
         self.cadre_boutons = Frame(master=self.page_acceuil.frame)
 
         self.bouton_nouveau_participant = Button(master=self.cadre_boutons.frame, text="Générer un numéro d'anonymat",
-                                                 function=self.nouveau, side=tk.LEFT)
+                                                 function=self.nouveau, side=tk.LEFT,
+                                                 width=300, height=40, police=20)
         self.bouton_participant_existant = Button(master=self.cadre_boutons.frame, text="Utiliser un numéro existant",
-                                                  function=self.existant, side=tk.LEFT)
+                                                  function=self.existant, side=tk.LEFT,
+                                                 width=300, height=40, police=20)
 
         # Cadre existant :
         self.cadre_existant = Frame(master=self.page_acceuil.frame, fg_color="#242424")
@@ -69,16 +72,19 @@ class PageAcceuil:
 
     def verifier_existant(self):
         try :
-            n_anoymat = [int(self.entry_n_ano.get())]
-            if dic_selected_var['selected_var_tache'] is not None :
+            n_anoymat = int(self.entry_n_ano.get())
+            dic_informations['n_anonymat'] = n_anoymat
+            if dic_informations['selected_var_tache'] is not None :
                 page_principale = PagePrincipale(self.root)
                 passer_definitif(self,page_principale)
+
         except ValueError:
             print("Erreur :" + " Le numéro d'anonymat doit être un entier, et la tâche doit être sélectionnée")
 
 
     def nouveau(self):
-        self.page_acceuil.frame.destroy()
+        page_lettre_information = PageLettreInformation(self.root)
+        passer_definitif(self,page_lettre_information)
 
     def existant(self):
         self.cadre_existant.afficher()
@@ -103,25 +109,3 @@ class PageAcceuil:
     def destroy(self):
         self.page_acceuil.destroy()
 
-
-# btn_valider = ctk.CTkButton(notif_exi,text="Valider",command=validation ,font=('Helvetica',15))
-#
-#
-# def modifier_tache(rep):
-#     """ Modifie la tâche de la ligne"""
-#     global tache_modif
-#     tache_modif = rep
-#
-
-# def change_tache(rep):
-#     global selected_var_tache
-#     selected_var_tache = rep
-#     combobox_tache2.set(selected_var_tache)
-#
-# frame_tache0 = ctk.CTkFrame(master=notif_exi, fg_color="#242424")
-#
-# label_tache0 = ctk.CTkLabel(master=frame_tache0, text="Quelle est la tâche que vous allez effectuer en priorité ?\n(Vous pourrez modifier la tâche en cours)",font=('Helvetica',15))
-# label_tache0.grid(row=1,column=0, ipadx=15, ipady=5)
-#
-# combobox_tache0 = ctk.CTkComboBox(master=frame_tache0, values=taches, state="readonly", command= lambda x : change_tache(x))
-# combobox_tache0.grid(row=1,column=1)

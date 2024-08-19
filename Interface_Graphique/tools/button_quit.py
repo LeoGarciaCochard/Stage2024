@@ -16,7 +16,12 @@ class ButtonQuitter:
     only_destroy: bool
     root: ctk.CTk
 
+    placed: bool = True
     btn = None
+
+    row: int = 0
+    column: int = 0
+    columnspan: int = 1
 
     def __post_init__(self):
         self.create()
@@ -52,10 +57,15 @@ class ButtonQuitter:
         self.btn.bind("<Button-1>", lambda event: self.arret_expe(event=event, only_destroy=self.only_destroy))
 
         self.btn.configure(fg_color="red", hover_color="white", text_color="black")
-        self.btn.place(x=10, y=10)
+
+        if self.placed :
+            self.btn.place(x=10, y=10)
 
         self.btn.bind("<Enter>", lambda x: self.on_enter())
         self.btn.bind("<Leave>", lambda x: self.on_leave())
+
+    def fixer(self):
+        self.btn.grid(column=self.column, row=self.row, columnspan=self.columnspan)
 
 
 @dataclass

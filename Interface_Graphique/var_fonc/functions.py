@@ -1,6 +1,5 @@
 import os
 import sys
-
 def resource_path(relative_path):
     """ On crée un path absolut depuis le relatif """
     try:
@@ -32,5 +31,3 @@ def tout_complet() :
 def stimulation(n) :
     """ Fonction de stimulation """
     pass
-
-

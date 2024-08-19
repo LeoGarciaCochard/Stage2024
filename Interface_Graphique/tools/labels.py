@@ -30,7 +30,9 @@ class Label:
         self.label = ctk.CTkLabel(master=self.master,
                                   text=self.text,
                                   fg_color=self.bg,
-                                  font=(self.font, self.police, self.style))
+                                  font=(self.font, self.police, self.style),
+                                  wraplength=1200,
+                                  justify="left") #TODO
 
     def afficher(self):
         self.label.pack(ipadx=self.ipx,

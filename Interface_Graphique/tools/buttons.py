@@ -66,11 +66,18 @@ class ButtonImage:
     path_hover: str
     function: callable
 
+    text: str = ''
+    compound: str = None
+
     width: int = 25
     height: int = 25
 
     tooltip: bool = False
-    text_tooltip: str = ''
+    text_tooltip: str = ' '
+
+    police: int = 15
+    font: str = 'Helvetica'
+    style: str = "normal"
 
     image = None
     image_resized = None
@@ -103,7 +110,8 @@ class ButtonImage:
         self.photo_hover = ctk.CTkImage(light_image=self.image_hover_resized, dark_image=self.image_hover_resized,
                                         size=(self.width, self.height))
 
-        self.button = ctk.CTkLabel(master=self.master, image=self.photo, text=' ', cursor="hand2")
+        self.button = ctk.CTkLabel(master=self.master, image=self.photo, text=self.text, cursor="hand2",
+                                   font=(self.font, self.police, self.style), compound=self.compound)
 
         self.button.bind("<Button-1>", self.function)
         self.button.bind("<Enter>", self.enter)

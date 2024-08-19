@@ -57,5 +57,15 @@ class BtnHelp:
 
 @dataclass
 class AjoutRapide(BtnHelp):
+    img_width: int = 55
+    img_height: int = 55
+    compound: str = "left"
+    btn_ipx = 50
+    def create(self):
+        super().create()
 
+        self.button = ButtonImage(master=self.cadre.frame, path=paths.img_btn, path_hover=paths.img_btn_hover,
+                                  text_tooltip=self.text_help, column=0, row=0, tooltip=False, ipx=self.btn_ipx,
+                                  function=self.function, text=self.text_button, compound= self.compound,
+                                  width=self.img_width, height=self.img_height)
 
