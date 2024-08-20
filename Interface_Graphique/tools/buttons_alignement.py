@@ -21,10 +21,10 @@ class BtnHelp:
     font: str = 'Helvetica'
     style: str = "normal"
 
-    px= 0
-    py= 0
-    ipx = 0
-    ipy= 0
+    px: int | tuple[int, int] = 0
+    py: int | tuple[int, int] = 0
+    ipx: int | tuple[int, int] = 0
+    ipy: int | tuple[int, int] = 0
 
     cadre = None
     button = None

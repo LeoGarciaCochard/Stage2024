@@ -1,4 +1,5 @@
 from Interface_Graphique.var_fonc.functions import resource_path
+from Interface_Graphique.var_fonc.variables_likert import *
 import pandas as pd
 
 def actualise_taches() :
@@ -35,15 +36,15 @@ dic_informations = {'n_anonymat' : None,
                     'age' : None,
                     'sommeil' : None,
                     'troubles_sommeil' : None,
-                    'stress_general' : None,
+                    'stress_general' : [dic_stress[48.5]],
                     'cafeine' : None,
                     'quantite_cafeine' : 0,
                     'nicotine' : None,
                     'quantite_nicotine' : 0,
                     'experience' : None,
-                    'aisance_informatique' : None,
-                    'passion' : None,
-                    'bruit' : None,
+                    'aisance_informatique' : [dic_aisance_informatique[53]],
+                    'passion' : [dic_passion[50]],
+                    'bruit' : [dic_bruit[53.5]],
                     'selected_var_tache' : None}
 
 questions = {"age": "Quel est votre âge ?",

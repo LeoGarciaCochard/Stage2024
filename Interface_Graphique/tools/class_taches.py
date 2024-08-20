@@ -89,7 +89,13 @@ class BarreTache:
     column: int = 0
     columnspan: int = 1
 
+    px: int | tuple[int, int] = 10
+    py: int | tuple[int, int] = 10
+    ipx: int | tuple[int, int] = 10
+    ipy: int | tuple[int, int] = 10
+
     fg_color:str = "#242424"
+    police: int = 15
 
     cadre_tache = None
     label_tache = None
@@ -106,9 +112,9 @@ class BarreTache:
 
     def create(self):
         self.cadre_tache = Frame(master=self.master, columnspan=self.columnspan, column=self.column, row=self.row,
-                                 fg_color=self.fg_color)
+                                 fg_color=self.fg_color, ipx=10, ipy=10, px=10, py=10)
 
-        self.label_tache = Label(master=self.cadre_tache.frame, column=0, row=0, text='')
+        self.label_tache = Label(master=self.cadre_tache.frame, column=0, row=0, text='',police=self.police)
 
         if self.choix == 'priorite':
             self.label_tache.label.configure(text="Quelle est la tâche que vous allez effectuer en priorité ? \n "
@@ -132,8 +138,10 @@ class BarreTache:
         popup.afficher()
 
     def afficher(self):
-        self.combobox_tache.combobox.set(dic_informations['selected_var_tache'])
-        print("tache : ", dic_informations['selected_var_tache'])
+        if dic_informations['selected_var_tache'] is not None:
+            self.combobox_tache.combobox.set(dic_informations['selected_var_tache'])
+            print("tache : ", dic_informations['selected_var_tache'])
+
         self.cadre_tache.afficher()
 
     def fixer(self):

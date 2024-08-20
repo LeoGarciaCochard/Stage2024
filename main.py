@@ -40,18 +40,24 @@ class Interface:
         self.root.mainloop()
 
 from Interface_Graphique.pages.principal import PagePrincipale
-from Interface_Graphique.pages.info_participant import PageParticipant
+from Interface_Graphique.pages.questionnaire_participant import PageParticipant
+from Interface_Graphique.pages.lettre_information import PageLettreInformation
 
 if __name__ == '__main__':
     app = Interface()
-    #
+
     # page_acceuil = PageAcceuil(app.root)
     # page_acceuil.afficher_page_acceuil()
-    #
-    # page_principale = PagePrincipale(app.root)
-    # page_principale.afficher()
 
-    page_participant = PageParticipant(app.root)
-    page_participant.afficher()
+    # page_lettre_information = PageLettreInformation(app.root)
+    # page_lettre_information.afficher()
+
+    # page_participant = PageParticipant(app.root)
+    # page_participant.afficher()
+
+    page_principale = PagePrincipale(app.root)
+    page_principale.afficher()
+
+
 
     app.run()

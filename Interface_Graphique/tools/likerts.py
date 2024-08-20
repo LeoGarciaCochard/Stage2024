@@ -13,13 +13,14 @@ class LikertLabel:
     py: int = 10
     ipx: int = 10
     ipy: int = 10
+    police: int = 15
     couleur: List[str] = field(default_factory=lambda: ["green", "green", "green", "white", "red", "red", "red"])
 
     def __post_init__(self):
-        self.grid_labels()
+        pass
 
     def grid_labels(self):
-        label = ctk.CTkLabel(self.master_frame,text=self.text)
+        label = ctk.CTkLabel(self.master_frame,text=self.text, font=("Helvetica", self.police))
         label.grid(row=0,column=0,columnspan=7, padx=self.px, pady=self.py)
         valeurs = list(self.dic.values())
         for i in range(len(valeurs)):
@@ -35,9 +36,11 @@ class LikertSlider:
     dic: Dict[int, str]
     width: int = 700
 
+    slider = None
+
     def __post_init__(self):
         self.liste = list(self.dic.keys())
-        self.pack_slider()
+
 
     def magnet_likert(self, valeur_actuelle):
         """Magnetise la valeur à la plus proche sur l'echelle de likert """
@@ -54,7 +57,7 @@ class LikertSlider:
 
 @dataclass
 class Likert() :
-    master_frame : ctk.CTkFrame
+    master : ctk.CTkFrame
     dic : Dict[int,str]
     var : List[int]
     text :str
@@ -64,17 +67,21 @@ class Likert() :
     py: int = 10
     ipx: int = 10
     ipy: int = 10
-    Sliderwidth : int = 700
+    sliderwidth : int | float = 700
+    police: int = 15
 
     def __post_init__(self):
         self.create_likert()
 
     def create_likert(self):
-        self.cadre = ctk.CTkFrame(master = self.master_frame, fg_color= self.bg)
-        self.cadre.pack(ipadx=self.ipx, ipady=self.ipy, padx=self.px, pady=self.py, anchor='center')
-        self.labels = LikertLabel(self.cadre, self.dic, text=self.text)
-        self.slider =LikertSlider(self.cadre, self.var,self.dic,width=self.Sliderwidth)
+        self.cadre = ctk.CTkFrame(master = self.master, fg_color= self.bg)
+        self.labels = LikertLabel(self.cadre, self.dic, text=self.text, police=self.police)
+        self.slider =LikertSlider(self.cadre, self.var, self.dic, width=self.sliderwidth)
 
+    def afficher(self):
+        self.cadre.pack(ipadx=self.ipx, ipady=self.ipy, padx=self.px, pady=self.py, anchor='center')
+        self.slider.pack_slider()
+        self.labels.grid_labels()
 
 
 

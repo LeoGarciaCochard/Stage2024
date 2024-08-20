@@ -12,7 +12,7 @@ dic_stress= {
     100: "Extrêmement stressé(e)"
 }
 
-dic_hability_inf = {
+dic_aisance_informatique = {
     0: "Aucunes compétences",
     16: "Très peu compétent(e)",
     39: "Peu compétent(e)",
@@ -92,5 +92,5 @@ selected_var_fatigue = [dic_fatigue[50]]
 
 selected_var_bruit = [dic_bruit[53.5]]
 selected_var_passion = [dic_passion[50]]
-selected_var_hability_inf = [dic_hability_inf[53]]
+selected_var_hability_inf = [dic_aisance_informatique[53]]
 selected_var_stress = [dic_stress[48.5]]

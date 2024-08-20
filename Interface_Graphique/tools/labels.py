@@ -10,6 +10,7 @@ class Label:
     police: int = 15
     font: str = 'Helvetica'
     style: str = "normal"
+    justify: str = "center"
     bg: str = "#2b2b2b"
     px: int | tuple[int, int] = 10
     py: int | tuple[int, int] = 10
@@ -32,7 +33,7 @@ class Label:
                                   fg_color=self.bg,
                                   font=(self.font, self.police, self.style),
                                   wraplength=1200,
-                                  justify="left") #TODO
+                                  justify=self.justify) #TODO
 
     def afficher(self):
         self.label.pack(ipadx=self.ipx,

@@ -38,9 +38,7 @@ class Combobox:
 
     def actualiser(self, choix):
 
-        if self.variable_name == "selected_var_tache":
-            global dic_selected_var
-            dic_informations[self.variable_name] = choix
+        dic_informations[self.variable_name] = choix
 
         self.combobox.set(choix)
 

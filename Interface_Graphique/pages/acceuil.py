@@ -8,10 +8,12 @@ from Interface_Graphique.tools.buttons import Button
 from Interface_Graphique.tools.button_quit import ButtonQuitter
 from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.entries import Entry
-from Interface_Graphique.var_fonc.variables_info import dic_informations, generer_ano
+from Interface_Graphique.var_fonc.variables_info import dic_informations
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.var_fonc.functions import passer_definitif
 from Interface_Graphique.pages.principal import PagePrincipale
+from Interface_Graphique.var_fonc.variables_pages import pages
+
 
 @dataclass
 class PageAcceuil:
@@ -59,14 +61,15 @@ class PageAcceuil:
                                                   width=300, height=40, police=20)
 
         # Cadre existant :
-        self.cadre_existant = Frame(master=self.page_acceuil.frame, fg_color="#242424")
+        self.cadre_existant = Frame(master=self.page_acceuil.frame, fg_color="#2b2b2b")
 
         self.entry_n_ano = Entry(master=self.cadre_existant.frame, placeholder="N° Anonymat...",
-                                 row=0, columnspan=3,column=0)
+                                 row=0, columnspan=3,column=0, py=(20,0))
 
-        self.barre_taches = BarreTache(master=self.cadre_existant.frame, column=1, row=1, choix='priorite')
+        self.barre_taches = BarreTache(master=self.cadre_existant.frame, column=1, row=1, choix='priorite',
+                                       fg_color="#2b2b2b")
 
-        self.bouton_valider_existant = Button(master=self.cadre_existant.frame, text="Valider",
+        self.bouton_valider_existant = Button(master=self.cadre_existant.frame, text="Valider", py=(0,20),
                                               function=self.verifier_existant, side=tk.LEFT,
                                               row=2, columnspan=3, column=0)
 
@@ -76,6 +79,7 @@ class PageAcceuil:
             dic_informations['n_anonymat'] = n_anoymat
             if dic_informations['selected_var_tache'] is not None :
                 page_principale = PagePrincipale(self.root)
+                pages["page_principale"] = page_principale
                 passer_definitif(self,page_principale)
 
         except ValueError:
@@ -84,7 +88,6 @@ class PageAcceuil:
 
     def nouveau(self):
         page_lettre_information = PageLettreInformation(self.root)
-        generer_ano()
         passer_definitif(self, page_lettre_information)
 
     def existant(self):

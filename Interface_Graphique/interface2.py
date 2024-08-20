@@ -1118,12 +1118,12 @@ combobox_expe.grid(row=1,column=1)
 
 #TODO Likert habilité info
 
-likert_hability_inf = Likert(frame_quest_participant2,dic_hability_inf,selected_var_hability_inf, text= dico_text["habilite_inf"], Sliderwidth=600)
+likert_hability_inf = Likert(frame_quest_participant2, dic_hability_inf, selected_var_hability_inf, text= dico_text["habilite_inf"], sliderwidth=600)
 
 ########## Passion :
 #TODO Likert passion
 
-likert_passion = Likert(frame_quest_participant2,dic_passion,selected_var_passion, text= dico_text["passion"], Sliderwidth=800)
+likert_passion = Likert(frame_quest_participant2, dic_passion, selected_var_passion, text= dico_text["passion"], sliderwidth=800)
 
 ########## Environemment de travail :
 
@@ -1141,7 +1141,7 @@ label_participantET.configure(font=("Helvetica", 25))
 
 #TODO LIKERT BRuIT
 
-likert_bruit = Likert(frame_quest_participant2,dic_bruit,selected_var_bruit, text= dico_text["bruit"], Sliderwidth=653.5)
+likert_bruit = Likert(frame_quest_participant2, dic_bruit, selected_var_bruit, text= dico_text["bruit"], sliderwidth=653.5)
 
 ########## Type de travail :
 
@@ -2574,7 +2574,7 @@ bad_label_1.bind("<Button-1>", lambda event:selected_option_Bad.set("Utilisateur
 
 # TODO Echelle d'importance de l'erreur
 
-likert_importance = Likert(frame_quest,dic_importance,selected_var_importance,text= dico_text["importance"], Sliderwidth=600 )
+likert_importance = Likert(frame_quest, dic_importance, selected_var_importance, text= dico_text["importance"], sliderwidth=600)
 
 
 frame_questCommentaire = ctk.CTkFrame(master=frame_quest, fg_color="#333333")
@@ -2620,7 +2620,7 @@ button_Concentration_Type = ctk.CTkButton(master=frame_quest, text="Retour", com
 
 # TODO Echelle du niveau de concentration
 
-likert_concentration = Likert(frame_quest,dic_concentration,selected_var_concentration, text= dico_text["concentration"], Sliderwidth=425)
+likert_concentration = Likert(frame_quest, dic_concentration, selected_var_concentration, text= dico_text["concentration"], sliderwidth=425)
 likert_concentration.cadre.pack_forget()
 
 # TODO Distraction
@@ -2667,7 +2667,7 @@ entry_Distraction.configure(font=("Helvetica",13))
 selected_optionDistraction.trace_add("write", check_selection)
 
 ##TODO Fatigue
-likert_fatigue = Likert(frame_quest,dic_fatigue,selected_var_fatigue, text= dico_text["fatigue"], Sliderwidth=500)
+likert_fatigue = Likert(frame_quest, dic_fatigue, selected_var_fatigue, text= dico_text["fatigue"], sliderwidth=500)
 ####### Difficulte
 
 frame_questDifficulte = ctk.CTkFrame(master = frame_quest, fg_color="#333333")

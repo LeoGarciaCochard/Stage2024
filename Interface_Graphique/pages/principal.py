@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from dataclasses import dataclass
+import tkinter as tk
 
 from Interface_Graphique.tools.frames import Frame
 from Interface_Graphique.tools.button_quit import ButtonQuitter
@@ -30,10 +31,12 @@ class PagePrincipale:
     renseigner = None
     forget = None
     recap = None
+    ajout_rapide = None
 
     def __post_init__(self):
         self.create()
-        self.label_n_ano.label.configure(text=f"N° Anonymat : \n{dic_informations['n_anonymat']}")
+
+        self.root.after(100,lambda: self.label_n_ano.label.configure(text=f"N° Anonymat : \n{dic_informations['n_anonymat']}"))
 
     def create(self):
         """ Création de la page principale """
@@ -46,7 +49,7 @@ class PagePrincipale:
 
         # Bouton quitter & N° Anonymat
 
-        self.cadre_quit_anonymat = Frame(master=self.page_principale.frame)
+        self.cadre_quit_anonymat = Frame(master=self.page_principale.frame, fg_color="#2b2b2b")
 
         self.bouton_quitter = ButtonQuitter(master=self.cadre_quit_anonymat.frame, only_destroy=False, root=self.root,
                                             placed=False)
@@ -65,13 +68,13 @@ class PagePrincipale:
 
         # Barre Taches
 
-        self.barre_taches = BarreTache(master=self.page_principale.frame, fg_color="#2b2b2b")
+        self.barre_taches = BarreTache(master=self.page_principale.frame, fg_color="#2b2b2b", police=17, py=0 )
 
         # Boutons & aides
 
         self.renseigner = BtnHelp(master=self.page_principale.frame, text_button="Renseigner un incident négatif",
                                   text_help=dico_aide['Erreur'], function=lambda: stimulation(0),
-                                  width=400, height=200, police=30, style="bold")
+                                  width=400, height=200, police=30, style="bold", py=0)
 
         self.forget = BtnHelp(master=self.page_principale.frame, width=300, height=50,
                               text_button="J'ai oublié de renseigner un incident négatif",
