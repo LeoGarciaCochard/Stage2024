@@ -2,6 +2,7 @@ from Interface_Graphique.var_fonc.functions import resource_path
 import pandas as pd
 
 def actualise_taches() :
+    """ Lis le fichier excel des tâches et les met dans la liste taches """
     df_taches = pd.read_excel(resource_path("../Sources/taches.xlsx"))
     global taches
     taches =list(df_taches['Tâches'])
@@ -10,13 +11,63 @@ def actualise_instance_tache(instance) :
     """ On actualise l'instance de la combobox de BarreTache à tâche """
     instance.combobox_tache.combobox.set(dic_informations['selected_var_tache'])
 
+#Anonymat
+def generer_ano() :
+    """ Génère un numéro d'anonymat qui suit le dernier"""
+    df_anonymat = pd.read_excel(resource_path("../Sources/info_participants.xlsx"))
+
+    #On récupère la dernière ligne de la colonne "N_ano" et ajoute 1 pour le nouveau numéro d'ano
+    n_anonymat = int(df_anonymat["N_Ano"].iloc[-1]) + 1 if not df_anonymat.empty else 1
+    dic_informations['n_anonymat'] = n_anonymat
+
+    #Ajoute le n_anonymat à la fin du tableau
+    nouvelle_ligne = pd.DataFrame({"N_Ano": [n_anonymat]})
+    df_anonymat = pd.concat([df_anonymat, nouvelle_ligne], ignore_index=False)
+
+    df_anonymat.to_excel(resource_path("../Sources/info_participants.xlsx"), index=False)
+
+
+
+
+
+dic_informations = {'n_anonymat' : None,
+                    'genre' : None,
+                    'age' : None,
+                    'sommeil' : None,
+                    'troubles_sommeil' : None,
+                    'stress_general' : None,
+                    'cafeine' : None,
+                    'quantite_cafeine' : 0,
+                    'nicotine' : None,
+                    'quantite_nicotine' : 0,
+                    'experience' : None,
+                    'aisance_informatique' : None,
+                    'passion' : None,
+                    'bruit' : None,
+                    'selected_var_tache' : None}
+
+questions = {"age": "Quel est votre âge ?",
+             "genre": "Veillez indiquer votre genre",
+             "sommeil": "Combien d'heures de sommeil avez-vous eu la nuit dernière ?",
+             "troubles_sommeil": "Avez-vous des troubles du sommeil ?",
+             "stress_general": "De manière générale, comment décrivez-vous votre état de stress ?",
+             "cafeine": "Avez-vous consommé de la caféine aujourd'hui ?",
+             "quantite_cafeine": "Combien de tasses de café avez-vous bu aujourd'hui ?",
+             "nicotine": "Avez-vous consommé de la nicotine aujourd'hui ?",
+             "quantite_nicotine": "Combien de cigarettes avez-vous fumé aujourd'hui ?",
+             "experience": "Combien de temps d'expérience avez-vous dans votre domaine ?",
+             "aisance_informatique": "À quel point êtes vous à l'aise avec les outils informatiques ?",
+             "passion": "À quel point aimez-vous ce travail ?",
+             "bruit": "Le niveau de bruit dans votre environnement de travail est :",
+             }
+
 
 taches = []
-
-dic_informations = {'n_anonymat' : None, 'selected_var_tache' : None}
-
-
-
+values_genre = ["Femme","Homme","Autre"]
+values_sommeil = ["Nuit blanche","Moins de 3h","4h","5h","6h","7h","8h","Plus de 9h"]
+values_oui_non = ["Oui","Non"]
+values_quantite = ["0","1","2","3","4","Plus de 5"]
+values_an_exeperience = ["Moins d'un an", "2 ans", "3 ans"," 4 ans", "plus de 5 ans", "plus de 10 ans"]
 
 
 actualise_taches()

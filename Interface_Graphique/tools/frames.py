@@ -17,7 +17,7 @@ class Frame:
     border_width: int = 0
     corner_radius: int = 5
     border_color: str = "#106a43"
-    fg_color: str = "#2b2b2b"
+    fg_color: str = "#333333"
     anchor: str = 'center'
 
     row: int = 0

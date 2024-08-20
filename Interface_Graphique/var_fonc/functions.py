@@ -24,6 +24,7 @@ def passer_definitif(page_actuelle, page_suivante):
     page_suivante.afficher()
 
 
+
 def tout_complet() :
     """ Vérifie si toutes les informations sont complétées """
     return False

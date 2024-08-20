@@ -10,7 +10,6 @@ from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.entries import Entry
 from Interface_Graphique.tools.comboboxes import Combobox
 
-from Interface_Graphique.var_fonc.variables_info import actualise_taches
 from Interface_Graphique.var_fonc.variables_info import taches, dic_informations
 import Interface_Graphique.var_fonc.variables_path as paths
 

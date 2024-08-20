@@ -8,7 +8,7 @@ from Interface_Graphique.tools.buttons import Button
 from Interface_Graphique.tools.button_quit import ButtonQuitter
 from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.entries import Entry
-from Interface_Graphique.var_fonc.variables_info import dic_informations
+from Interface_Graphique.var_fonc.variables_info import dic_informations, generer_ano
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.var_fonc.functions import passer_definitif
 from Interface_Graphique.pages.principal import PagePrincipale
@@ -56,7 +56,7 @@ class PageAcceuil:
                                                  width=300, height=40, police=20)
         self.bouton_participant_existant = Button(master=self.cadre_boutons.frame, text="Utiliser un numéro existant",
                                                   function=self.existant, side=tk.LEFT,
-                                                 width=300, height=40, police=20)
+                                                  width=300, height=40, police=20)
 
         # Cadre existant :
         self.cadre_existant = Frame(master=self.page_acceuil.frame, fg_color="#242424")
@@ -84,7 +84,8 @@ class PageAcceuil:
 
     def nouveau(self):
         page_lettre_information = PageLettreInformation(self.root)
-        passer_definitif(self,page_lettre_information)
+        generer_ano()
+        passer_definitif(self, page_lettre_information)
 
     def existant(self):
         self.cadre_existant.afficher()
@@ -108,4 +109,5 @@ class PageAcceuil:
 
     def destroy(self):
         self.page_acceuil.destroy()
+
 
