@@ -1,5 +1,6 @@
 from Interface_Graphique.var_fonc.functions import resource_path
 from Interface_Graphique.var_fonc.variables_likert import *
+from Interface_Graphique.var_fonc.variables_path import fichier_types_err
 import pandas as pd
 
 def actualise_taches() :
@@ -47,6 +48,17 @@ dic_informations = {'n_anonymat' : None,
                     'bruit' : [dic_bruit[53.5]],
                     'selected_var_tache' : None}
 
+dic_questionnaire = {"nature_incident" : None,
+                     "responsabilite" : None,
+                     "tache" : None,
+                     "importance" : [dic_importance[50]],
+                     "description_incident" : None,
+                     "concentration" : [dic_concentration[50]],
+                     "distraction" : None,
+                     "nature_distraction" : None,
+                     "fatigue" : [dic_fatigue[50]],
+                     "difficulte" : None}
+
 questions = {"age": "Quel est votre âge ?",
              "genre": "Veillez indiquer votre genre",
              "sommeil": "Combien d'heures de sommeil avez-vous eu la nuit dernière ?",
@@ -61,6 +73,20 @@ questions = {"age": "Quel est votre âge ?",
              "passion": "À quel point aimez-vous ce travail ?",
              "bruit": "Le niveau de bruit dans votre environnement de travail est :",
              }
+
+values_difficulte = [
+    "Très Simple",
+    "Simple",
+    "Moyenne",
+    "Difficile",
+    "Très Difficile"
+]
+
+df_types = pd.read_excel(fichier_types_err)
+
+types_options = list(df_types['Types'])
+types_descriptions = list(df_types['Description'])
+types_exemples = list(df_types['Exemple'])
 
 
 taches = []

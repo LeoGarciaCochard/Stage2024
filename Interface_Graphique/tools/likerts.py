@@ -69,6 +69,7 @@ class Likert() :
     ipy: int = 10
     sliderwidth : int | float = 700
     police: int = 15
+    expand: bool = True
 
     def __post_init__(self):
         self.create_likert()
@@ -79,7 +80,7 @@ class Likert() :
         self.slider =LikertSlider(self.cadre, self.var, self.dic, width=self.sliderwidth)
 
     def afficher(self):
-        self.cadre.pack(ipadx=self.ipx, ipady=self.ipy, padx=self.px, pady=self.py, anchor='center')
+        self.cadre.pack(ipadx=self.ipx, ipady=self.ipy, padx=self.px, pady=self.py, anchor='center',expand=self.expand)
         self.slider.pack_slider()
         self.labels.grid_labels()
 

@@ -83,7 +83,7 @@ class PopUpAjouterTache:
 class BarreTache:
     master: ctk.CTkFrame | ctk.CTk
 
-    choix:Literal['priorite','erreur',''] = ''
+    choix:Literal['priorite','questionnaire',''] = ''
 
     row: int = 0
     column: int = 0
@@ -119,7 +119,7 @@ class BarreTache:
         if self.choix == 'priorite':
             self.label_tache.label.configure(text="Quelle est la tâche que vous allez effectuer en priorité ? \n "
                                                   "(Vous pourrez modifier la tâche pars la suite)")
-        elif self.choix == 'erreur':
+        elif self.choix == 'questionnaire':
             self.label_tache.label.configure(text="Quelle était la tâche lors de l'incident ?")
         else:
             self.label_tache.label.configure(text="Quelle est la tâche que vous effetuez actuellement ?")

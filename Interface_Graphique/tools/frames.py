@@ -48,5 +48,8 @@ class Frame:
                         column=self.column,
                         columnspan=self.columnspan)
 
+    def unfix(self):
+        self.frame.grid_forget()
+
     def destroy(self):
         self.frame.destroy()

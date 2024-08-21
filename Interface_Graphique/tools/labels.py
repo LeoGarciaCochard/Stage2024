@@ -16,6 +16,8 @@ class Label:
     py: int | tuple[int, int] = 10
     ipx: int | tuple[int, int] = 5
     ipy: int | tuple[int, int] = 5
+    cursor: str = "arrow"
+    side: str = ctk.TOP
 
     row: int = 0
     column: int = 0
@@ -33,13 +35,15 @@ class Label:
                                   fg_color=self.bg,
                                   font=(self.font, self.police, self.style),
                                   wraplength=1200,
-                                  justify=self.justify) #TODO
+                                  justify=self.justify,
+                                  cursor=self.cursor)
 
     def afficher(self):
         self.label.pack(ipadx=self.ipx,
                         ipady=self.ipy,
                         padx=self.px,
-                        pady=self.py)
+                        pady=self.py,
+                        side=self.side)
 
     def fixer(self):
         self.label.grid(ipadx=self.ipx,

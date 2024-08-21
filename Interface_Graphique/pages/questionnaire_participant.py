@@ -5,9 +5,8 @@ from dataclasses import dataclass
 from Interface_Graphique.tools.frames import Frame
 from Interface_Graphique.tools.buttons import Button
 from Interface_Graphique.tools.button_quit import ButtonQuitter
-from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.likerts import Likert
-from Interface_Graphique.var_fonc.variables_likert import *
+# from Interface_Graphique.var_fonc.variables_likert import *
 
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.tools.formats import FormatTitre, FormatQuestionCombobox

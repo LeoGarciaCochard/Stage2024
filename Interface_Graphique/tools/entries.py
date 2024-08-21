@@ -38,6 +38,7 @@ class Entry:
 
     def get(self):
         return self.entry.get()
+
     def afficher(self):
         self.entry.pack(ipadx=self.ipx,
                         ipady=self.ipy,
@@ -55,3 +56,6 @@ class Entry:
 
     def cacher(self):
         self.entry.pack_forget()
+
+    def destroy(self):
+        self.entry.destroy()

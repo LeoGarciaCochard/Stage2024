@@ -8,6 +8,7 @@ class Tooltip:
         self.text = text
         self.tooltip_window = None
         self.screen_width = widget.winfo_screenwidth()
+        self.wraplength = 750
 
         self.widget.bind("<Enter>", self.show_tooltip)
         self.widget.bind("<Leave>", self.hide_tooltip)
@@ -22,7 +23,7 @@ class Tooltip:
 
         frame = ctk.CTkFrame(self.tooltip_window, fg_color=None)
         frame.pack()
-        label = ctk.CTkLabel(frame, text=self.text, text_color="white", fg_color="black")
+        label = ctk.CTkLabel(frame, text=self.text, text_color="white", fg_color="black", wraplength=self.wraplength)
         label.pack(ipady=5, ipadx=5)
 
         self.tooltip_window.update_idletasks()

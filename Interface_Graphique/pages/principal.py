@@ -11,6 +11,11 @@ from Interface_Graphique.pages.recapitulatif import PageRecapitulatif
 from Interface_Graphique.var_fonc.functions import stimulation, passer
 from Interface_Graphique.var_fonc.variables_textes import dico_aide
 from Interface_Graphique.var_fonc.variables_info import dic_informations
+from Interface_Graphique.pages.questionnaire import PageQuestionnaire
+from Interface_Graphique.pages.recapitulatif import PageRecapitulatif
+
+from Interface_Graphique.var_fonc.variables_pages import pages
+
 
 
 @dataclass
@@ -73,28 +78,58 @@ class PagePrincipale:
         # Boutons & aides
 
         self.renseigner = BtnHelp(master=self.page_principale.frame, text_button="Renseigner un incident négatif",
-                                  text_help=dico_aide['Erreur'], function=lambda: stimulation(0),
+                                  text_help=dico_aide['Erreur'], function=self.renseigner0,
                                   width=400, height=200, police=30, style="bold", py=0)
 
         self.forget = BtnHelp(master=self.page_principale.frame, width=300, height=50,
                               text_button="J'ai oublié de renseigner un incident négatif",
-                              text_help=dico_aide['Forget'], function=self.derouler_forget)
+                              text_help=dico_aide['Forget'], function=self.derouler_forget,
+                              text_label_deroulement="Combien de temps s'est-il écoulé depuis l'incident ? \n "
+                                                     "(En minutes)",
+                              placeholder="Temps en minutes...")
 
         self.recap = BtnHelp(master=self.page_principale.frame, width=300, height=50, text_button="Voir récapitulatif",
                              text_help=dico_aide['Recap'], function=lambda: passer(self, page_recapitulatif))
 
         self.ajout_rapide = AjoutRapide(master=self.page_principale.frame, width=400, height=50,
-                                        text_button=" Ajout Rapide ", text_help=dico_aide['Rapide'],
-                                        function=self.derouler_ajout_rapide, img_width=55, img_height=55)
+                                        text_button="  Ajout Rapide ", text_help=dico_aide['Rapide'],
+                                        function=self.derouler_ajout_rapide, img_width=55, img_height=55,
+                                        text_label_deroulement="Vous pouvez renseigner une brève description "
+                                                               "(Facultatif)", entry_height=50,
+                                        text_button_deroulement="Valider ou ignorer",
+                                        placeholder="Rapide description...")
 
+    def renseigner0(self):
+        """ Stimule(0) car sur le moment et passe à la page questionnaire"""
+        stimulation(0)
+        page_questionnaire1 = PageQuestionnaire(root=self.root)
+        pages["page_questionnaire1"] = page_questionnaire1
+        passer(self, page_questionnaire1)
 
-    def derouler_forget(self):
-        """ Fonction de forget """
-        pass
+    def recapitulatif(self):
+        """ Affiche le récapitulatif """
+        page_recapitulatif = PageRecapitulatif(root=self.root)
+        pages["page_recapitulatif"] = page_recapitulatif
+        passer(self, page_recapitulatif)
 
-    def derouler_ajout_rapide(self):
-        """ Fonction de ajout rapide """
-        pass
+    def derouler_forget(self , event=None):
+        """ Fonction qui affiche les nouveaux éléments pour le forget """
+        try:
+            self.ajout_rapide.retirer_deroulement()
+        except AttributeError:
+            pass
+
+        self.forget.afficher_deroulement()
+
+    def derouler_ajout_rapide(self, event=None):
+        """ Fonction qui affiche les nouveaux éléments pour l'ajout rapide """
+        try:
+            self.forget.retirer_deroulement()
+        except AttributeError:
+            pass
+
+        self.ajout_rapide.afficher_deroulement()
+
 
     def afficher(self):
         self.page_principale.afficher()

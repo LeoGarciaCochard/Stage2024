@@ -23,10 +23,14 @@ class Button:
     police: int = 15
     font: str = 'Helvetica'
     style: str = "normal"
+    fg_color: str = "#2FA572"
 
     row: int = 0
     column: int = 0
     columnspan: int = 1
+
+    x: int = 0
+    y: int = 0
 
     btn = None
     button = None
@@ -36,7 +40,8 @@ class Button:
 
     def create(self):
         self.button = ctk.CTkButton(master=self.master, text=self.text, command=self.function, width=self.width,
-                                    height=self.height, font=(self.font, self.police, self.style))
+                                    height=self.height, font=(self.font, self.police, self.style),
+                                    fg_color=self.fg_color)
 
     def afficher(self):
         self.button.pack(ipadx=self.ipx,
@@ -54,9 +59,17 @@ class Button:
                         column=self.column,
                         columnspan=self.columnspan)
 
+    def unfix(self):
+        self.button.grid_forget()
 
     def cacher(self):
         self.button.pack_forget()
+
+    def placed(self):
+        self.button.place(x=self.x, y=self.y)
+
+    def unplaced(self):
+        self.button.place_forget()
 
 
 @dataclass
@@ -141,6 +154,9 @@ class ButtonImage:
                          row=self.row,
                          column=self.column,
                          columnspan=self.columnspan)
+
+    def unfix(self):
+        self.button.grid_forget()
 
 
     def cacher(self):

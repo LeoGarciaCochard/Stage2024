@@ -29,6 +29,6 @@ def tout_complet() :
     """ Vérifie si toutes les informations sont complétées """
     return False
 
-def stimulation(n) :
+def stimulation(n,minutes=0) :
     """ Fonction de stimulation """
     pass

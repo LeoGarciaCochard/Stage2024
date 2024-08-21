@@ -42,6 +42,7 @@ class Interface:
 from Interface_Graphique.pages.principal import PagePrincipale
 from Interface_Graphique.pages.questionnaire_participant import PageParticipant
 from Interface_Graphique.pages.lettre_information import PageLettreInformation
+from Interface_Graphique.pages.questionnaire import PageQuestionnaire
 
 if __name__ == '__main__':
     app = Interface()
@@ -54,10 +55,12 @@ if __name__ == '__main__':
 
     # page_participant = PageParticipant(app.root)
     # page_participant.afficher()
+    #
+    # page_principale = PagePrincipale(app.root)
+    # page_principale.afficher()
 
-    page_principale = PagePrincipale(app.root)
-    page_principale.afficher()
-
+    page_questionnaire = PageQuestionnaire(app.root)
+    page_questionnaire.afficher()
 
 
     app.run()
