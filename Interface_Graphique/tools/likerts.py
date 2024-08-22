@@ -84,6 +84,8 @@ class Likert() :
         self.slider.pack_slider()
         self.labels.grid_labels()
 
+    def set(self, valeur):
+        self.slider.magnet_likert(valeur)
 
 
 

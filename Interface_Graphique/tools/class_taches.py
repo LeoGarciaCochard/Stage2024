@@ -152,3 +152,7 @@ class BarreTache:
 
     def get_selected(self):
         return self.combobox_tache.combobox.get()
+
+    def set(self, tache):
+        self.combobox_tache.combobox.set(tache)
+        dic_informations['selected_var_tache'] = tache

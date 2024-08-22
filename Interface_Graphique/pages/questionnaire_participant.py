@@ -10,6 +10,7 @@ from Interface_Graphique.tools.likerts import Likert
 
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.tools.formats import FormatTitre, FormatQuestionCombobox
+from Interface_Graphique.var_fonc.recolte_donnes import recolter_donnes_participant
 from Interface_Graphique.var_fonc.variables_info import *
 
 from Interface_Graphique.var_fonc.functions import passer, passer_definitif
@@ -232,9 +233,11 @@ class PageParticipant2:
 
     def termine(self):
 
-        if any(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
+        if all(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
             generer_ano()
+            recolter_donnes_participant()
             passer_definitif(self, pages["page_principale"])
+
 
     def afficher(self):
         self.page_participant_2.afficher()

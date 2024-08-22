@@ -238,4 +238,17 @@ class PageQuestionnaire:
 
         print(dic_questionnaire.items())
 
+    def set_values(self,dic_values):
+
+        self.nature_incident.set(dic_values["nature_incident"])
+        self.selected_var_responsabilite.set(dic_values["responsabilite"])
+        self.barre_tache.set(dic_values["tache"])
+        self.importance.set(dic_values["importance"])
+        self.description.set(dic_values["description_incident"])
+        self.concentration.set(dic_values["concentration"])
+        self.selected_var_distraction.set(dic_values["distraction"])
+        self.distraction.set(dic_values["nature_distraction"])
+        self.fatigue.set(dic_values["fatigue"])
+        self.selected_var_difficulte.set(dic_values["difficulte"])
+
 

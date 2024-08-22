@@ -164,6 +164,27 @@ class PageRecapitulatif:
     def modifier_ligne(self, row_id):
         print("Id de la ligne à modifier : ", row_id)
 
+        df = pd.read_excel(excel_path)
+
+        # Suppression des colonnes à exclure
+        df = df.drop(columns=columns_to_exclude_complete)
+
+        # Trouver l'indice de la ligne correspondant à l'ID spécifié
+        row_modif = int(df.index[df['ID'] == row_id].tolist()[0])
+
+        # Extraire la ligne correspondant à l'ID spécifié
+        ligne = df.loc[df['ID'] == row_id]
+
+        # Supprimer la colonne 'ID'
+        ligne = ligne.drop(columns=['ID'])
+
+        # Convertir la ligne en dictionnaire {nom de colonne : valeur}
+        ligne_dict = ligne.to_dict(orient='records')[0]
+
+
+        passer_definitif(self, pages["page_questionnaire1"])
+        pages["page_questionnaire1"].set_values(ligne_dict)
+
     def verifier_page_1_questionnaire(self, row):
         """ Verifie si les information de la page 1 sont complétées"""
 

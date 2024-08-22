@@ -32,3 +32,5 @@ def tout_complet() :
 def stimulation(n,minutes=0) :
     """ Fonction de stimulation """
     pass
+
+
