@@ -41,17 +41,17 @@ class PagePrincipale:
     def __post_init__(self):
         self.create()
 
-        self.root.after(100,lambda: self.label_n_ano.label.configure(text=f"N° Anonymat : \n{dic_informations['n_anonymat']}"))
-
     def create(self):
         """ Création de la page principale """
 
         page_recapitulatif = PageRecapitulatif(root=self.root)
 
+        ############################################################################################################
         # Frame page d'acceuil
         self.page_principale = Frame(master=self.root, fg_color="#2b2b2b", border_width=2, ipy=10, ipx=100,
                                      fill='both', expand=True)
 
+        ############################################################################################################
         # Bouton quitter & N° Anonymat
 
         self.cadre_quit_anonymat = Frame(master=self.page_principale.frame, fg_color="#2b2b2b")
@@ -64,6 +64,7 @@ class PagePrincipale:
         self.label_n_ano = Label(master=self.cadre_ano.frame, text='N° Anonymat : \n...', police=13,
                                  ipx=3, ipy=3, px=5, py=5)
 
+        ############################################################################################################
         # Titre
 
         self.cadre_titre = Frame(self.page_principale.frame, border_width=3, corner_radius=100, ipx=20, py=(150, 60))
@@ -71,10 +72,12 @@ class PagePrincipale:
         self.label_titre = Label(master=self.cadre_titre.frame, text="Errare humanum est, et machinae".upper(),
                                  police=40, style="bold")
 
+        ############################################################################################################
         # Barre Taches
 
         self.barre_taches = BarreTache(master=self.page_principale.frame, fg_color="#2b2b2b", police=17, py=0 )
 
+        ############################################################################################################
         # Boutons & aides
 
         self.renseigner = BtnHelp(master=self.page_principale.frame, text_button="Renseigner un incident négatif",
@@ -99,18 +102,16 @@ class PagePrincipale:
                                         text_button_deroulement="Valider ou ignorer",
                                         placeholder="Rapide description...")
 
+        ############################################################################################################
+
     def renseigner0(self):
         """ Stimule(0) car sur le moment et passe à la page questionnaire"""
         stimulation(0)
-        page_questionnaire1 = PageQuestionnaire(root=self.root)
-        pages["page_questionnaire1"] = page_questionnaire1
-        passer(self, page_questionnaire1)
+        passer(self, pages["page_questionnaire1"])
 
     def recapitulatif(self):
         """ Affiche le récapitulatif """
-        page_recapitulatif = PageRecapitulatif(root=self.root)
-        pages["page_recapitulatif"] = page_recapitulatif
-        passer(self, page_recapitulatif)
+        passer(self, pages["page_recapitulatif"])
 
     def derouler_forget(self , event=None):
         """ Fonction qui affiche les nouveaux éléments pour le forget """
@@ -132,6 +133,21 @@ class PagePrincipale:
 
 
     def afficher(self):
+        """ Affiche la page principale en retirant les possibles déroulants de forget et ajout_rapide"""
+        try:
+            self.forget.retirer_deroulement()
+        except AttributeError:
+            pass
+
+        try:
+            self.ajout_rapide.retirer_deroulement()
+        except AttributeError:
+            pass
+
+        print("Affiché sera : ", dic_informations['n_anonymat'])
+        self.root.after(100, lambda: self.label_n_ano.label.configure(
+            text=f"N° Anonymat : \n{dic_informations['n_anonymat']}"))
+
         self.page_principale.afficher()
         self.cadre_titre.afficher()
         self.label_titre.afficher()

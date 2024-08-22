@@ -77,10 +77,9 @@ class PageAcceuil:
         try :
             n_anoymat = int(self.entry_n_ano.get())
             dic_informations['n_anonymat'] = n_anoymat
+            print(dic_informations['n_anonymat'])
             if dic_informations['selected_var_tache'] is not None :
-                page_principale = PagePrincipale(self.root)
-                pages["page_principale"] = page_principale
-                passer_definitif(self,page_principale)
+                passer_definitif(self,pages["page_principale"])
 
         except ValueError:
             print("Erreur :" + " Le numéro d'anonymat doit être un entier, et la tâche doit être sélectionnée")

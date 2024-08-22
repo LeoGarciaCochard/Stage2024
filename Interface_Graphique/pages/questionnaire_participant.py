@@ -15,7 +15,6 @@ from Interface_Graphique.var_fonc.variables_info import *
 from Interface_Graphique.var_fonc.functions import passer, passer_definitif
 from Interface_Graphique.var_fonc.variables_pages import pages
 
-from Interface_Graphique.pages.principal import PagePrincipale
 
 
 @dataclass
@@ -137,9 +136,7 @@ class PageParticipant:
         try:
             passer(self, pages["page_participant_2"])
         except KeyError:
-            page_participant_2 = PageParticipant2(self.root)
-            pages["page_participant_2"] = page_participant_2
-            passer(self, page_participant_2)
+            passer(self, pages["page_participant_2"])
 
 
     def afficher(self):
@@ -235,11 +232,9 @@ class PageParticipant2:
 
     def termine(self):
 
-        if all(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
-            page_principale = PagePrincipale(self.root)
-            pages["page_principale"] = page_principale
+        if any(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
             generer_ano()
-            passer_definitif(self, page_principale)
+            passer_definitif(self, pages["page_principale"])
 
     def afficher(self):
         self.page_participant_2.afficher()

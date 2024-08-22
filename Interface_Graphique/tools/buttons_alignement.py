@@ -6,8 +6,9 @@ from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.entries import Entry
 from Interface_Graphique.tools.buttons import Button, ButtonImage
 import Interface_Graphique.var_fonc.variables_path as paths
+from Interface_Graphique.var_fonc.variables_pages import pages
 from Interface_Graphique.var_fonc.variables_textes import dico_aide
-from Interface_Graphique.var_fonc.functions import stimulation
+from Interface_Graphique.var_fonc.functions import stimulation, passer
 
 
 @dataclass
@@ -95,6 +96,7 @@ class BtnHelp:
                 stimulation(1, minutes )
                 stimulation(2)
                 print(minutes)
+                passer(pages["page_principale"], pages['page_questionnaire1'])
 
                 self.retirer_deroulement()
 

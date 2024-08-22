@@ -149,3 +149,6 @@ class BarreTache:
 
     def cacher(self):
         self.cadre_tache.cacher()
+
+    def get_selected(self):
+        return self.combobox_tache.combobox.get()

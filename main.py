@@ -3,6 +3,7 @@ from screeninfo import get_monitors
 from dataclasses import dataclass, field
 
 from Interface_Graphique.pages.acceuil import PageAcceuil
+from Interface_Graphique.var_fonc.variables_pages import pages
 
 
 @dataclass
@@ -40,15 +41,33 @@ class Interface:
         self.root.mainloop()
 
 from Interface_Graphique.pages.principal import PagePrincipale
-from Interface_Graphique.pages.questionnaire_participant import PageParticipant
+from Interface_Graphique.pages.questionnaire_participant import PageParticipant, PageParticipant2
 from Interface_Graphique.pages.lettre_information import PageLettreInformation
+from Interface_Graphique.pages.recapitulatif import PageRecapitulatif
 from Interface_Graphique.pages.questionnaire import PageQuestionnaire
 
 if __name__ == '__main__':
     app = Interface()
 
-    # page_acceuil = PageAcceuil(app.root)
-    # page_acceuil.afficher_page_acceuil()
+    page_participant = PageParticipant(app.root)
+    pages["page_participant"] = page_participant
+
+    page_participant_2 = PageParticipant2(app.root)
+    pages["page_participant_2"] = page_participant_2
+
+    page_principale = PagePrincipale(app.root)
+    pages["page_principale"] = page_principale
+
+    page_questionnaire1 = PageQuestionnaire(root=app.root)
+    pages["page_questionnaire1"] = page_questionnaire1
+
+    page_recapitulatif = PageRecapitulatif(root=app.root)
+    pages["page_recapitulatif"] = page_recapitulatif
+
+
+
+    page_acceuil = PageAcceuil(app.root)
+    page_acceuil.afficher_page_acceuil()
 
     # page_lettre_information = PageLettreInformation(app.root)
     # page_lettre_information.afficher()
@@ -59,8 +78,8 @@ if __name__ == '__main__':
     # page_principale = PagePrincipale(app.root)
     # page_principale.afficher()
 
-    page_questionnaire = PageQuestionnaire(app.root)
-    page_questionnaire.afficher()
+    # page_questionnaire = PageQuestionnaire(app.root)
+    # page_questionnaire.afficher()
 
 
     app.run()
