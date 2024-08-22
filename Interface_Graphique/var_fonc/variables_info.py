@@ -30,6 +30,9 @@ def generer_ano() :
 
 
 
+excel_path = r"C:\Users\milio\PycharmProjects\Stage2024\DATA\2\Detail_Stim_n-2__2024-08-22_14h00m54s.xlsx"
+columns_to_exclude_complete = ["Path","ID Cible" ,"Timecode", "Parameter"]
+columns_to_keep_incomplete = ["ID","Description"]
 
 
 dic_informations = {'n_anonymat' : None,

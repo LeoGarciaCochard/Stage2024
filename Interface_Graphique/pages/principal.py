@@ -44,8 +44,6 @@ class PagePrincipale:
     def create(self):
         """ Création de la page principale """
 
-        page_recapitulatif = PageRecapitulatif(root=self.root)
-
         ############################################################################################################
         # Frame page d'acceuil
         self.page_principale = Frame(master=self.root, fg_color="#2b2b2b", border_width=2, ipy=10, ipx=100,
@@ -92,7 +90,7 @@ class PagePrincipale:
                               placeholder="Temps en minutes...")
 
         self.recap = BtnHelp(master=self.page_principale.frame, width=300, height=50, text_button="Voir récapitulatif",
-                             text_help=dico_aide['Recap'], function=lambda: passer(self, page_recapitulatif))
+                             text_help=dico_aide['Recap'], function=lambda: passer(self, pages["page_recapitulatif"]))
 
         self.ajout_rapide = AjoutRapide(master=self.page_principale.frame, width=400, height=50,
                                         text_button="  Ajout Rapide ", text_help=dico_aide['Rapide'],

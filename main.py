@@ -66,8 +66,8 @@ if __name__ == '__main__':
 
 
 
-    page_acceuil = PageAcceuil(app.root)
-    page_acceuil.afficher_page_acceuil()
+    # page_acceuil = PageAcceuil(app.root) # TODO : Gernerer ano dans fichier excel lors d'existant
+    # page_acceuil.afficher_page_acceuil()
 
     # page_lettre_information = PageLettreInformation(app.root)
     # page_lettre_information.afficher()
@@ -75,8 +75,8 @@ if __name__ == '__main__':
     # page_participant = PageParticipant(app.root)
     # page_participant.afficher()
     #
-    # page_principale = PagePrincipale(app.root)
-    # page_principale.afficher()
+    page_principale = PagePrincipale(app.root)
+    page_principale.afficher()
 
     # page_questionnaire = PageQuestionnaire(app.root)
     # page_questionnaire.afficher()
