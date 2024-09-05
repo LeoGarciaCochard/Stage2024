@@ -6,8 +6,10 @@ from Interface_Graphique.tools.frames import Frame
 from Interface_Graphique.tools.buttons import Button
 from Interface_Graphique.tools.labels import Label
 
-from Interface_Graphique.var_fonc.functions import tout_complet
+from Interface_Graphique.var_fonc.functions import passer
+from Interface_Graphique.var_fonc.variables_pages import pages
 
+from Interface_Graphique.var_fonc.recolte_donnes import stop_recording
 
 
 @dataclass
@@ -32,7 +34,8 @@ class ButtonQuitter:
             self.root.destroy()
         else:
 
-            if tout_complet():
+            if pages["page_recapitulatif"].toutes_infos_completes():
+
                 #on vérifie que tout soit complet
 
                 # arreterRecEEG() #TODO REMETTRE POUR REC INFO
@@ -108,12 +111,13 @@ class PopUpIncomplet:
     def fermer(self):
         """Ferme l'application"""
         self.root.destroy()
+        stop_recording()
         self.root_app.destroy()
 
     def completer(self):
         """Ferme la fenêtre et ouvre la page_recapitulatif afin de compléter les infos"""
-        print("completer")
-        # passer(self, page_recapitulatif)
+        self.root.destroy()
+        passer(pages['page_principale'], pages["page_recapitulatif"])
 
 
     def afficher(self):
@@ -123,4 +127,5 @@ class PopUpIncomplet:
         self.bouton_completer.fixer()
 
         self.root.mainloop()
+
 

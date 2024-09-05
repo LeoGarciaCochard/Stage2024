@@ -1,3 +1,6 @@
+import subprocess
+import threading
+import time
 import customtkinter as ctk
 from dataclasses import dataclass
 import tkinter as tk
@@ -7,17 +10,15 @@ from Interface_Graphique.tools.button_quit import ButtonQuitter
 from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.tools.buttons_alignement import BtnHelp, AjoutRapide
-from Interface_Graphique.pages.recapitulatif import PageRecapitulatif
-from Interface_Graphique.var_fonc.functions import stimulation, passer
+
+from Interface_Graphique.var_fonc.functions import passer
 from Interface_Graphique.var_fonc.variables_textes import dico_aide
-from Interface_Graphique.var_fonc.variables_info import dic_informations
-from Interface_Graphique.pages.questionnaire import PageQuestionnaire
-from Interface_Graphique.pages.recapitulatif import PageRecapitulatif
-
+from Interface_Graphique.var_fonc.variables_info import dic_informations, time_code_start_recording
 from Interface_Graphique.var_fonc.variables_pages import pages
+from Interface_Graphique.var_fonc.recolte_donnes import stimulation
 
-
-
+from Interface_Graphique.var_fonc.variables_path import openvibe_executable, scenario_file_Ecriture
+from Interface_Graphique.var_fonc.variables_info import process
 @dataclass
 class PagePrincipale:
     root: ctk.CTk
@@ -142,7 +143,6 @@ class PagePrincipale:
         except AttributeError:
             pass
 
-        print("Affiché sera : ", dic_informations['n_anonymat'])
         self.root.after(100, lambda: self.label_n_ano.label.configure(
             text=f"N° Anonymat : \n{dic_informations['n_anonymat']}"))
 
@@ -171,3 +171,23 @@ class PagePrincipale:
 
     def destroy(self):
         self.page_principale.destroy()
+
+
+    def lancer_enregistrement_eeg(self):
+        """Lance la fonction lancerRecEEG() dans un thread séparé pour ne pas bloquer l'interface graphique"""
+
+        threading.Thread(target=self.lancerRecEEG).start()
+
+    def lancerRecEEG(self):
+        """Lance le rec"""
+
+        time_code_start_recording.append(time.time())
+
+        try:
+            command = [openvibe_executable, "--no-gui", "--play", scenario_file_Ecriture]
+            process[0] = subprocess.Popen(command)
+        except FileNotFoundError:
+            print("Erreur : fichier exécutable OpenViBE introuvable.")
+        except subprocess.CalledProcessError as e:
+            print(f"Erreur lors de l'exécution de la commande : {e}")
+

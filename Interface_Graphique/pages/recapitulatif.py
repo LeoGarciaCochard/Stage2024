@@ -9,10 +9,10 @@ from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.scrollable_frames import CadreTableauScrollable
 
 
-from Interface_Graphique.var_fonc.functions import passer_definitif
-
+from Interface_Graphique.var_fonc.functions import passer_definitif, resource_path
+from Interface_Graphique.var_fonc.variables_likert import *
 from Interface_Graphique.var_fonc.variables_pages import pages
-from Interface_Graphique.var_fonc.variables_info import (excel_path, columns_to_exclude_complete,
+from Interface_Graphique.var_fonc.variables_info import (directory_paths, columns_to_exclude_complete,
                                                          columns_to_keep_incomplete)
 
 @dataclass
@@ -75,7 +75,9 @@ class PageRecapitulatif:
 
     def create_tableau_complet(self, cadre):
 
-        df = pd.read_excel(excel_path)
+        df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
+        df = df[df['Parameter'] != 2]  # On supprimer les lignes de signalement du moment de l'oubli
+        df = df[df['Parameter'] != 4]  # On supprimer les lignes de l'annulation du signalement
 
         df_filtered = df.drop(columns=columns_to_exclude_complete)
 
@@ -90,7 +92,10 @@ class PageRecapitulatif:
         headers = ["Modifier"] + list(df_filtered.columns)
 
         for col_num, col_name in enumerate(headers):
-            header = Label(master=scrollable_frame, text=col_name, row=0, column=col_num, px=10, py=5,
+
+            col_name_presentale = col_name.replace('_', ' ').title()
+
+            header = Label(master=scrollable_frame, text=col_name_presentale, row=0, column=col_num, px=10, py=5,
                            police=self.police)
             header.fixer()
 
@@ -119,8 +124,9 @@ class PageRecapitulatif:
 
     def create_tableau_incomplet(self,cadre):
 
-        df = pd.read_excel(excel_path)
+        df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
         df = df[df['Parameter'] != 2]  # On supprimer les lignes de signalement du moment de l'oubli
+        df = df[df['Parameter'] != 4] # On supprimer les lignes de l'annulation du signalement
 
         # Créer une instance de la classe
         cadre_tableau = CadreTableauScrollable(master=cadre, bg_color='#333333', width=600, height=400)
@@ -133,7 +139,10 @@ class PageRecapitulatif:
         headers = ["Modifier"] + list(df[columns_to_keep_incomplete].columns)
 
         for col_num, col_name in enumerate(headers):
-            header = Label(master=scrollable_frame, text=col_name, row=0, column=col_num, px=10, py=5,
+
+            col_name_presentale = col_name.replace('_', ' ').title()
+
+            header = Label(master=scrollable_frame, text=col_name_presentale, row=0, column=col_num, px=10, py=5,
                            police=self.police)
             header.fixer()
 
@@ -155,16 +164,15 @@ class PageRecapitulatif:
 
                     filtered_row = row[columns_to_keep_incomplete]
                     for col_num, value in enumerate(filtered_row) :
-                        if str(value) == 'nan' or str(value) == ' ': # TODO : Vérifier si c'est la bonne condition
+                        if str(value) == 'nan' or str(value) == ' ' or str(value) == "":
                             value = '--'
                         cell = Label(master=scrollable_frame, text=value, row=row_num+1, column=col_num+1,
                                      px=10, py=5, police=self.police)
                         cell.fixer()
 
     def modifier_ligne(self, row_id):
-        print("Id de la ligne à modifier : ", row_id)
 
-        df = pd.read_excel(excel_path)
+        df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
 
         # Suppression des colonnes à exclure
         df = df.drop(columns=columns_to_exclude_complete)
@@ -176,23 +184,46 @@ class PageRecapitulatif:
         ligne = df.loc[df['ID'] == row_id]
 
         # Supprimer la colonne 'ID'
-        ligne = ligne.drop(columns=['ID'])
+        # ligne = ligne.drop(columns=['ID'])
 
         # Convertir la ligne en dictionnaire {nom de colonne : valeur}
         ligne_dict = ligne.to_dict(orient='records')[0]
 
+        #  # On modifie le type des valeurs pour les likerts qui nécessitent des int, la valeur associée au string] :
 
+        # On crée une fonction intermédiare nécessaire pour la conversion
+        def get_key_from_value(dic, value):
+            """Récuperer la clef (int) associée à une valeur (str) dans un dictionnaire"""
+            for key, val in dic.items():
+                if val == value:
+                    return key
+
+        for key, value in ligne_dict.items():
+            # pour tous les likerts échanger leurs valeurs
+            if key in ['importance', 'concentration', 'fatigue']:  # TODO : Ajouter les autres likerts si ajout
+                dic = globals().get(f"dic_{key}")
+                if dic:
+                    ligne_dict[key] = get_key_from_value(dic, value)
+            if pd.isna(value):
+                ligne_dict[key] = ''
+
+
+        print("Ligne à modifier : ", ligne_dict)
+
+        #Passer à la page questionnaire avec les valeurs de la ligne à modifier
         passer_definitif(self, pages["page_questionnaire1"])
         pages["page_questionnaire1"].set_values(ligne_dict)
 
     def verifier_page_1_questionnaire(self, row):
         """ Verifie si les information de la page 1 sont complétées"""
 
-        type = str(row['Type'])
-        faute = str(row['Faute'])
-        description = str(row['Description'])
 
-        rep = (type != '' and faute != '' and description != "Description de l'incident négatif...")
+        type = str(row['nature_incident'])
+        faute = str(row['responsabilite'])
+        description = str(row['description_incident'])
+
+
+        rep = (type != '' and faute != '' and description != "Description de l'incident...")
         rep_vide = (type != 'nan' and faute != 'nan' and description != "nan")
 
         return rep and rep_vide
@@ -203,5 +234,17 @@ class PageRecapitulatif:
 
     def destroy(self):
         self.page_recapitulatif.destroy()
+
+    def toutes_infos_completes(self):
+        df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
+        df = df[df['Parameter'] != 2]  # On supprimer les lignes de signalement du moment de l'oubli
+        df = df[df['Parameter'] != 4]  # On supprimer les lignes de l'annulation du signalement
+
+        for row_num, row in df.iterrows():
+            if not self.verifier_page_1_questionnaire(row):
+                return False
+
+        return True
+
 
 

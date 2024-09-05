@@ -8,8 +8,8 @@ from Interface_Graphique.tools.buttons import Button, ButtonImage
 import Interface_Graphique.var_fonc.variables_path as paths
 from Interface_Graphique.var_fonc.variables_pages import pages
 from Interface_Graphique.var_fonc.variables_textes import dico_aide
-from Interface_Graphique.var_fonc.functions import stimulation, passer
-
+from Interface_Graphique.var_fonc.functions import passer
+from Interface_Graphique.var_fonc.recolte_donnes import stimulation
 
 @dataclass
 class BtnHelp:

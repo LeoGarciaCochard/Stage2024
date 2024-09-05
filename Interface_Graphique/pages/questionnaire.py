@@ -13,12 +13,21 @@ from Interface_Graphique.tools.likerts import Likert
 from Interface_Graphique.tools.class_taches import BarreTache
 
 from Interface_Graphique.var_fonc.variables_pages import pages
-from Interface_Graphique.var_fonc.functions import passer_definitif, stimulation
-from Interface_Graphique.var_fonc.variables_info import *
+from Interface_Graphique.var_fonc.functions import passer_definitif
+from Interface_Graphique.var_fonc.variables_info import (dic_informations, dic_questionnaire, dic_donnes_questionnaire ,
+                                                         types_options, types_descriptions, types_exemples,
+                                                         dic_importance, dic_concentration, dic_fatigue,
+                                                         values_difficulte, dico_text, dic_informations_incident)
+from Interface_Graphique.var_fonc.recolte_donnes import stimulation
+import Interface_Graphique.var_fonc.variables_info as variables_info
+
+from Interface_Graphique.var_fonc.recolte_donnes import recolter_questionnaire
 
 @dataclass
 class PageQuestionnaire:
     root: ctk.CTk
+
+    place_holder_description = "Description de l'incident négatif..."
 
     page_questionnaire1 = None
     page_questionnaire2 = None
@@ -69,7 +78,7 @@ class PageQuestionnaire:
                                  var= dic_questionnaire['importance'], text= dico_text["importance"], sliderwidth=600)
 
         self.description = FormatTextBox(master=self.cadre_description.frame, text="Décrivez l'incident négatif :",
-                                         placeholder="Description de l'incident...", textbox_height=80, py=0)
+                                         placeholder=self.place_holder_description, textbox_height=80, py=0)
 
         ############################################################################################################
 
@@ -124,7 +133,7 @@ class PageQuestionnaire:
                                                                 "l'incident négatif s'est produit ?",
                                                            variable=self.selected_var_distraction, fg_color="#2b2b2b",
                                                            text_deroulement="Si oui, par quoi étiez-vous distrait(e) ?",
-                                                           placeholder_deroulement="Décrire distraction...",
+                                                           placeholder_deroulement="Décrire la distraction...",
                                                            py=5)
 
         self.fatigue = Likert(master=self.cadre_concentration.frame, dic=dic_fatigue, expand=True,
@@ -175,17 +184,35 @@ class PageQuestionnaire:
 
         #TODO : envoyer les informations en l'état
 
-        print(dic_questionnaire.items())
+        self.get_answers()
+
+        # On copie le dictionnaire des informations de l'incident pour créer le df avec le reste des infos
+        dic_donnes_questionnaire.append(dic_informations_incident.copy())
+        dic_donnes_questionnaire[-1].update(dic_questionnaire)
+
+        # Les likerts sont des listes, on prend le premier élément
+        for key, value in dic_donnes_questionnaire[-1].items():
+            if isinstance(value, list):
+                try:
+                    dic_donnes_questionnaire[-1][key] = value[0]
+                except IndexError:
+                    pass
+
+        print(dic_donnes_questionnaire[-1])
+
+        recolter_questionnaire()
+
         passer_definitif(self, pages["page_principale"])
 
     def envoyer_complet(self):
         """Envoie les informations si le questionnaire est complet"""
 
         #TODO : envoyer les informations si le questionnaire est complet
+
         self.get_answers()
-        if all(dic_questionnaire.values()):
-            print(dic_questionnaire.values())
-            passer_definitif(self, pages["page_principale"])
+
+        if self.est_complet():
+            self.envoyer_etat()
 
     def afficher(self):
 
@@ -193,6 +220,7 @@ class PageQuestionnaire:
 
     def afficher_page_1(self):
         self.create_page1()
+        self.create_page2()
         self.page_questionnaire1.afficher()
 
     def cacher_page_1(self):
@@ -206,12 +234,12 @@ class PageQuestionnaire:
         self.page_questionnaire2.cacher()
 
     def suivant1(self):
-        self.cacher_page_1()
-        self.afficher_page_2()
+        self.page_questionnaire1.frame.pack_forget()
+        self.page_questionnaire2.afficher()
 
     def retour1(self):
-        self.cacher_page_2()
-        self.afficher_page_1()
+        self.page_questionnaire2.frame.pack_forget()
+        self.page_questionnaire1.afficher()
 
     def destroy(self):
         self.page_questionnaire1.destroy()
@@ -225,20 +253,71 @@ class PageQuestionnaire:
         self.selected_var_difficulte = tk.StringVar(master=self.root)
 
     def get_answers(self):
-        dic_questionnaire["nature_incident"] = self.nature_incident.get_selected()
-        dic_questionnaire["responsabilite"] = self.selected_var_responsabilite.get()
-        dic_questionnaire["tache"] = self.barre_tache.get_selected()
+        """
+        Récupère les réponses du questionnaire et les stocke dans dic_questionnaire
+        Incorporer ici les spécificités de chaque reponse (ex: si place_holder, alors vide)
+        Mais pas spécialement besoin de mettre toutes les réponses en str, on peut les laisser en listes car dans
+        la fonction envoyer_complet, on les transforme en str si besoin
+        """
+
+        # On récupère le type de l'incident sous la forme d'une liste[str][0] donc un str
+        nature_incident = self.nature_incident.get_selected()
+        if nature_incident is not None:
+            dic_questionnaire["nature_incident"] = self.nature_incident.get_selected()[0]  # Type List[str]
+        else:
+            dic_questionnaire["nature_incident"] = ''
+
+        # On récupère la responsabilité sous la forme d'un str
+        dic_questionnaire["responsabilite"] = self.selected_var_responsabilite.get()  # Type str
+
+        # On récupère la tâche sous la forme d'un str
+        dic_questionnaire["tache"] = self.barre_tache.get_selected()  # Type str
+
         # l'importance est déjà obtenue avec le Likert
-        dic_questionnaire["description_incident"] = self.description.get_text()
+        # Type List[str]
+
+        # On récupère la description de l'incident sous la forme d'un str
+        nouvelle_valeur_description = self.description.get_text()
+        if nouvelle_valeur_description == self.place_holder_description:
+            nouvelle_valeur_description = ''
+        dic_questionnaire["description_incident"] = nouvelle_valeur_description  # Type str
+
         # la concentration est déjà obtenue avec le Likert
-        dic_questionnaire["distraction"] = self.selected_var_distraction.get()
-        dic_questionnaire["nature_distraction"] = self.distraction.get_entry_deroulement()
+        # Type List[str]
+
+        # On récupère la distraction sous la forme d'un str
+        dic_questionnaire["distraction"] = self.selected_var_distraction.get() # Type str
+
+        # On récupère la nature de la distraction sous la forme d'un str
+        if dic_questionnaire["distraction"] == "Non":
+            nature_distraction = 'Pas de distraction'
+        elif dic_questionnaire["distraction"] == "Oui":
+            nature_distraction = self.distraction.get_entry_deroulement() # Type str
+        else :
+            nature_distraction = ''
+        dic_questionnaire["nature_distraction"] = nature_distraction  # Type str
+
         # la fatigue est déjà obtenue avec le Likert
-        dic_questionnaire["difficulte"] = self.selected_var_difficulte.get()
+        # Type List[str]
 
-        print(dic_questionnaire.items())
+        # On récupère la difficulté sous la forme d'un str
+        dic_questionnaire["difficulte"] = self.selected_var_difficulte.get() # Type str
 
-    def set_values(self,dic_values):
+        for key, value in dic_questionnaire.items() :
+            print(key, " : ", value)
+
+    def est_complet(self):
+        """ regarde dans dic_questionnaire si toutes les valeurs sont remplies :
+
+        """
+        return all([dic_questionnaire["nature_incident"] != '',
+                   dic_questionnaire["responsabilite"] != '',
+                   dic_questionnaire["description_incident"] != '',
+                   dic_questionnaire["distraction"] != '',
+                   dic_questionnaire["nature_distraction"] != '' or dic_questionnaire["distraction"] == 'Non',
+                   dic_questionnaire["difficulte"] != ''])
+
+    def set_values(self, dic_values):
 
         self.nature_incident.set(dic_values["nature_incident"])
         self.selected_var_responsabilite.set(dic_values["responsabilite"])
@@ -247,7 +326,7 @@ class PageQuestionnaire:
         self.description.set(dic_values["description_incident"])
         self.concentration.set(dic_values["concentration"])
         self.selected_var_distraction.set(dic_values["distraction"])
-        self.distraction.set(dic_values["nature_distraction"])
+        self.distraction.set(choix=dic_values["distraction"], valeur=dic_values["nature_distraction"])
         self.fatigue.set(dic_values["fatigue"])
         self.selected_var_difficulte.set(dic_values["difficulte"])
 

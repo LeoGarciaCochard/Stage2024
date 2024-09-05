@@ -16,23 +16,35 @@ def actualise_instance_tache(instance) :
 #Anonymat
 def generer_ano() :
     """ Génère un numéro d'anonymat qui suit le dernier"""
-    df_anonymat = pd.read_excel(resource_path("../Sources/info_participants.xlsx"))
+    df_anonymat = pd.read_excel(resource_path("../Database/participants.xlsx"))
 
     #On récupère la dernière ligne de la colonne "N_ano" et ajoute 1 pour le nouveau numéro d'ano
-    n_anonymat = int(df_anonymat["N_Ano"].iloc[-1]) + 1 if not df_anonymat.empty else 1
+    n_anonymat = int(df_anonymat["n_anonymat"].iloc[-1]) + 1 if not df_anonymat.empty else 1
     dic_informations['n_anonymat'] = n_anonymat
 
-    #Ajoute le n_anonymat à la fin du tableau
-    nouvelle_ligne = pd.DataFrame({"N_Ano": [n_anonymat]})
-    df_anonymat = pd.concat([df_anonymat, nouvelle_ligne], ignore_index=False)
-
-    df_anonymat.to_excel(resource_path("../Sources/info_participants.xlsx"), index=False)
 
 directory_paths = {}
 
-excel_path = r"C:\Users\milio\PycharmProjects\Stage2024\DATA\2\Detail_Stim_n-2__2024-08-22_14h00m54s.xlsx"
+time_code_start_recording = []
+
+process = [None]
+
+dic_informations_incident = {"ID" : None,
+                   "Path" : None,
+                   "Timecode" : None,
+                   "Parameter" : None,
+                   "ID Cible" : None}
+
+
+columns_excel_initialisation = ["ID", "Path", "Timecode", "Parameter", "ID Cible",
+           "nature_incident", "responsabilite", "tache","importance",
+           "description_incident", "concentration", "distraction",
+           "nature_distraction", "fatigue", "difficulte"]
+
+dic_donnes_questionnaire = []
+
 columns_to_exclude_complete = ["Path","ID Cible" ,"Timecode", "Parameter"]
-columns_to_keep_incomplete = ["ID","Description"]
+columns_to_keep_incomplete = ["ID","description_incident"]
 
 
 dic_informations = {'n_anonymat' : None,

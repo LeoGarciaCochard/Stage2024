@@ -13,7 +13,7 @@ from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.var_fonc.functions import passer_definitif
 from Interface_Graphique.pages.principal import PagePrincipale
 from Interface_Graphique.var_fonc.variables_pages import pages
-
+from Interface_Graphique.var_fonc.recolte_donnes import creer_repertoire_subject
 
 @dataclass
 class PageAcceuil:
@@ -78,7 +78,11 @@ class PageAcceuil:
             n_anoymat = int(self.entry_n_ano.get())
             dic_informations['n_anonymat'] = n_anoymat
             print(dic_informations['n_anonymat'])
-            if dic_informations['selected_var_tache'] is not None :
+            if dic_informations['selected_var_tache'] is not None:
+
+                creer_repertoire_subject()
+                pages["page_principale"].lancer_enregistrement_eeg()
+
                 passer_definitif(self,pages["page_principale"])
 
         except ValueError:

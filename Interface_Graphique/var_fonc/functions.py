@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 def resource_path(relative_path):
     """ On crée un path absolut depuis le relatif """
     try:
@@ -22,15 +23,5 @@ def passer_definitif(page_actuelle, page_suivante):
     """ On détruit la page actuelle et on affiche la suivante """
     page_actuelle.destroy()
     page_suivante.afficher()
-
-
-
-def tout_complet() :
-    """ Vérifie si toutes les informations sont complétées """
-    return False
-
-def stimulation(n,minutes=0) :
-    """ Fonction de stimulation """
-    pass
 
 

@@ -140,7 +140,7 @@ class BarreTache:
     def afficher(self):
         if dic_informations['selected_var_tache'] is not None:
             self.combobox_tache.combobox.set(dic_informations['selected_var_tache'])
-            print("tache : ", dic_informations['selected_var_tache'])
+            # print("tache : ", dic_informations['selected_var_tache'])
 
         self.cadre_tache.afficher()
 

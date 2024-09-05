@@ -10,7 +10,7 @@ from Interface_Graphique.tools.likerts import Likert
 
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.tools.formats import FormatTitre, FormatQuestionCombobox
-from Interface_Graphique.var_fonc.recolte_donnes import recolter_donnes_participant
+from Interface_Graphique.var_fonc.recolte_donnes import recolter_donnes_participant, creer_repertoire_subject
 from Interface_Graphique.var_fonc.variables_info import *
 
 from Interface_Graphique.var_fonc.functions import passer, passer_definitif
@@ -194,7 +194,7 @@ class PageParticipant2:
 
         self.aisance_informatique = Likert(master= self.page_participant_2.frame, dic=dic_aisance_informatique,
                                              var=dic_informations['aisance_informatique'],
-                                             text= dico_text["habilite_inf"], sliderwidth=600)
+                                             text= dico_text["habilite_inf"], sliderwidth=700)
 
         self.passion = Likert(master= self.page_participant_2.frame, dic=dic_passion,
                               var=dic_informations['passion'], text= dico_text["passion"], sliderwidth=800)
@@ -233,9 +233,16 @@ class PageParticipant2:
 
     def termine(self):
 
-        if all(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
+        # Les likerts sont des listes, on prend le premier élément
+        for key, value in dic_informations.items():
+            if isinstance(value, list):
+                dic_informations[key] = value[0]
+
+        if any(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
             generer_ano()
             recolter_donnes_participant()
+            creer_repertoire_subject()
+            pages["page_principale"].lancer_enregistrement_eeg()
             passer_definitif(self, pages["page_principale"])
 
 
