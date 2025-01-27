@@ -1,12 +1,26 @@
 # Interface graphique pour l'utilisateur participant à l'étude sur les potentiels d'erreur en milieu écologique
 
-### Refactor en cours,  je suis en train d'améliorer le code pour le rendre plus lisible et réutilisable.
+### Description
 
+Dans le dossier `Interface_Graphique`, vous trouverez le fichier `interface1.py` qui est le premier fichier de 
+l'interface graphique que je vous ai envoyé par mail, le code fonctionne mais n'est absolument pas modulable.
+Les dossiers `pages`, `tools` et `var_fonc` sont des dossiers qui contiennent des les fichiers python qui sont utilisés 
+dans le `main.py` pour l'interface en poo.
+
+Le fichier `main.py` est le fichier principal de l'interface graphique en POO
+
+Le dossier `Database` est l'emplacement de récolte des données de l'étude sous format BIDS.
+Celui de `DATA` est l'ancien emplacement de récolte des données de l'étude lié au fichier `interface1.py`.
+
+Le dossier `OpenVibe` contient les scénarios OpenVibe utilisées pour l'acquisition des données, les dossiers 
+d'enregistrement depuis openvibe ainsi que le script LUA pour placer les stimulations.
 
 ## Information
 
-Pour déploiement sur la machine finale, modifier les chemins absolus dans le code `main.py` 
+Pour déploiement sur la machine finale, modifier les chemins absolus dans le code 
+`Interface_Graphique/var_fonc/variables_paths.py` 
 Ainsi que dans les boîtes OpenVibe.
+Et dans le script LUA l.166
 
 (Pas pour le pilote).
 

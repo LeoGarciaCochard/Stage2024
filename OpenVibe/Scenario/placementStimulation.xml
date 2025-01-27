@@ -7,41 +7,6 @@
 	<Outputs></Outputs>
 	<Boxes>
 		<Box>
-			<Identifier>(0x00000747, 0x0000363a)</Identifier>
-			<Name>LSL Communication</Name>
-			<AlgorithmClassIdentifier>(0xc07934f5, 0x9390e102)</AlgorithmClassIdentifier>
-			<Attributes>
-				<Attribute>
-					<Identifier>(0x17ee7c08, 0x94c14893)</Identifier>
-					<Value></Value>
-				</Attribute>
-				<Attribute>
-					<Identifier>(0x1fa7a38f, 0x54edbe0b)</Identifier>
-					<Value>144</Value>
-				</Attribute>
-				<Attribute>
-					<Identifier>(0x207c9054, 0x3c841b63)</Identifier>
-					<Value>816</Value>
-				</Attribute>
-				<Attribute>
-					<Identifier>(0x30a4e5c9, 0x83502953)</Identifier>
-					<Value></Value>
-				</Attribute>
-				<Attribute>
-					<Identifier>(0x4e7b798a, 0x183beafb)</Identifier>
-					<Value>(0x8c5c26fc, 0x3ec93181)</Value>
-				</Attribute>
-				<Attribute>
-					<Identifier>(0x527ad68d, 0x16d746a0)</Identifier>
-					<Value></Value>
-				</Attribute>
-				<Attribute>
-					<Identifier>(0xfba64161, 0x65304e21)</Identifier>
-					<Value></Value>
-				</Attribute>
-			</Attributes>
-		</Box>
-		<Box>
 			<Identifier>(0x00002b5a, 0x000004e5)</Identifier>
 			<Name>Generic stream reader</Name>
 			<AlgorithmClassIdentifier>(0x6468099f, 0x0370095a)</AlgorithmClassIdentifier>
@@ -60,7 +25,7 @@
 					<TypeIdentifier>(0x330306dd, 0x74a95f98)</TypeIdentifier>
 					<Name>Filename</Name>
 					<DefaultValue></DefaultValue>
-					<Value>C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/record.ov</Value>
+					<Value>C:/Users/milio/PycharmProjects/Stage2024/OpenVibe/enregistrement_en_cours/record.ov</Value>
 					<Modifiability>false</Modifiability>
 				</Setting>
 			</Settings>
@@ -110,7 +75,7 @@
 					<TypeIdentifier>(0xb0d0db45, 0x49cbc34a)</TypeIdentifier>
 					<Name>Lua Script</Name>
 					<DefaultValue></DefaultValue>
-					<Value>C:/Users/milio/PycharmProjects/Stage/OpenVibe/ScriptLua/algoLuaListe.lua</Value>
+					<Value>C:/Users/milio/PycharmProjects/Stage2024/OpenVibe/ScriptLua/algoLuaListe.lua</Value>
 					<Modifiability>false</Modifiability>
 				</Setting>
 			</Settings>
@@ -172,7 +137,7 @@
 					<TypeIdentifier>(0x330306dd, 0x74a95f98)</TypeIdentifier>
 					<Name>Filename</Name>
 					<DefaultValue>record-[$core{date}-$core{time}].ov</DefaultValue>
-					<Value>C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.ov</Value>
+					<Value>C:/Users/milio/PycharmProjects/Stage2024/OpenVibe/enregistrements_avec_stim/recordStim.ov</Value>
 					<Modifiability>false</Modifiability>
 				</Setting>
 				<Setting>
@@ -347,7 +312,7 @@
 					<TypeIdentifier>(0x330306dd, 0x74a95f98)</TypeIdentifier>
 					<Name>Filename</Name>
 					<DefaultValue>record-[$core{date}-$core{time}].edf</DefaultValue>
-					<Value>C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStimBackUp-[$core{date}-$core{time}].edf</Value>
+					<Value>C:/Users/milio/PycharmProjects/Stage2024/OpenVibe/enregistrements_avec_stim/recordStimBackUp-[$core{date}-$core{time}].edf</Value>
 					<Modifiability>false</Modifiability>
 				</Setting>
 			</Settings>
@@ -397,7 +362,7 @@
 					<TypeIdentifier>(0x330306dd, 0x74a95f98)</TypeIdentifier>
 					<Name>Filename</Name>
 					<DefaultValue>record-[$core{date}-$core{time}].edf</DefaultValue>
-					<Value>C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrements_avec_stim/recordStim.edf</Value>
+					<Value>C:/Users/milio/PycharmProjects/Stage2024/OpenVibe/enregistrements_avec_stim/recordStim.edf</Value>
 					<Modifiability>false</Modifiability>
 				</Setting>
 			</Settings>

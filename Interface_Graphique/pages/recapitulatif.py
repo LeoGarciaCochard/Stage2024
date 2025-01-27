@@ -122,11 +122,14 @@ class PageRecapitulatif:
                                      px=10, py=5, police=self.police)
                         cell.fixer()
 
-    def create_tableau_incomplet(self,cadre):
+    def create_tableau_incomplet(self, cadre):
 
         df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
         df = df[df['Parameter'] != 2]  # On supprimer les lignes de signalement du moment de l'oubli
         df = df[df['Parameter'] != 4] # On supprimer les lignes de l'annulation du signalement
+
+        # Retiré les paramètres annulés :
+
 
         # Créer une instance de la classe
         cadre_tableau = CadreTableauScrollable(master=cadre, bg_color='#333333', width=600, height=400)

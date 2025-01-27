@@ -1,5 +1,5 @@
 import subprocess
-
+import shutil
 import pandas as pd
 import os
 import time
@@ -44,10 +44,10 @@ def creer_repertoire_subject():
         df.set_index('ID', inplace=True)
         df.to_excel(path_excel_beh)
 
-    if not os.path.exists(path_time_codes):
-        df = pd.DataFrame(columns=[list(dic_informations_incident)])
-        df.set_index('ID', inplace=True)
-        df.to_csv(path_time_codes)
+    os.path.exists(path_time_codes)
+    df = pd.DataFrame(columns=["ID", "Timecode", "Parameter"])
+    df.set_index('ID', inplace=True)
+    df.to_csv(path_time_codes)
 
     # On ajoute les chemins au dictionnaire
     directory_paths["path_sub"] = path_sub
@@ -80,7 +80,7 @@ def recolter_donnes_participant():
     # Sauvegarder le fichier Excel
     updated_df.to_excel(path_participants)
 
-def recolter_questionnaire():
+def recolter_questionnaire(num_dict):
     """
     Récupère les informations du questionnaire dans dic_questionnaire et les met dans le fichier excel
     ../Database/sub-XX/beh/sub-XX_task_questionnaire_beh.xlsx
@@ -89,25 +89,53 @@ def recolter_questionnaire():
     global dic_donnes_questionnaire
 
     # On transforme le dictionnaire en DataFrame
-    # print("Avant problème : ", dic_donnes_questionnaire)
-    df = pd.DataFrame([dic_donnes_questionnaire[-1]])
-    # print("Avant problème : ",df.columns)
 
+    print(f"\n\n\nOn arrive dans recolter_questionnaire avec num_dict = {num_dict}\nEt dic_donnes_questionnaire =")
+    for dic in dic_donnes_questionnaire:
+        print(dic)
+
+    if num_dict != -1 :
+        print("\nComme num_dict est différent de -1, on va chercher le dictionnaire correspondant car il faut le modifier")
+    # On récupère le dic dont la clé est l'ID de l'incident
+        for dico in dic_donnes_questionnaire:
+            print(f"\nOn regarde le dico :\n{dico}")
+            print(f"dico['ID'] == num_dict : {dico['ID'] == num_dict}")
+            if dico["ID"] == num_dict:
+                dic_pour_enregistrement = dico
+                break
+    else:
+        dic_pour_enregistrement = dic_donnes_questionnaire[-1]
+
+    print(f"\nLe dictionnaire à modifier est donc : \n{dic_pour_enregistrement}") # Pourquoi forcément modifier ??
+
+    df = pd.DataFrame(dic_pour_enregistrement, index=[0])
+
+    print(f"\n\nOn crée un DataFrame avec ce dictionnaire : \n{df}")
     df.set_index('ID', inplace=True)
 
     if os.path.exists(directory_paths["path_excel_beh"]):
         # Si le fichier existe, charger le fichier existant
         existing_df = pd.read_excel( directory_paths["path_excel_beh"], index_col=0)
-        # Ajouter la nouvelle ligne
-        updated_df = pd.concat([existing_df, df])
+        # Récupérer l'ID à mettre à jour ou à ajouter
+        id_to_update = df.index[0]
+        # Vérifier si l'ID existe déjà
+        if id_to_update in list(existing_df.index):
+            # Mettre à jour la ligne existante
+            existing_df.loc[id_to_update] = df.iloc[0]
+        else:
+            # Ajouter une nouvelle ligne
+            existing_df = pd.concat([existing_df, df])
     else:
-        # Si le fichier n'existe pas, le DataFrame est le seul contenu
-        updated_df = df
+        # Créer un nouveau DataFrame
+        existing_df = df
 
-    # Sauvegarder le fichier Excel
-    updated_df.to_excel(directory_paths["path_excel_beh"])
+        # Enregistrer le DataFrame mis à jour
 
-def stimulation(n,minutes=0) :
+    print("Nouveau fichier :{existing_df} ")
+
+    existing_df.to_excel(directory_paths["path_excel_beh"])
+
+def stimulation(n,minutes=0, description='') :
     """ Fonction de stimulation :
 
     Paramètre : 0 si l'erreur est déclarée sur le moment
@@ -132,15 +160,51 @@ def stimulation(n,minutes=0) :
     dic_informations_incident["Timecode"] = temps_stim
 
     if n == 2 :
-        dic_informations_incident["ID Cible"] = dernier_id
+        dic_informations_incident["ID Cible"] = dernier_id +2
+
+    elif n == 3 :
+
+        dic_donnes_questionnaire.append(dic_informations_incident.copy())
+
     elif n == 4 :
         dic_informations_incident["ID Cible"] = dernier_id
 
-    # Ajouter les informations dans le fichier excel
-    df = pd.read_csv(directory_paths["path_time_codes"])
-    nouvelle_ligne = pd.DataFrame([dic_informations_incident])
-    df = pd.concat([df, nouvelle_ligne], ignore_index=True)
-    df.to_csv(directory_paths["path_time_codes"], index=False)
+
+### Ajouter les informations dans le fichier time_codes pour open Vibe
+
+    df = pd.read_csv(directory_paths["path_time_codes"], sep=',') # Ouvre le Excel et récupère les infos
+    # print(df)
+
+    # Ajouter à df la ligne contenant les colonnes ID, Timecode, Parameter:
+    nouvelle_ligne = pd.DataFrame([dic_informations_incident]) # Création d'un nouveau DF à concatener
+    nouvelle_ligne = nouvelle_ligne[["ID", "Timecode", "Parameter"]] # On garde que les colonnes ID, Timecode, Parameter
+
+    # print(f"nouvelle ligne : \n{nouvelle_ligne}")
+
+
+    df = pd.concat([df, nouvelle_ligne], ignore_index=True) # Concatenation
+    df.to_csv(directory_paths["path_time_codes"], index=False) # Enregistrement
+
+    # print(df)
+
+#### Fichier Excel
+
+    #TODO :
+    # ID cible
+    # Description rapide
+
+
+    df = pd.read_excel(directory_paths["path_excel_beh"])  # Ouvre le Excel et récupère les infos
+    nouvelle_ligne = pd.DataFrame([dic_informations_incident])  # Création d'un nouveau DF à concatener
+
+
+    if n == 3 : # ajout de la description rapide
+        nouvelle_ligne["description_incident"] = description
+
+
+    # print(f"df :\n{df}\n\nligne à rajouter : \n{nouvelle_ligne}")
+    df = pd.concat([df, nouvelle_ligne], ignore_index=True)  # Concatenation
+    df.to_excel(directory_paths["path_excel_beh"], index=False)  # Enregistrement
 
 def recupere_dernier_id() :
     """ Récupère le dernier ID dans le fichier excel """
@@ -193,6 +257,7 @@ def ranger_edf():
                                 f"{format_count_edf_files(count_edf_files + 1)}_eeg.edf")
 
     directory_paths["path_edf_eeg"] = path_edf_eeg
+
 
     try:
         shutil.move(path_recordStim_edf, directory_paths["path_edf_eeg"])

@@ -85,7 +85,8 @@ class BtnHelp:
         """
 
         if self.text_help == dico_aide['Rapide']:
-            stimulation(3)
+            print(" --> Simulation3")
+            stimulation(3, description = self.entry_deroulement.get())
             print(self.entry_deroulement.get())
 
             self.retirer_deroulement()
@@ -93,8 +94,8 @@ class BtnHelp:
         elif self.text_help == dico_aide['Forget']:
             try:
                 minutes = int(self.entry_deroulement.get())
-                stimulation(1, minutes )
                 stimulation(2)
+                stimulation(1, minutes )
                 print(minutes)
                 passer(pages["page_principale"], pages['page_questionnaire1'])
 
@@ -114,6 +115,10 @@ class BtnHelp:
         self.entry_deroulement.fixer()
 
         self.cadre_deroulement.fixer()
+
+        self.entry_deroulement.entry.focus_set()
+
+        self.entry_deroulement.entry.bind("<Return>", lambda event: self.valider())
 
     def retirer_deroulement(self):
         self.entry_deroulement.destroy()

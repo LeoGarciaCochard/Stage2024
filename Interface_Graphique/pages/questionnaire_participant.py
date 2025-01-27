@@ -238,7 +238,7 @@ class PageParticipant2:
             if isinstance(value, list):
                 dic_informations[key] = value[0]
 
-        if any(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
+        if all(key == "n_anonymat" or value is not None for key, value in dic_informations.items()):
             generer_ano()
             recolter_donnes_participant()
             creer_repertoire_subject()

@@ -29,6 +29,9 @@ class PageQuestionnaire:
 
     place_holder_description = "Description de l'incident négatif..."
 
+    modifier = False
+    num_dic: int = -1
+
     page_questionnaire1 = None
     page_questionnaire2 = None
     bouton_annuler = None
@@ -176,7 +179,13 @@ class PageQuestionnaire:
 
     def annuler(self):
         """Annule le renseignement, donc stimule(4) pour signaler l'annulation, puis retourne à la page principale"""
-        stimulation(4)
+        if not self.modifier :
+            stimulation(4)
+            print(f"\n\n\n J'annule e, stimulant, {self.modifier} \n\n\n")
+
+            self.modifier = False
+
+        print(f"\n\n\n J'annule sans stimuler, {self.modifier} \n\n\n")
         passer_definitif(self, pages["page_principale"])
 
     def envoyer_etat(self):
@@ -184,25 +193,60 @@ class PageQuestionnaire:
 
         #TODO : envoyer les informations en l'état
 
+        print("_______________________________\n\nDébut de envoyer_etat : \n"
+              "On récupère les réponses\n\n")
         self.get_answers()
 
-        # On copie le dictionnaire des informations de l'incident pour créer le df avec le reste des infos
-        dic_donnes_questionnaire.append(dic_informations_incident.copy())
-        dic_donnes_questionnaire[-1].update(dic_questionnaire)
+        print(f"de base voici le dic_donnes_questionnaire :")
+        for dic in dic_donnes_questionnaire:
+            print(dic)
+
+
+        print(f"\nModifier = {self.modifier} donc \n")
+        # On copie le dictionnaire des informations de l'incident pour créer le df avec le reste des informations
+        if not self.modifier:
+            dic_donnes_questionnaire.append(dic_informations_incident.copy())
+            print(f"On rajoute les information dans un nouveau dic de dic_donnes_questionnaire :")
+            for dic in dic_donnes_questionnaire:
+                print(dic)
+
+        # On attribue à index_dic l'index de la liste dic_donnes_questionnaire qui correspond au numéro du dic dont l'index = num_dic
+
+        index_dic = -1
+        for i in range(len(dic_donnes_questionnaire)):
+            print(f"\nOn regarde le dico :\n{dic_donnes_questionnaire[i]}")
+            print(f"['ID'] == num_dict : {dic_donnes_questionnaire[i]['ID'] == self.num_dic}")
+            if dic_donnes_questionnaire[i]['ID'] == self.num_dic:
+                index_dic = i
+                break
+
+        print(f"\nOn met à jour l'élément {index_dic} de dic_donnes_questionnaire avec les informations du questionnaire :")
+        dic_donnes_questionnaire[index_dic].update(dic_questionnaire) # TODO PAS LE DERNIER MAIS LE NUM_DIC
+        print(dic_donnes_questionnaire[index_dic])
+
+
 
         # Les likerts sont des listes, on prend le premier élément
-        for key, value in dic_donnes_questionnaire[-1].items():
+        for key, value in dic_donnes_questionnaire[index_dic].items():
             if isinstance(value, list):
                 try:
-                    dic_donnes_questionnaire[-1][key] = value[0]
+                    dic_donnes_questionnaire[index_dic][key] = value[0]
                 except IndexError:
                     pass
 
-        print(dic_donnes_questionnaire[-1])
+        print(f"\nNum_dic = {self.num_dic} et on passe à récolter questionnaire\n__________________________")
 
-        recolter_questionnaire()
+        if self.modifier:
+            recolter_questionnaire(self.num_dic)
+        else :
+            recolter_questionnaire(self.num_dic)
 
         passer_definitif(self, pages["page_principale"])
+
+        self.modifier = False
+        self.num_dic = -1
+
+        print("Et on réinitialise les variables : mofiier = False et num_dic = -1\n\n_______________________________\n\n")
 
     def envoyer_complet(self):
         """Envoie les informations si le questionnaire est complet"""
@@ -303,7 +347,7 @@ class PageQuestionnaire:
         # On récupère la difficulté sous la forme d'un str
         dic_questionnaire["difficulte"] = self.selected_var_difficulte.get() # Type str
 
-        for key, value in dic_questionnaire.items() :
+        for key, value in dic_questionnaire.items() : #TODO : A enlever
             print(key, " : ", value)
 
     def est_complet(self):
@@ -318,6 +362,9 @@ class PageQuestionnaire:
                    dic_questionnaire["difficulte"] != ''])
 
     def set_values(self, dic_values):
+
+        self.modifier = True
+        self.num_dic = dic_values["ID"]
 
         self.nature_incident.set(dic_values["nature_incident"])
         self.selected_var_responsabilite.set(dic_values["responsabilite"])

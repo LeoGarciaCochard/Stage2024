@@ -44,6 +44,20 @@ class LikertSlider:
 
     def magnet_likert(self, valeur_actuelle):
         """Magnetise la valeur à la plus proche sur l'echelle de likert """
+        # print("val actuelle :", valeur_actuelle)
+
+        try:
+            valeur_actuelle = float(valeur_actuelle)
+        except:
+            pass
+        try:
+            valeur_actuelle = int(valeur_actuelle)
+        except:
+            pass
+
+        if valeur_actuelle == '':
+            valeur_actuelle=50
+
         nouvelle_val = min(self.liste, key=lambda val: abs(val - valeur_actuelle))
         self.slider.set(nouvelle_val)
         self.selected_var[0] = self.dic[nouvelle_val]

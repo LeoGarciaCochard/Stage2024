@@ -163,7 +163,7 @@ end
 -- Fonction principale du script
 function process(box)
     -- Lire le fichier CSV
-    local file_path = "C:/Users/milio/PycharmProjects/Stage/OpenVibe/enregistrement_en_cours/timecodes.csv"  -- Remplacez par le chemin de votre fichier CSV
+    local file_path = "C:/Users/milio/PycharmProjects/Stage2024/OpenVibe/enregistrement_en_cours/timecodes.csv"  -- Remplacer par le chemin
     local csv = read_csv(file_path)
     
     -- Vérifier si le CSV a été correctement lu
