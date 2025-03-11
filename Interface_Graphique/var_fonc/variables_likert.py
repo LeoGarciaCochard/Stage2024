@@ -3,23 +3,23 @@
 #Likert
 
 dic_stress= {
-    0: "Sans stress",
-    16: "Pas trop stressé(e)",
-    33: "Légèrement stressé(e)",
-    48.5: "Neutre",
-    66: "Assez stressé(e)",
+    0: "Aucun stress",
+    16: "Très peu stressé(e)",
+    33: "Peu stressé(e)",
+    48.5: "Modérément",
+    66: "Plutôt stressé(e)",
     83: "Très stressé(e)",
     100: "Extrêmement stressé(e)"
 }
 
 dic_aisance_informatique = {
-    0: "Aucunes compétences",
-    16: "Très peu compétent(e)",
-    39: "Peu compétent(e)",
-    53: "Moyen",
-    66: "Compétent(e)",
-    83: "Très compétent(e)",
-    100: "Extrêmement compétent(e)"
+    0: "Pas dutout à l'aise",
+    16: "Très peu à l’aise",
+    39: "Peu à l’aise",
+    53: "Moyennement",
+    66: "Plutôt à l’aise",
+    83: "Très à l’aise",
+    100: "Extrêmement à l’aise"
 }
 
 dic_passion = {

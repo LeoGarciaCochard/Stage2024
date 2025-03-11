@@ -6,6 +6,9 @@ img_btn_hover = resource_path("../Sources/btn_f.png")
 img_aide = resource_path("../Sources/aide.png")
 img_aide_hover = resource_path("../Sources/aide_f.png")
 
+img_btn_micro = resource_path("../Sources/voice_rec.png")
+img_btn_micro_f = resource_path("../Sources/voice_rec_f.png")
+
 fichier_types_err = resource_path("../Sources/types_err.xlsx")
 
 openvibe_executable = r"C:\Program Files\openvibe-3.6.0-64bit\bin\openvibe-designer.exe"

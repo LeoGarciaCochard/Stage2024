@@ -201,7 +201,12 @@ function process(box)
 
                 elseif  stimulation_info.parameter == 4 then
                     stimulation_id = 0x00008104  -- Label pour paramètre 4
+
+                elseif  stimulation_info.parameter == 5 then
+                    stimulation_id = 0x00008105  -- Label pour paramètre 5
                 end
+
+
                 
                 -- Envoyer la stimulation
                 box:send_stimulation(1, stimulation_id, current_time, 0)

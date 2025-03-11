@@ -76,8 +76,8 @@ class PageRecapitulatif:
     def create_tableau_complet(self, cadre):
 
         df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
-        df = df[df['Parameter'] != 2]  # On supprimer les lignes de signalement du moment de l'oubli
-        df = df[df['Parameter'] != 4]  # On supprimer les lignes de l'annulation du signalement
+        df = df[df['Parameter'] != 2]  # On supprime les lignes de signalement du moment de l'oubli
+        df = df[df['Parameter'] != 4]  # On supprime les lignes de l'annulation du signalement
 
         df_filtered = df.drop(columns=columns_to_exclude_complete)
 
@@ -125,8 +125,8 @@ class PageRecapitulatif:
     def create_tableau_incomplet(self, cadre):
 
         df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
-        df = df[df['Parameter'] != 2]  # On supprimer les lignes de signalement du moment de l'oubli
-        df = df[df['Parameter'] != 4] # On supprimer les lignes de l'annulation du signalement
+        df = df[df['Parameter'] != 2]  # On supprime les lignes de signalement du moment de l'oubli
+        df = df[df['Parameter'] != 4] # On supprime les lignes de l'annulation du signalement
 
         # Retiré les paramètres annulés :
 

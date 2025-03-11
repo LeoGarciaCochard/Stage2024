@@ -194,7 +194,7 @@ class PageParticipant2:
 
         self.aisance_informatique = Likert(master= self.page_participant_2.frame, dic=dic_aisance_informatique,
                                              var=dic_informations['aisance_informatique'],
-                                             text= dico_text["habilite_inf"], sliderwidth=700)
+                                             text= dico_text["habilite_inf"], sliderwidth=650)
 
         self.passion = Likert(master= self.page_participant_2.frame, dic=dic_passion,
                               var=dic_informations['passion'], text= dico_text["passion"], sliderwidth=800)

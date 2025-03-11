@@ -30,6 +30,8 @@ def creer_repertoire_subject():
     path_sub = resource_path(f"../Database/sub-{n_anonymat}")
     path_eeg = os.path.join(path_sub, "eeg")
     path_beh = os.path.join(path_sub, "beh")
+    path_audio = os.path.join(path_sub, "audio")
+
     path_excel_beh = os.path.join(path_beh, f"sub-{n_anonymat}_task-work_questionnaire_beh.xlsx")
     path_time_codes = resource_path('../OpenVibe/enregistrement_en_cours/timecodes.csv')
 
@@ -37,6 +39,7 @@ def creer_repertoire_subject():
     os.makedirs(path_sub, exist_ok=True)
     os.makedirs(path_eeg, exist_ok=True)
     os.makedirs(path_beh, exist_ok=True)
+    os.makedirs(path_audio, exist_ok=True)
 
         # Créer le fichier excel vide s'il n'existe pas déjà
     if not os.path.exists(path_excel_beh):
@@ -53,6 +56,7 @@ def creer_repertoire_subject():
     directory_paths["path_sub"] = path_sub
     directory_paths["path_eeg"] = path_eeg
     directory_paths["path_beh"] = path_beh
+    directory_paths["path_audio"] = path_audio
     directory_paths["path_excel_beh"] = path_excel_beh
     directory_paths["path_time_codes"] = path_time_codes
 
@@ -143,6 +147,7 @@ def stimulation(n,minutes=0, description='') :
                 2 le moment ou l'erreur est déclarée à posteriori
                 3 Ajout rapide
                 4 Anulation d'une erreur
+                5 Ajout d'une erreur vocale
     """
 
     #       Temps actuel - temps passé depuis l'erreur - du lancement du record

@@ -4,6 +4,19 @@ from typing import List, Dict
 
 from Interface_Graphique.var_fonc.variables_likert import *
 
+green1 = "#97e500"
+green2 = "#3fae35"
+green3 = "green"
+
+white =  "#f9df00"
+
+red1 = "#f5b212"
+red2 = "#ef3f14"
+red3 = "red"
+
+
+
+
 @dataclass
 class LikertLabel:
     master_frame: ctk.CTkFrame
@@ -14,7 +27,7 @@ class LikertLabel:
     ipx: int = 10
     ipy: int = 10
     police: int = 15
-    couleur: List[str] = field(default_factory=lambda: ["green", "green", "green", "white", "red", "red", "red"])
+    couleur: List[str] = field(default_factory=lambda: [green3, green2, green1, white, red1, red2, red3])
 
     def __post_init__(self):
         pass

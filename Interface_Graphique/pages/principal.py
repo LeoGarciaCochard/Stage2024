@@ -10,6 +10,7 @@ from Interface_Graphique.tools.button_quit import ButtonQuitter
 from Interface_Graphique.tools.labels import Label
 from Interface_Graphique.tools.class_taches import BarreTache
 from Interface_Graphique.tools.buttons_alignement import BtnHelp, AjoutRapide
+from Interface_Graphique.tools.voice_recorder import VoiceRecorder
 
 from Interface_Graphique.var_fonc.functions import passer
 from Interface_Graphique.var_fonc.variables_textes import dico_aide
@@ -79,9 +80,13 @@ class PagePrincipale:
         ############################################################################################################
         # Boutons & aides
 
-        self.renseigner = BtnHelp(master=self.page_principale.frame, text_button="Renseigner un incident négatif",
+        self.cadre_rec = Frame(master=self.page_principale.frame, fg_color="#2b2b2b", ipx=0, ipy=0, px=0, py=0)
+        self.renseigner = BtnHelp(master=self.cadre_rec.frame, text_button="Renseigner un incident négatif",
+                                  row=0, column=1, ipx=0, ipy=0,
                                   text_help=dico_aide['Erreur'], function=self.renseigner0,
                                   width=400, height=200, police=30, style="bold", py=0)
+
+        self.voice = VoiceRecorder(self.cadre_rec.frame, row=0, column=0) # Bouton pour enregistrer la voix
 
         self.forget = BtnHelp(master=self.page_principale.frame, width=300, height=50,
                               text_button="J'ai oublié de renseigner un incident négatif",
@@ -150,7 +155,9 @@ class PagePrincipale:
         self.cadre_titre.afficher()
         self.label_titre.afficher()
         self.barre_taches.afficher()
-        self.renseigner.afficher()
+        self.cadre_rec.afficher()
+        self.renseigner.fixer() # TODO: Fix this
+        self.voice.fixer() # TODO: Fix this
         self.forget.afficher()
         self.recap.afficher()
         self.ajout_rapide.afficher()
@@ -164,7 +171,7 @@ class PagePrincipale:
         self.cadre_titre.cacher()
         self.label_titre.cacher()
         self.barre_taches.cacher()
-        self.renseigner.cacher()
+        self.cadre_rec.cacher()
         self.forget.cacher()
         self.recap.cacher()
         self.ajout_rapide.cacher()

@@ -36,6 +36,12 @@ class BtnHelp:
     ipx: int | tuple[int, int] = 0
     ipy: int | tuple[int, int] = 0
 
+    row: int = 0
+    column: int = 0
+
+    side: str | None = None
+    anchor: str = "center"
+
     cadre = None
     button = None
     button_help = None
@@ -53,8 +59,8 @@ class BtnHelp:
 
     def create(self):
 
-        self.cadre = Frame(master=self.master, fg_color=self.fg_color, ipx=self.ipx, ipy=self.ipy,
-                           px=self.px, py=self.py)
+        self.cadre = Frame(master=self.master, fg_color=self.fg_color, ipx=self.ipx, ipy=self.ipy, anchor=self.anchor,
+                           px=self.px, py=self.py, row=self.row, column=self.column)
 
         self.button = Button(master=self.cadre.frame, text=self.text_button, width=self.width, height=self.height,
                              function=self.function, police=self.police, font=self.font, style=self.style,
@@ -127,6 +133,9 @@ class BtnHelp:
 
     def afficher(self):
         self.cadre.afficher()
+
+    def fixer(self):
+        self.cadre.fixer()
 
     def cacher(self):
         self.cadre.cacher()
