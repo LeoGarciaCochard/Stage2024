@@ -78,6 +78,7 @@ class PageRecapitulatif:
         df = pd.read_excel(resource_path(directory_paths["path_excel_beh"]))
         df = df[df['Parameter'] != 2]  # On supprime les lignes de signalement du moment de l'oubli
         df = df[df['Parameter'] != 4]  # On supprime les lignes de l'annulation du signalement
+        df = df[df['Parameter'] != 5]  # On supprime les lignes de d'énregistrement vocal
 
         df_filtered = df.drop(columns=columns_to_exclude_complete)
 

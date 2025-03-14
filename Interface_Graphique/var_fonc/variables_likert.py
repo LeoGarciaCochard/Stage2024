@@ -23,13 +23,13 @@ dic_aisance_informatique = {
 }
 
 dic_passion = {
-    0: "Pas du tout passionné(e)",
-    16: "Très peu passionné(e)",
-    33: "Peu passionné(e)",
-    50: "Passion neutre",
-    66: "Légèrement passionné(e)",
-    83: "Très passionné(e)",
-    100: "Extrêmement passionné(e)"
+    0: "Pas du tout motivé(e)",
+    16: "Très peu motivé(e)",
+    33: "Peu motivé(e)",
+    50: "Motivation neutre",
+    66: "Légèrement motivé(e)",
+    83: "Très motivé(e)",
+    100: "Extrêmement motivé(e)"
 }
 
 
@@ -78,7 +78,7 @@ dic_fatigue = {
 dico_text = {
     "stress" : "De manière générale, comment décrivez-vous votre état de stress",
     "bruit" : "Le niveau de bruit dans votre environnement de travail est : ",
-    "passion" : "À quel point aimez-vous ce travail ? ",
+    "passion" : "Quelle est votre niveau de motivation pour ce travail ? ",
     "habilite_inf" : "À quel point êtes vous à l'aise avec les outils informatiques : ",
 
     "importance" : "Veuillez renseigner l'importance (la gravité) de l'incident négatif",
