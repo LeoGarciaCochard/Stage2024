@@ -25,3 +25,9 @@ def passer_definitif(page_actuelle, page_suivante):
     page_suivante.afficher()
 
 
+#TODO pathlib
+
+# from pathlib import Path
+#
+# SRC = Path(__file__).parent.parent / "Sources"
+# btn = SRC / "btn.png"
